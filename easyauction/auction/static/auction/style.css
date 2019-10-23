@@ -1,11 +1,14 @@
     body {
-        background-color: antiquewhite;
+        background-color: #ADADAD;
     }
 
     h1, h2, h3 {
-        color: navy;
-        font-family: Impact;
-        font-style: italic;
+        color: black;
+        font-family: Georgia;
+    }
+
+    h1 {
+        text-align: center;
     }
 
     p {
