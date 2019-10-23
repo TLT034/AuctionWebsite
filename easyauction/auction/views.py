@@ -1,3 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def login(request):
+    return(request, 'auction/login.html')
+
+
+def home(request):
+    return(request, 'auction/home.html')
+

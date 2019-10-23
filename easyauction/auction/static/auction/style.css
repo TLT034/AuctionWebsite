@@ -1,0 +1,13 @@
+    body {
+        background-color: antiquewhite;
+    }
+
+    h1, h2, h3 {
+        color: navy;
+        font-family: Impact;
+        font-style: italic;
+    }
+
+    p {
+        font-size: 12pt;
+    }
