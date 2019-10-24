@@ -1,3 +1,3 @@
 from django.shortcuts import render
 
-def sign_up()
+# Create your views here.
