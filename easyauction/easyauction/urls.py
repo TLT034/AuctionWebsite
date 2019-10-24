@@ -16,14 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from .decorators import anon_required
 from django.urls import path
 from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html', redirect_authenticated_user=True), name='login'),
     path('logout/', login_required(auth_views.logout_then_login), name='logout'),
-    path('signup/', views.SignUpView.as_view(template_name='registration/signup.html'), name='signup'),
+    path('signup/', anon_required(views.SignUpView.as_view(template_name='registration/signup.html')), name='signup'),
     path('', login_required(TemplateView.as_view(template_name='home.html')), name='home')
 ]
