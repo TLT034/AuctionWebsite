@@ -4,6 +4,6 @@ from django.views import generic
 
 
 class SignUpView(generic.CreateView):
-    form_class = auth_forms.CompleteUserCreationForm
+    form_class = auth_forms.UserSignUpForm
     success_url = reverse_lazy('login')
     template_name = 'easyauction/templates/registration/signup.html'
