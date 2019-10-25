@@ -1,9 +1,86 @@
-{% extends 'auction/base.html' %}
+<!DOCTYPE html>
+{% load static %}
 
-{% block title %}Home{% endblock %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'auction/style.css' %}">
+    <title>Home Page</title>
 
-{% block content %}
-    <p>Hi {{ user.first_name }}!</p>
-    <p><a href="{% url 'auction:logout' %}">Logout</a></p>
-    <p><a href="{% url 'auction:account' user.id%}">Edit account</a></p>
-{% endblock %}
+    <style>
+        #menu {
+            width: 604px;
+            margin: auto;
+            border: 1px solid black;
+            text-align: center;
+        }
+        #my_auctions {
+            width: 300px;
+            height: 500px;
+            float: left;
+            border: 1px solid black;
+            text-align: center;
+        }
+        #participating_auctions {
+            width: 300px;
+            height: 500px;
+            float: right;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+
+<body>
+    <h1>This is the Home Page</h1>
+
+    <div id="menu">
+        <h2>This is the Menu</h2>
+        <div id="my_auctions">
+            <h3>My Auctions</h3>
+            {% if my_auctions %}
+                <ul>
+                {% for auction in my_auctions %}
+<!--                    <li><a href="{% url 'blog:entry' blog.id %}">{{ blog.title }}</a>-->
+                    <li><a href="{% url 'auction:auction' auction.id %}" >{{auction.name}}</a>
+                    <br />
+                {% endfor %}
+                <p><a href="{% url 'auction:create_auction' %}" > Click here to create a new auction to host</a></p>
+                </ul>
+            {% else %}
+                <p>Looks like you haven't set up any auctions to host</p>
+            <p><a href="{% url 'auction:create_auction' %}" > Click here to create one</a></p>
+            {% endif %}
+        </div>
+        <div id="participating_auctions">
+            <h3>Auctions I'm Participating in</h3>
+            {% if joined_auctions %}
+                <ul>
+                {% for auction in joined_auctions %}
+<!--                    <li><a href="{% url 'blog:entry' blog.id %}">{{ blog.title }}</a>-->
+                    <li><a href="{% url 'auction:auction' auction.id %}" >{{auction.name}}</a>
+                    <br />
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>Looks like you haven't joined any local auctions</p>
+            {% endif %}
+            <p><a href="{% url 'auction:enter_local_code' %}" > Click here to enter a local code</a></p>
+        </div>
+
+    </div>
+
+<!--    <table id="tmenu">-->
+<!--        <thead>-->
+<!--            <tr>-->
+<!--                <th>Auctions I'm Participating in</th>-->
+<!--                <th>Auctions I'm Hosting</th>-->
+<!--            </tr>-->
+<!--        </thead>-->
+
+<!--    </table>-->
+</body>
+</html>
