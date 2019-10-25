@@ -42,7 +42,7 @@ class Auction(models.Model):
 
 class Item(models.Model):
 	name = models.CharField(max_length=200)
-	starting_price = models.DecimalField(decimal_places=2)
+	starting_price = models.DecimalField(max_digits=10, decimal_places=2)
 	main_pic = models.ImageField(default="default_item_pic.jpg", upload_to="item_pics")
 	item_desc = models.TextField("item description")
 	is_sold = models.BooleanField(default=False)
