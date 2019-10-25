@@ -2,15 +2,20 @@ from django.db import models
 
 from random import randrange
 
-# Dummy User model. When you replace this, edit the ForeignKey in the Item model.
+
+def random_entry_code():
+	return randrange(100000)
+
+
+# Dummy User model. When you replace this, edit the ForeignKey
+# in the Item model and the registration in admin.py.
 class User(models.Model):
 	name = models.CharField(max_length=200)
 
 	def __str__(self):
 		return self.name
 
-def random_entry_code():
-	return randrange(100000)
+
 
 class Auction(models.Model):
 	name = models.CharField(max_length=200)
@@ -20,6 +25,20 @@ class Auction(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	def publish(self):
+		self.published = True
+		return self.entry_code
+
+	def end(self):
+		self.published = False
+
+	def add_item(self, name, starting_price, item_desc):
+		self.item_set.create(name=name, starting_price=starting_price, item_desc=item_desc)
+
+	def remove_item(self, pk):
+		self.item_set.filter(pk=pk).first().delete()
+
 
 
 class Item(models.Model):
