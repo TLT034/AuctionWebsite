@@ -15,7 +15,6 @@ class User(models.Model):
 		return self.name
 
 
-
 class Auction(models.Model):
 	name = models.CharField(max_length=200)
 	time_created = models.DateTimeField()
@@ -37,7 +36,6 @@ class Auction(models.Model):
 
 	def remove_item(self, pk):
 		self.item_set.filter(pk=pk).first().delete()
-
 
 
 class Item(models.Model):

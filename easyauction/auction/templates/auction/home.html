@@ -44,7 +44,6 @@
             {% if my_auctions %}
                 <ul>
                 {% for auction in my_auctions %}
-<!--                    <li><a href="{% url 'blog:entry' blog.id %}">{{ blog.title }}</a>-->
                     <li><a href="{% url 'auction:auction' auction.id %}" >{{auction.name}}</a>
                     <br />
                 {% endfor %}
@@ -55,12 +54,12 @@
             <p><a href="{% url 'auction:create_auction' %}" > Click here to create one</a></p>
             {% endif %}
         </div>
+
         <div id="participating_auctions">
             <h3>Auctions I'm Participating in</h3>
             {% if joined_auctions %}
                 <ul>
                 {% for auction in joined_auctions %}
-<!--                    <li><a href="{% url 'blog:entry' blog.id %}">{{ blog.title }}</a>-->
                     <li><a href="{% url 'auction:auction' auction.id %}" >{{auction.name}}</a>
                     <br />
                 {% endfor %}
@@ -73,14 +72,5 @@
 
     </div>
 
-<!--    <table id="tmenu">-->
-<!--        <thead>-->
-<!--            <tr>-->
-<!--                <th>Auctions I'm Participating in</th>-->
-<!--                <th>Auctions I'm Hosting</th>-->
-<!--            </tr>-->
-<!--        </thead>-->
-
-<!--    </table>-->
 </body>
 </html>

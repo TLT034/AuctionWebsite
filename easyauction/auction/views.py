@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Auction, User, Item
 
 
 def login(request):
@@ -6,7 +7,10 @@ def login(request):
 
 
 def home(request):
+    all_hosted_auctions = Auction.objects.order_by('name')
+    all_joined_auctions = Auction.objects.order_by('name')
     return render(request, 'auction/home.html', context={})
+    return render(request, 'auction/home.html', context={'my_auctions': all_hosted_auctions, 'joined_auctions': all_joined_auctions})
 
 
 def create_auction(request):
