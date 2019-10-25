@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'auction/style.css' %}">
+    <title>Home Page</title>
+
+    <style>
+        #menu {
+            width: 600px;
+            margin: auto;
+            border: solid black;
+            text-align: center;
+        }
+        #my_auctions {
+            width: 300px;
+            height: 500px;
+            float: left;
+            border: solid black;
+            text-align: center;
+        }
+        #participating_auctions {
+            width: 300px;
+            height: 500px;
+            float: right;
+            border: solid black;
+            text-align: center;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+            padding: 12px;
+            margin: 25px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1>This is the Home Page</h1>
+
+<!--    <div id="menu">-->
+<!--        <h2>This is the Menu</h2>-->
+<!--        <div id="my_auctions">-->
+<!--            <h3>My Auctions</h3>-->
+<!--        </div>-->
+<!--        <div id="participating_auctions">-->
+<!--            <h3>Auctions I'm Participating in</h3>-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+    <table id="tmenu">
+        <thead>
+            <tr>
+                <th>Auctions I'm Participating in</th>
+                <th>Auctions I'm Hosting</th>
+            </tr>
+        </thead>
+
+    </table>
+</body>
+</html>

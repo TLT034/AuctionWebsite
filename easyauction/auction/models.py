@@ -1,8 +1,7 @@
 from django.db import models
-
 from random import randrange
 
-
+# Need to validate that the random number is unique (not already in use by another auction)
 def random_entry_code():
 	return randrange(100000)
 
@@ -30,7 +29,7 @@ class Auction(models.Model):
 		self.published = True
 		return self.entry_code
 
-	def end(self):
+	def archive(self):
 		self.published = False
 
 	def add_item(self, name, starting_price, item_desc):
@@ -43,7 +42,7 @@ class Auction(models.Model):
 
 class Item(models.Model):
 	name = models.CharField(max_length=200)
-	starting_price = models.FloatField()
+	starting_price = models.DecimalField(decimal_places=2)
 	main_pic = models.ImageField(default="default_item_pic.jpg", upload_to="item_pics")
 	item_desc = models.TextField("item description")
 	is_sold = models.BooleanField(default=False)
