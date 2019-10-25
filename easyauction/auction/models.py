@@ -44,7 +44,8 @@ class Auction(models.Model):
 class Item(models.Model):
 	name = models.CharField(max_length=200)
 	starting_price = models.FloatField()
-	item_desc = models.TextField('item description')
+	main_pic = models.ImageField(default="default_item_pic.jpg", upload_to="item_pics")
+	item_desc = models.TextField("item description")
 	is_sold = models.BooleanField(default=False)
 	is_paid = models.BooleanField(default=False)
 	is_open = models.BooleanField(default=False)
