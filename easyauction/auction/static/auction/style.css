@@ -1,0 +1,16 @@
+    body {
+        background-color: #ADADAD;
+    }
+
+    h1, h2, h3 {
+        color: black;
+        font-family: Georgia;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    p {
+        font-size: 12pt;
+    }

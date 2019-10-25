@@ -1,0 +1,9 @@
+{% extends 'auction/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <p>Hi {{ user.first_name }}!</p>
+    <p><a href="{% url 'auction:logout' %}">Logout</a></p>
+    <p><a href="{% url 'auction:account' user.id%}">Edit account</a></p>
+{% endblock %}

@@ -122,6 +122,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Redirect to home page
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'auction:home'
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'auction:login'
+
+AUTH_USER_MODEL = 'auction.AuctionUser'
