@@ -8,3 +8,6 @@ def login(request):
 def home(request):
     return render(request, 'auction/home.html', context={})
 
+
+def create_auction(request):
+	return render(request, 'auction/create_auction.html', context={})
