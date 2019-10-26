@@ -2,23 +2,24 @@ from django.db import models
 from random import randrange
 from django.contrib.auth.models import AbstractUser
 
+
 # Need to validate that the random number is unique (not already in use by another auction)
 def random_entry_code():
 	return randrange(100000)
 
 
 class AuctionUser(AbstractUser):
-    pass
+	pass
 
 
 class Auction(models.Model):
-    name = models.CharField(max_length=200)
-    time_created = models.DateTimeField()
-    entry_code = models.IntegerField(default=random_entry_code)
-    published = models.BooleanField(default=False)
-    admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+	time_created = models.DateTimeField()
+	entry_code = models.IntegerField(default=random_entry_code)
+	published = models.BooleanField(default=False)
+	admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
 
-    def __str__(self):
+	def __str__(self):
 		return self.name
 
 	def publish(self):

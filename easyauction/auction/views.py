@@ -2,6 +2,7 @@ from .forms import auth as auth_forms
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import AuctionUser
+from django.shortcuts import render
 
 
 # TODO: add account successfully created notification before redirecting
@@ -10,17 +11,19 @@ class SignUpView(generic.CreateView):
     model = AuctionUser
     form_class = auth_forms.UserSignUpForm
     success_url = reverse_lazy('auction:login')
-    template_name = 'auction/account/signup.html'
+    template_name = 'auction/account/temp_signup.html'
 
 
-# TODO: add account successfully updated notificaiton before redirecting
+# TODO: add account successfully updated notification before redirecting
 # Presents form for editing select account info
 class EditAccountView(generic.UpdateView):
     model = AuctionUser
     fields = ('email', 'first_name', 'last_name')
-    template_name = 'auction/account/account.html'
+    template_name = 'auction/account/temp_account.html'
     success_url = reverse_lazy('auction:login')
 
+    def get_object(self):
+        return self.request.user
 
 
 def login(request):
