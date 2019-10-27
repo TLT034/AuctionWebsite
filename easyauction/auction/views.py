@@ -5,7 +5,6 @@ from .models import AuctionUser
 from django.shortcuts import render
 
 
-# TODO: add account successfully created notification before redirecting
 # Presents sign up form and submits
 class SignUpView(generic.CreateView):
     model = AuctionUser
@@ -14,13 +13,20 @@ class SignUpView(generic.CreateView):
     template_name = 'auction/account/temp_signup.html'
 
 
-# TODO: add account successfully updated notification before redirecting
+class ViewAccountView(generic.DetailView):
+    model = AuctionUser
+    template_name = 'auction/account/temp_account.html'
+
+    def get_object(self):
+        return self.request.user
+
+
 # Presents form for editing select account info
 class EditAccountView(generic.UpdateView):
     model = AuctionUser
     fields = ('email', 'first_name', 'last_name')
-    template_name = 'auction/account/temp_account.html'
-    success_url = reverse_lazy('auction:login')
+    template_name = 'auction/account/temp_edit_account.html'
+    success_url = reverse_lazy('auction:account')
 
     def get_object(self):
         return self.request.user

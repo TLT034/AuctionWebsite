@@ -1,0 +1,14 @@
+{% extends 'auction/base.html' %}
+
+{% block title %}Edit Account Info{% endblock %}
+
+{% block content %}
+    {# user info #}
+  <h2>Edit Account Info</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+    {# my won items #}
+{% endblock %}

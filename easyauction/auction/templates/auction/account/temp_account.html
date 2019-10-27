@@ -3,12 +3,11 @@
 {% block title %}Account Info{% endblock %}
 
 {% block content %}
-    {# user info #}
-  <h2>Edit Account Info</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-  </form>
-    {# my won items #}
+  <h2>Account Info</h2>
+    <p><strong>Username:</strong> {{ auctionuser.username }}</p>
+    <p><strong>Email:</strong> {{ auctionuser.email }}</p>
+    <p><strong>First name:</strong> {{ auctionuser.first_name}}</p>
+    <p><strong>Last name:</strong> {{ auctionuser.last_name }}</p>
+    <p><a href="{% url 'auction:edit_account' %}">Edit account</a></p>
+    <p><a href="{% url 'auction:change_password' %}">Change password</a></p>
 {% endblock %}

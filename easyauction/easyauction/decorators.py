@@ -1,5 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponse
+from django.urls import resolve
+from django.http import HttpResponseForbidden
+from urllib import parse
+import functools
 
 
 def anon_required(function=None, redirect_field_name='auction:home'):
@@ -17,3 +20,15 @@ def anon_required(function=None, redirect_field_name='auction:home'):
     if function:
         return actual_decorator(function)
     return actual_decorator
+
+
+def redirected_from(referer):
+    def wrapper(func):
+        def inner_wrapper(request, *args, **kwargs):
+            if 'HTTP_REFERER' in request.META and parse.urlparse(request.META['HTTP_REFERER']).path == referer:
+                return func(request, *args, **kwargs)
+            else:
+                return HttpResponseForbidden()
+
+        return inner_wrapper
+    return wrapper
