@@ -127,6 +127,19 @@ MEDIA_URL = '/media/'
 # Redirect to home page
 LOGIN_REDIRECT_URL = 'auction:home'
 
+# Used by login_required decorator
 LOGIN_URL = 'auction:login'
 
+# Sets this model to work with django.contrib.auth backend
 AUTH_USER_MODEL = 'auction.AuctionUser'
+
+# Dir to store password recovery emails during dev
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+
+# Settings for django SMTP backend
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'easyauctioncourier@gmail.com'
+EMAIL_HOST_PASSWORD = 'team8ball'   # Remove this before production
+EMAIL_USE_TLS = True
