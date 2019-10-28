@@ -9,7 +9,7 @@ def login(request):
 def home(request):
     all_hosted_auctions = Auction.objects.order_by('name')
     all_joined_auctions = Auction.objects.order_by('name')
-    return render(request, 'auction/home.html', context={})
+    return render(request, 'auction/home.html', context={})  # TODO delete this line once there is an auction url and page
     return render(request, 'auction/home.html', context={'my_auctions': all_hosted_auctions, 'joined_auctions': all_joined_auctions})
 
 
