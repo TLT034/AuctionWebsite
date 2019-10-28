@@ -1,0 +1,14 @@
+{% extends 'auction/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    <p><a href="{% url 'auction:signup' %}">Sign up</a></p>
+    <p><a href="{% url 'auction:reset_password' %}">Forgot password?</a></p>
+{% endblock %}
