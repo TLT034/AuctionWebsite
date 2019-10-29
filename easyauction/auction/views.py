@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from .models import AuctionUser
 from django.shortcuts import render
-from .models import Auction, User, Item
+from .models import Auction, AuctionUser, Item
 
 
 # Presents sign up form and submits
