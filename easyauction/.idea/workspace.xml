@@ -2,6 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_account.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_edit_account.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_signup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,12 +31,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="404" />
-    <option name="y" value="250" />
-    <option name="width" value="2432" />
-    <option name="height" value="1500" />
-  </component>
   <component name="ProjectId" id="1SWowhoFxWUdO3EDYDsDstD3Cs5" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
@@ -44,6 +46,11 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\trist\repos\school\cs3450\auction-program\easyauction\auction\templates\auction\account" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">

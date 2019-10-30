@@ -17,7 +17,7 @@ urlpatterns = [
 
 # Account management urls
 urlpatterns += [
-    path('login/', auth_views.LoginView.as_view(template_name='auction/account/temp_login.html', redirect_authenticated_user=True),
+    path('login/', auth_views.LoginView.as_view(template_name='auction/account/login.html', redirect_authenticated_user=True),
          name='login'),
     path('logout/', login_required(auth_views.logout_then_login),
          name='logout'),
@@ -29,7 +29,7 @@ urlpatterns += [
          name='edit_account'),
     path('account/change_password/', login_required(auth_views.PasswordChangeView.as_view(success_url=reverse_lazy('auction:change_password_done'))),
          name='change_password'),
-    path('account/change_password/done/', redirected_from('auction:change_password')(auth_views.PasswordChangeDoneView.as_view(template_name='auction/account/temp_change_password_done.html')),
+    path('account/change_password/done/', redirected_from('auction:change_password')(auth_views.PasswordChangeDoneView.as_view(template_name='auction/account/change_password_done.html')),
          name='change_password_done'),
     path('account/reset_password/', auth_views.PasswordResetView.as_view(email_template_name='auction/account/temp_reset_password.html', success_url=reverse_lazy('auction:reset_password_done')),
          name='reset_password'),
