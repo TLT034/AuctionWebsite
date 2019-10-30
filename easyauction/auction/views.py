@@ -1,4 +1,3 @@
-from .forms import auth as auth_forms
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import AuctionUser
@@ -8,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .forms import AuctionForm
+from .forms import UserSignUpForm
 
 from .models import Auction, AuctionUser, Item
 
@@ -15,7 +15,7 @@ from .models import Auction, AuctionUser, Item
 # Presents sign up form and submits
 class SignUpView(generic.CreateView):
     model = AuctionUser
-    form_class = auth_forms.UserSignUpForm
+    form_class = UserSignUpForm
     success_url = reverse_lazy('auction:login')
     template_name = 'auction/account/signup.html'
 
@@ -51,17 +51,16 @@ def auction_detail(request, pk):
 
 
 def create_auction(request):
-	if request.method == 'POST':
-		form = AuctionForm(request.POST)
-		if form.is_valid():
-			new_auction = Auction(name=form.cleaned_data['auction_name'], time_created=timezone.now())
-			new_auction.save()
-			url = reverse('auction:auction-detail', kwargs={'pk': new_auction.pk})
-			return HttpResponseRedirect(url)
-	else:
-		form = AuctionForm()
-    
-  return render(request, 'auction/create_auction.html', context={'form': form})
+    if request.method == 'POST':
+        form = AuctionForm(request.POST)
+        if form.is_valid():
+            new_auction = Auction(name=form.cleaned_data['auction_name'], time_created=timezone.now())
+            new_auction.save()
+            url = reverse('auction:auction-detail', kwargs={'pk': new_auction.pk})
+            return HttpResponseRedirect(url)
+    else:
+        form = AuctionForm()
+    return render(request, 'auction/create_auction.html', context={'form': form})
     
 
 
