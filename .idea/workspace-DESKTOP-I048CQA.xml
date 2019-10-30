@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="46a5ec21-4304-4c1c-942e-14208e44484f" name="Default Changelist" comment="Login, signup, proper permissions checking (logged in, not logged in) and&#10;associated redirects working. No tests yet.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <change afterPath="$PROJECT_DIR$/easyauction/auction/forms/auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/easyauction/auction/migrations/0001_initial.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Repo-1.08" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>redirect</find>
+      <find>debug</find>
+      <find>settings_mo</find>
+      <find>mdt</find>
+      <find>login</find>
+      <find>loginurl</find>
+      <find>opts</find>
+      <find>extn</find>
+      <find>multipleform</find>
+      <find>render_</find>
+      <find>creat</find>
+      <find>auth</find>
+      <find>baseupdate</find>
+      <find>auth_user</find>
+      <find>next</find>
+      <find>logout</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
+    <dirStrings>
+      <dir>C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\easyauction\forms</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="SIGN_OFF_COMMIT" value="true" />
+  </component>
+  <component name="ProjectId" id="1SaDqMrCKnRqcx6PQIReQiOwILg" />
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="TODO_SCOPE" value="All Places" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Django/Jinja2 Template" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\templates\registration" />
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\templates\admin" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\auction\templates\auction" />
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\auction\templates" />
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\auction" />
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\account" />
+      <recent name="C:\Users\ender\OneDrive - aggiemail.usu.edu\USU\Junior Year\CS 3450\Repo-1.08\easyauction\easyauction" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Django" type="Python.DjangoServer" factoryName="Django server">
+      <module name="Repo-1.08" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="easyauction.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="46a5ec21-4304-4c1c-942e-14208e44484f" name="Default Changelist" comment="" />
+      <created>1571194305700</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1571194305700</updated>
+      <workItem from="1571194311211" duration="154000" />
+      <workItem from="1571194492034" duration="42000" />
+      <workItem from="1571194544248" duration="611000" />
+      <workItem from="1571195711143" duration="611000" />
+      <workItem from="1571248236405" duration="778000" />
+      <workItem from="1571508814694" duration="909000" />
+      <workItem from="1571718017223" duration="2785000" />
+      <workItem from="1571793005113" duration="611000" />
+      <workItem from="1571796190317" duration="7086000" />
+      <workItem from="1571877142820" duration="19236000" />
+      <workItem from="1571963891602" duration="4469000" />
+      <workItem from="1571969434014" duration="557000" />
+      <workItem from="1572028462981" duration="8997000" />
+      <workItem from="1572038975775" duration="41000" />
+      <workItem from="1572039243002" duration="2633000" />
+    </task>
+    <task id="LOCAL-00001" summary="Adding .gitignore for Django projects.">
+      <created>1571194684885</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1571194684885</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added .gitignore for Django and Pycharm.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <created>1571195018390</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1571195018390</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Initialized easyauction Django project.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <created>1571195048365</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1571195048365</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Init branch for development of user accounts and the app authentification process.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <created>1571718775603</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1571718775603</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added temporary templates for login, signup, and home page.&#10;Setup basic login, logout, and signup functionality using built-in &#10;Django auth.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <created>1571883989407</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1571883989407</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added decorator to restrict view access to anonymous users. This was needed&#10;to prevent logged in users from accessing the signup page while&#10;already logged in.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <created>1571888182220</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1571888182220</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Extended default UserCreationForm to accept entry for &#10;email, first name, and last name.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;">
+      <created>1571890904903</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1571890904904</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Adding .gitignore for Django projects." />
+    <MESSAGE value="Added .gitignore for Django and Pycharm.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <MESSAGE value="Initialized easyauction Django project.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <MESSAGE value="Init branch for development of user accounts and the app authentification process.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <MESSAGE value="Added temporary templates for login, signup, and home page.&#10;Setup basic login, logout, and signup functionality using built-in &#10;Django auth.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <MESSAGE value="Added decorator to restrict view access to anonymous users. This was needed&#10;to prevent logged in users from accessing the signup page while&#10;already logged in.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <MESSAGE value="Extended default UserCreationForm to accept entry for &#10;email, first name, and last name.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <MESSAGE value="Login, signup, proper permissions checking (logged in, not logged in) and&#10;associated redirects working. No tests yet.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Login, signup, proper permissions checking (logged in, not logged in) and&#10;associated redirects working. No tests yet.&#10;&#10;Signed-off-by: Zion &lt;zion.steiner@aggiemail.usu.edu&gt;" />
+  </component>
+</project>

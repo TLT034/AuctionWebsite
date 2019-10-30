@@ -1,18 +1,48 @@
+from .forms import auth as auth_forms
+from django.urls import reverse_lazy
+from django.views import generic
+from .models import AuctionUser
 from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .forms import AuctionForm
-from .models import Auction
+
+from .models import Auction, AuctionUser, Item
 
 
-def login(request):
-    return render(request, 'auction/login.html', context={})
+# Presents sign up form and submits
+class SignUpView(generic.CreateView):
+    model = AuctionUser
+    form_class = auth_forms.UserSignUpForm
+    success_url = reverse_lazy('auction:login')
+    template_name = 'auction/account/signup.html'
 
 
+class ViewAccountView(generic.DetailView):
+    model = AuctionUser
+    template_name = 'auction/account/account_view.html'
+
+    def get_object(self):
+        return self.request.user
+
+
+# Presents form for editing select account info
+class EditAccountView(generic.UpdateView):
+    model = AuctionUser
+    fields = ('email', 'first_name', 'last_name')
+    template_name = 'auction/account/edit_account.html'
+    success_url = reverse_lazy('auction:account')
+
+    def get_object(self):
+        return self.request.user
+
+      
 def home(request):
-	return render(request, 'auction/home.html', context={})
+    all_hosted_auctions = Auction.objects.order_by('name')
+    all_joined_auctions = Auction.objects.order_by('name')
+    return render(request, 'auction/home.html', context={'my_auctions': all_hosted_auctions, 'joined_auctions': all_joined_auctions})
 
 
 def auction_detail(request, pk):
@@ -30,5 +60,11 @@ def create_auction(request):
 			return HttpResponseRedirect(url)
 	else:
 		form = AuctionForm()
+    
+  return render(request, 'auction/create_auction.html', context={'form': form})
+    
 
-	return render(request, 'auction/create_auction.html', context={'form': form})
+
+def enter_local_code(request):
+    return render(request, 'auction/enter_local_code.html', context={})
+ 

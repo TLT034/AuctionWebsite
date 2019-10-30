@@ -1,26 +1,22 @@
 from django.db import models
 from random import randrange
+from django.contrib.auth.models import AbstractUser
+
 
 # Need to validate that the random number is unique (not already in use by another auction)
 def random_entry_code():
 	return randrange(100000)
 
 
-# Dummy User model. When you replace this, edit the ForeignKey
-# in the Item model and the registration in admin.py.
-class User(models.Model):
-	name = models.CharField(max_length=200)
-
-	def __str__(self):
-		return self.name
-
-
+class AuctionUser(AbstractUser):
+	pass
 
 class Auction(models.Model):
 	name = models.CharField(max_length=200)
 	time_created = models.DateTimeField()
 	entry_code = models.IntegerField(default=random_entry_code)
 	published = models.BooleanField(default=False)
+	admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.name
@@ -39,7 +35,6 @@ class Auction(models.Model):
 		self.item_set.filter(pk=pk).first().delete()
 
 
-
 class Item(models.Model):
 	name = models.CharField(max_length=200)
 	starting_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -50,7 +45,7 @@ class Item(models.Model):
 	is_open = models.BooleanField(default=False)
 	paid_time = models.DateTimeField(null=True, blank=True)
 	auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-	winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+	winner = models.ForeignKey(AuctionUser, on_delete=models.SET_NULL, null=True, blank=True)
 
 	def __str__(self):
 		return self.name
