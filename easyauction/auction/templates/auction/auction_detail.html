@@ -5,9 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-    name
-    starting price
-    description
-    image
+    {{ auction.name }}
+    {% for item in auction.item_set.all %}
+    	{{ item.name }}
+    {% endfor %}
 </body>
 </html>

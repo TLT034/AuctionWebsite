@@ -11,8 +11,6 @@ app_name = 'auction'
 urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('auction:home'))),
     path('home/', login_required(views.home), name='home'),
-    path('create_auction/', login_required(views.create_auction), name='create_auction'),
-    path('enter_local_code/', login_required(views.enter_local_code), name='enter_local_code')
 ]
 
 # Account management urls
@@ -39,4 +37,10 @@ urlpatterns += [
          name='reset_password_confirm'),
     path('account/reset_password/complete/', redirected_from('auction:reset_password_confirm')(auth_views.PasswordResetCompleteView.as_view()),
          name='reset_password_complete'),
+]
+
+urlpatterns += [
+  path('create_auction/', login_required(views.create_auction), name='create_auction'),
+  path('enter_local_code/', login_required(views.enter_local_code), name='enter_local_code'),
+  path('auction-detail/<int:pk>', views.auction_detail, name='auction-detail')
 ]

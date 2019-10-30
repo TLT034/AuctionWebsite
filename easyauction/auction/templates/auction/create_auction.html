@@ -8,6 +8,12 @@
     <title>Create Auction</title>
 </head>
 <body>
-    get name of auction & description
+    name of auction
+    description
+    <form action="/auction/create-auction" method="post">
+    	{% csrf_token %}
+    	{{ form }}
+    	<input type="submit" value="Create">
+    </form>
 </body>
 </html>
