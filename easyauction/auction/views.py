@@ -16,7 +16,7 @@ class SignUpView(generic.CreateView):
 
 class ViewAccountView(generic.DetailView):
     model = AuctionUser
-    template_name = 'auction/account/temp_account.html'
+    template_name = 'auction/account/account_view.html'
 
     def get_object(self):
         return self.request.user
@@ -26,7 +26,7 @@ class ViewAccountView(generic.DetailView):
 class EditAccountView(generic.UpdateView):
     model = AuctionUser
     fields = ('email', 'first_name', 'last_name')
-    template_name = 'auction/account/temp_edit_account.html'
+    template_name = 'auction/account/edit_account.html'
     success_url = reverse_lazy('auction:account')
 
     def get_object(self):
