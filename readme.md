@@ -1,7 +1,7 @@
 # Organization and Name Scheme
 * Django default file structure.
-* Python name convention – [Python part of program (back end)]
-* Javascript name convention – [JS and Vue part of program (front end)]
+* Python name convention â€“ [Python part of program (back end)]
+* Javascript name convention â€“ [JS and Vue part of program (front end)]
 # Version-control procedures
 * GitHub - https://github.com/usu-cs-3450/Repo-1.08.git
 * Create a new branch for each independent task.
@@ -13,6 +13,7 @@
 * Django 2.2.5
 
 # Build instructions
+* pip install django-widget-tweaks
 
 # Unit testing instructions
 * Django built in Unit Testing
