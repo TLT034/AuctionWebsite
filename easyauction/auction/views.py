@@ -11,7 +11,7 @@ class SignUpView(generic.CreateView):
     model = AuctionUser
     form_class = auth_forms.UserSignUpForm
     success_url = reverse_lazy('auction:login')
-    template_name = 'auction/account/temp_signup.html'
+    template_name = 'auction/account/signup.html'
 
 
 class ViewAccountView(generic.DetailView):
@@ -34,7 +34,7 @@ class EditAccountView(generic.UpdateView):
 
 
 def login(request):
-    return render(request, 'auction/login.html', context={})
+    return render(request, 'auction/account/login.html', context={})
 
 
 def forgot(request):
@@ -46,7 +46,7 @@ def reset_password(request):
 
 
 def signup(request):
-    return render(request, 'auction/signup.html', context={})
+    return render(request, 'auction/account/signup.html', context={})
 
 
 def home(request):

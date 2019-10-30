@@ -2,7 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/auction/templates/auction/account/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0002_auction_published.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0003_auto_20191023_0956.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0004_auto_20191023_1008.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0005_auto_20191023_1423.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0006_auto_20191023_1448.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0007_auto_20191024_2118.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0008_item_main_pic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0009_auto_20191025_0816.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/migrations/0010_auto_20191025_1022.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/signup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/easyauction/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/easyauction/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +60,11 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\trist\repos\school\cs3450\auction-program\easyauction\auction\templates\auction\account" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
