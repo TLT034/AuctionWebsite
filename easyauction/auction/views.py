@@ -3,7 +3,7 @@ from django.views import generic
 from .models import AuctionUser
 from django.shortcuts import render
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 
 from .forms import AuctionForm
@@ -40,14 +40,20 @@ class EditAccountView(generic.UpdateView):
 
       
 def home(request):
-    all_hosted_auctions = Auction.objects.order_by('name')
-    all_joined_auctions = Auction.objects.order_by('name')
+    user = request.user
+    if user.has_auction()
+    all_hosted_auctions = Auction.objects.order_by('-time_created')
+    all_joined_auctions = Auction.objects.order_by('-time_created')
     return render(request, 'auction/home.html', context={'my_auctions': all_hosted_auctions, 'joined_auctions': all_joined_auctions})
 
 
 def auction_detail(request, pk):
-	auction = Auction.objects.all().filter(pk=pk).first()
-	return render(request, 'auction/auction_detail.html', context={'auction': auction})
+    user = request.user
+    if user.auction_set.exists(pk=pk):
+        auction = Auction.objects.all().filter(pk=pk).first()
+        return render(request, 'auction/auction_detail.html', context={'auction': auction})
+    else:
+        return HttpResponseForbidden()
 
 
 def create_auction(request):
@@ -63,7 +69,7 @@ def create_auction(request):
     return render(request, 'auction/create_auction.html', context={'form': form})
     
 
-
+# TODO: add current user as a participant in the auction specified
 def enter_local_code(request):
     return render(request, 'auction/enter_local_code.html', context={})
  

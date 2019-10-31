@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "auction/base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
     {{ auction.name }}
     {% for item in auction.item_set.all %}
     	{{ item.name }}
     {% endfor %}
-</body>
-</html>
+{% endblock %}

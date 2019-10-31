@@ -6,7 +6,7 @@ from .models import Auction
 
 
 class AuctionForm(forms.Form):
-	auction_name = forms.CharField(label="Auction name", max_length=200)
+    auction_name = forms.CharField(label="Auction name", max_length=200)
 
 
 # Default UserCreationForm with added user attributes
@@ -18,6 +18,3 @@ class UserSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = AuctionUser
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
-
-
-#class ChangePasswordForm()

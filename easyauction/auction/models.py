@@ -3,20 +3,34 @@ from random import randrange
 from django.contrib.auth.models import AbstractUser
 
 
-# Need to validate that the random number is unique (not already in use by another auction)
+# TODO: Validate that the random number is unique (not already in use by another auction)
 def random_entry_code():
 	return randrange(100000)
 
 
+# Extends the base user class to preserve compatability with Django's auth backend
 class AuctionUser(AbstractUser):
-	pass
+	# Creates auction seting the current user as admin
+	def create_auction(self, name:str, description:str):
+		self.auction_set.create(name=name, description=description)
+
+	# Retrieves specified auction, returning None if it does not exist
+	def get_auction(self, pk:int):
+		auction = self.auction_set.get(pk=pk)
+		return auction
+
+	def archive_auction(self, pk:int):
+		auction = self.get_auction(pk=pk)
+		auction.archive()
+
 
 class Auction(models.Model):
 	name = models.CharField(max_length=200)
-	time_created = models.DateTimeField()
+	time_created = models.DateTimeField(auto_now_add=True)
 	entry_code = models.IntegerField(default=random_entry_code)
 	published = models.BooleanField(default=False)
 	admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
+	description = models.TextField(default='Auction description')
 
 	def __str__(self):
 		return self.name
@@ -39,7 +53,7 @@ class Item(models.Model):
 	name = models.CharField(max_length=200)
 	starting_price = models.DecimalField(max_digits=10, decimal_places=2)
 	main_pic = models.ImageField(default="default_item_pic.jpg", upload_to="item_pics")
-	item_desc = models.TextField("item description")
+	description = models.TextField(default="Item description")
 	is_sold = models.BooleanField(default=False)
 	is_paid = models.BooleanField(default=False)
 	is_open = models.BooleanField(default=False)
