@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {{ auction.name }}
+{% extends "auction/base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <h2>{{ auction.name }}</h2>
+    <h5>Owner: {{ auction.admin.username }}</h5>
+    <h5>Created on {{ auction.time_created }}</h5>
     {% for item in auction.item_set.all %}
-    	{{ item.name }}
+    	<p>{{ item.name }} - Highest bid: "item.bid_set.order_by('amount').desc()[0]"</p>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

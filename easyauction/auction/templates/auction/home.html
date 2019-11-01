@@ -44,7 +44,7 @@
             {% if my_auctions %}
                 <ul>
                 {% for auction in my_auctions %}
-                    <li><a href="{% url 'auction:auction' auction.id %}" >{{auction.name}}</a>
+                    <li><a href="{% url 'auction:auction_detail' auction.id %}" >{{auction.name}}</a>
                     <br />
                 {% endfor %}
                 <p><a href="{% url 'auction:create_auction' %}" > Click here to create a new auction to host</a></p>
@@ -60,7 +60,7 @@
             {% if joined_auctions %}
                 <ul>
                 {% for auction in joined_auctions %}
-                    <li><a href="{% url 'auction:auction' auction.id %}" >{{auction.name}}</a>
+                    <li><a href="{% url 'auction:auction_detail' auction.id %}" >{{auction.name}}</a>
                     <br />
                 {% endfor %}
                 </ul>

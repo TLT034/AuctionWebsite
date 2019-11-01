@@ -4,7 +4,6 @@ from django.urls import reverse_lazy
 from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
 from .decorators import anon_required, redirected_from
-from django.urls import reverse
 from . import views
 
 app_name = 'auction'
@@ -39,8 +38,10 @@ urlpatterns += [
          name='reset_password_complete'),
 ]
 
+
+# Auction management urls
 urlpatterns += [
-  path('create_auction/', login_required(views.create_auction), name='create_auction'),
-  path('enter_local_code/', login_required(views.enter_local_code), name='enter_local_code'),
-  path('auction-detail/<int:pk>', views.auction_detail, name='auction-detail')
+  path('auction/create_auction/', login_required(views.create_auction), name='create_auction'),
+  path('auction/enter_local_code/', login_required(views.enter_local_code), name='enter_local_code'),
+  path('auction/auction_detail/<int:pk>', login_required(views.auction_detail), name='auction_detail')
 ]

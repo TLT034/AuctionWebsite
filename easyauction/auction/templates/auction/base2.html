@@ -1,0 +1,98 @@
+{# Template modified from Vuetify.com #}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div id="app">
+        <v-app id="inspire">
+            <v-navigation-drawer
+                    v-model="drawer"
+                    app
+            >
+                <v-list dense>
+                    <v-list-item href="{% url 'auction:home' %}">
+                        <v-list-item-action>
+                            <v-icon>home</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Home</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item href="{% url 'auction:create_auction' %}">
+                        <v-list-item-content>
+                            <v-list-item-title>Host an Auction</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>My Bids</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item href="{% url 'auction:account' %}">
+                        <v-list-item-action>
+                            <v-icon>contact_mail</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Account</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item href="{% url 'auction:logout' %}">
+                        <v-list-item-content>
+                            <v-list-item-title>Logout</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+
+            <v-app-bar
+                    app
+                    color="indigo"
+                    dark
+            >
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-toolbar-title>Easy Auction</v-toolbar-title>
+            </v-app-bar>
+
+            <v-content>
+                <v-container
+                        fluid
+                        fill-height
+                >
+                    {% block content %}
+                    {% endblock %}
+                </v-container>
+            </v-content>
+            <v-footer
+                    color="indigo"
+                    app
+            >
+            </v-footer>
+        </v-app>
+    </div>
+</body>
+{% block vue %}
+        <script>
+        Vue.use(Vuetify);
+
+        base_vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                drawer: false,
+            },
+            delimiters: ["[[", "]]"],
+        });
+        </script>
+{% endblock %}
+</html>
