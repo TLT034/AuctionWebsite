@@ -1,0 +1,75 @@
+{% extends 'auction/base2.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<v-row>
+    <v-col>
+        {% if my_auctions.exists %}
+        <v-list>
+            <v-subheader>My Auctions</v-subheader>
+            {% for auction in hosted_auctions %}
+            <v-list-item>
+                <v-card href="{% url 'auction:auction_detail' pk=auction.pk %}">
+                    <v-card-title>{{ auction.name }}</v-card-title>
+                    <v-card-subtitle>{{ auction.time_created }}</v-card-subtitle>
+                </v-card>
+            </v-list-item>
+            {% endfor %}
+        </v-list>
+        {% else %}
+        <v-list>
+            <v-subheader>My Auctions</v-subheader>
+            <v-list-item>
+                <v-card>
+                    <v-card-title>No Auctions Created</v-card-title>
+                    <v-card-subtitle>Click here to create an auction</v-card-subtitle>
+                </v-card>
+            </v-list-item>
+        </v-list>
+        {% endif %}
+    </v-col>
+    <v-col>
+        {% if joined_auctions.exists %}
+        <v-list>
+            <v-subheader>Joined Auctions</v-subheader>
+            {% for auction in joined_auctions %}
+            <v-list-item>
+                <v-card href="{% url 'auction:auction_detail' pk=auction.pk %}">
+                    <v-card-title>{{ auction.name }}</v-card-title>
+                    <v-card-subtitle>{{ auction.time_created }}</v-card-subtitle>
+                </v-card>
+            </v-list-item>
+            {% endfor %}
+        </v-list>
+        {% else %}
+        <v-list>
+            <v-subheader>Joined Auctions</v-subheader>
+            <v-list-item>
+                <v-card>
+                    <v-card-title>No Auctions Joined</v-card-title>
+                    <v-card-subtitle>Enter auction code here</v-card-subtitle>
+                </v-card>
+            </v-list-item>
+        </v-list>
+        {% endif %}
+    </v-col>
+</v-row>
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    window.App = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                drawer: false,
+                my_auctions: {{ my_auctions_json|safe }},
+                joined_auctions: {{ joined_auctions_json|safe }},
+            },
+            delimiters: ["[[", "]]"],
+    });
+    </script>
+{% endblock %}
