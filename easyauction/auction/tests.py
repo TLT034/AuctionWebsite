@@ -109,3 +109,39 @@ class AuthTests(TestCase):
 
 def create_user(username, password, email=None):
     AuctionUser.objects.create_user(username=username, password=password, email=email).save()
+
+
+class AuctionTests(TestCase):
+    def test_restrict_auction_detail_access_to_admins(self):
+        # Admin
+        username1 = 'admin'
+        password1 = 'test12345'
+        create_user(username1, password1)
+        self.client.login(username=username1, password=password1)
+        admin = AuctionUser.objects.get(username=username1)
+        admin.create_auction(name='Test Auction')
+
+        auction_pk = admin.auction_set.first().pk
+        admin_response = self.client.get(reverse('auction:auction_detail', kwargs={'pk': auction_pk}))
+        self.client.logout()
+
+        # Non-participant user
+        username2 = 'user'
+        password2 = 'test12345'
+        create_user(username2, password1)
+        self.client.login(username=username2, password=password2)
+
+        user_response = self.client.get(reverse('auction:auction_detail', kwargs={'pk': auction_pk}))
+        self.client.logout()
+
+        self.assertEqual(admin_response.status_code, 200)
+        self.assertEqual(user_response.status_code, 403)
+
+    def test_correctly_rendered_admin_detail_view(self):
+        pass
+
+    def test_restrict_auction_detail_access_to_participants(self):
+        pass
+
+    def test_correctly_rendered_participant_detail_view(self):
+        pass

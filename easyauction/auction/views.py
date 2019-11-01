@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
+from django.core import serializers
 
 from .forms import AuctionForm
 from .forms import UserSignUpForm
@@ -41,16 +42,30 @@ class EditAccountView(generic.UpdateView):
       
 def home(request):
     user = request.user
-    if user.has_auction()
-    all_hosted_auctions = Auction.objects.order_by('-time_created')
-    all_joined_auctions = Auction.objects.order_by('-time_created')
-    return render(request, 'auction/home.html', context={'my_auctions': all_hosted_auctions, 'joined_auctions': all_joined_auctions})
+    hosted_auctions = Auction.objects.filter(published=True).order_by('-time_created')
+    joined_auctions = Auction.objects.order_by('-time_created')
+
+    Json_Serializer = serializers.get_serializer('json')
+    json = Json_Serializer()
+
+    json.serialize(hosted_auctions)
+    hosted_auctions_json = json.getvalue()
+
+    json.serialize(joined_auctions)
+    joined_auctions_json = json.getvalue()
+
+    context = {'hosted_auctions': hosted_auctions,
+               'joined_auctions': joined_auctions,
+               'my_auctions_json': hosted_auctions_json,
+               'joined_auctions_json': joined_auctions_json}
+
+    return render(request, 'auction/home2.html', context=context)
 
 
 def auction_detail(request, pk):
     user = request.user
-    if user.auction_set.exists(pk=pk):
-        auction = Auction.objects.all().filter(pk=pk).first()
+    if user.auction_set.filter(pk=pk).exists():
+        auction = user.auction_set.get(pk=pk)
         return render(request, 'auction/auction_detail.html', context={'auction': auction})
     else:
         return HttpResponseForbidden()
@@ -60,9 +75,9 @@ def create_auction(request):
     if request.method == 'POST':
         form = AuctionForm(request.POST)
         if form.is_valid():
-            new_auction = Auction(name=form.cleaned_data['auction_name'], time_created=timezone.now())
+            new_auction = Auction(name=form.cleaned_data['auction_name'])
             new_auction.save()
-            url = reverse('auction:auction-detail', kwargs={'pk': new_auction.pk})
+            url = reverse('auction:auction_detail', kwargs={'pk': new_auction.pk})
             return HttpResponseRedirect(url)
     else:
         form = AuctionForm()
@@ -72,4 +87,9 @@ def create_auction(request):
 # TODO: add current user as a participant in the auction specified
 def enter_local_code(request):
     return render(request, 'auction/enter_local_code.html', context={})
+
+
+class ItemView(generic.DetailView):
+    model = Item
+
  
