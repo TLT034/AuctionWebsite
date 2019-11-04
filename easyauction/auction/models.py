@@ -48,7 +48,7 @@ class Auction(models.Model):
     image = models.ImageField(default="default_item_pic.jpg", upload_to="auction_pics")
     published = models.BooleanField(default=False)
     admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
-    description = models.TextField(default='Auction description')
+    description = models.TextField()
     participants = models.ManyToManyField(AuctionUser, related_name='joined_auctions', related_query_name='joined_auction')
 
     def __str__(self):
@@ -72,7 +72,7 @@ class Item(models.Model):
     name = models.CharField(max_length=200)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(default="item_pics/default_item_pic.jpg", upload_to="item_pics")
-    description = models.TextField(default="Item description")
+    description = models.TextField()
     is_sold = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
     is_open = models.BooleanField(default=False)
