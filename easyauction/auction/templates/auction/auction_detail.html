@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="item_desc">{{ item_form.description.label }}</label>
-                                    {% render_field item_form.description class="form-control" placeholder="Enter starting item price" id="item_desc" %}
+                                    {% render_field item_form.description class="form-control" placeholder="Enter item description" id="item_desc" %}
                                     {% if item_form.description.errors %}
                                        {% for error in form.description.errors %}
                                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
