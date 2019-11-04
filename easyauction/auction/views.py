@@ -41,29 +41,12 @@ class EditAccountView(generic.UpdateView):
 
 def home(request):
     user = request.user
-    hosted_auctions = Auction.objects.filter(published=True).order_by('-time_created')
-    joined_auctions = Auction.objects.order_by('-time_created')
+    hosted_auctions = user.auction_set.order_by('-time_created')
+    joined_auctions = user.joined_auctions.order_by('-time_created')
 
-    # JSON representation to be used for Vue app data elements (Querysets don't work)
-    Json_Serializer = serializers.get_serializer('json')
-    json = Json_Serializer()
-
-    json.serialize(hosted_auctions)
-    hosted_auctions_json = json.getvalue()
-
-    json.serialize(joined_auctions)
-    joined_auctions_json = json.getvalue()
-
-    """
-    'hosted_auctions', 'joined_auctions': data for rendering auction info in-page
-    'my_auctions_json', 'joined_auctions_json': used by v-for directive to iterate over auctions in host_auctions list in-page 
-    (probably more efficient to just pass len(auctions_to_iterate_over) instead but it's already done)
-    """
     context = {  # Used for data
                 'hosted_auctions': hosted_auctions,
-                'joined_auctions': joined_auctions,
-                'my_auctions_json': hosted_auctions_json,
-                'joined_auctions_json': joined_auctions_json}
+                'joined_auctions': joined_auctions}
 
     return render(request, 'auction/home2.html', context=context)
 
