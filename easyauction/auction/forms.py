@@ -1,12 +1,13 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 
-from .models import AuctionUser
-from .models import Auction
+from .models import AuctionUser, Item, Auction
 
 
-class AuctionForm(forms.Form):
-    auction_name = forms.CharField(label="Auction name", max_length=200)
+class AuctionForm(forms.ModelForm):
+    class Meta:
+        model = Auction
+        fields = ['name', 'image', 'description']
 
 
 # Default UserCreationForm with added user attributes
@@ -18,3 +19,9 @@ class UserSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = AuctionUser
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
+
+
+class AddItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'starting_price', 'description', 'image']

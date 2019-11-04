@@ -3,12 +3,11 @@ from django.views import generic
 from .models import AuctionUser
 from django.shortcuts import render
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponseForbidden
 from django.urls import reverse
 from django.core import serializers
 
-from .forms import AuctionForm
-from .forms import UserSignUpForm
+from .forms import AuctionForm, UserSignUpForm, AddItemForm
 
 from .models import Auction, AuctionUser, Item
 
@@ -69,26 +68,61 @@ def home(request):
     return render(request, 'auction/home2.html', context=context)
 
 
+"""
+TODO: add toggle for switching between live and silent auctions.
+The toggle could put a flag in the post data, which the view can use to
+pick which items to load
+"""
 def auction_detail(request, pk):
+    # Get context items
     user = request.user
     if user.auction_set.filter(pk=pk).exists():
+        user_is_admin = True
         auction = user.auction_set.get(pk=pk)
-        return render(request, 'auction/auction_detail.html', context={'auction': auction})
-    else:
+        items = auction.item_set.all()
+    elif user.joined_auctions.filter(pk=pk).exists():
+        # TODO: implement count-down on items and only show items with positive countdowns
+        user_is_admin = False
+        auction = user.joined_auctions.get(pk=pk)
+        items = auction.item_set.all()
+    elif Auction.objects.filter(pk=pk).exists():
         return HttpResponseForbidden()
+    else:
+        return HttpResponseNotFound()
+
+    # Save object from form or create new form to put in context
+    if request.method == 'POST':
+        item_form = AddItemForm(request.POST, request.FILES)
+        if item_form.is_valid():
+            item = item_form.save(commit=False)
+            item.auction = auction
+            item.save()
+            return HttpResponseRedirect(reverse('auction:auction_detail', args=[auction.pk]))
+    else:
+        item_form = AddItemForm()
+
+    context = {
+        'auction': auction,
+        'items': items,
+        'item_form': item_form,
+        'user_is_admin': user_is_admin
+    }
+
+    return render(request, 'auction/auction_detail.html', context=context)
 
 
 def create_auction(request):
     if request.method == 'POST':
-        form = AuctionForm(request.POST)
-        if form.is_valid():
-            new_auction = Auction(name=form.cleaned_data['auction_name'])
-            new_auction.save()
-            url = reverse('auction:auction_detail', kwargs={'pk': new_auction.pk})
+        auction_form = AuctionForm(request.POST, request.FILES)
+        if auction_form.is_valid():
+            auction = auction_form.save(commit=False)
+            auction.admin = request.user
+            auction.save()
+            url = reverse('auction:auction_detail', kwargs={'pk': auction_form.instance.pk})
             return HttpResponseRedirect(url)
     else:
-        form = AuctionForm()
-    return render(request, 'auction/create_auction.html', context={'form': form})
+        auction_form = AuctionForm()
+    return render(request, 'auction/create_auction.html', context={'auction_form': auction_form})
 
 
 # TODO: add current user as a participant in the auction specified
