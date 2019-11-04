@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import AuctionUser
 from django.urls import reverse
+from .forms import AddItemForm
 
 
 class AuthTests(TestCase):
@@ -138,10 +139,66 @@ class AuctionTests(TestCase):
         self.assertEqual(user_response.status_code, 403)
 
     def test_correctly_rendered_admin_detail_view(self):
-        pass
+        username = 'test_user'
+        password = 'test12345'
+        create_user(username, password)
+
+        user = AuctionUser.objects.get(username=username)
+        user.create_auction('test auction', 'test auction desc')
+        auction = user.auction_set.get(name='test auction')
+
+        # Asserts the page loaded and the add item form rendered for the admin
+        self.client.login(username=username, password=password)
+        response = self.client.get(reverse('auction:auction_detail', args=[auction.pk]))
+        self.assertTrue(response.status_code, 200)
+        self.assertTrue('id="add_item_col"' in response.content.decode())
+
 
     def test_restrict_auction_detail_access_to_participants(self):
         pass
 
     def test_correctly_rendered_participant_detail_view(self):
-        pass
+        # Admin
+        username1 = 'admin'
+        password1 = 'test12345'
+        create_user(username1, password1)
+        admin = AuctionUser.objects.get(username=username1)
+        admin.create_auction(name='Test Auction')
+
+        auction = admin.auction_set.first()
+        auction_pk = auction.pk
+
+        # Participant
+        username2 = 'user'
+        password2 = 'test12345'
+        create_user(username2, password1)
+        participant = AuctionUser.objects.get(username=username2)
+        auction.participants.add(participant)
+        self.client.login(username=username2, password=password2)
+
+        # Asserts the user had access to the page and that the add item form didn't render for the non-admin
+        response = self.client.get(reverse('auction:auction_detail', kwargs={'pk': auction_pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse('id="add_item_col"' in response.content.decode())
+
+    def test_add_item(self):
+        username = 'test_user'
+        password = 'test12345'
+        create_user(username, password)
+
+        user = AuctionUser.objects.get(username=username)
+        user.create_auction('test auction', 'test auction desc')
+        auction = user.auction_set.get(name='test auction')
+
+        data = {'name': 'test item',
+                'starting_price': 5.00,
+                'description': 'desc for test item'}
+
+        item_form = AddItemForm(data)
+        item_form.is_valid()
+        item = item_form.save(commit=False)
+        item.auction = auction
+        item.save()
+
+        updated_auction = user.auction_set.get(name='test auction')
+        self.assertTrue(updated_auction.item_set.filter(name='test item').exists())
