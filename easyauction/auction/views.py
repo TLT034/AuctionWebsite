@@ -3,7 +3,7 @@ from django.views import generic
 from .models import AuctionUser
 from django.shortcuts import render
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.urls import reverse
 from django.core import serializers
 
@@ -111,6 +111,20 @@ def create_auction(request):
 # TODO: add current user as a participant in the auction specified
 def enter_local_code(request):
     return render(request, 'auction/enter_local_code.html', context={})
+
+
+def item_view(request, item_id):
+    user = request.user
+
+    if user.is_admin(user.pk):
+        admin = True
+
+    try:
+        item = Item.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        raise Http404("Item does not exist")
+
+    return render(request, 'auction/item.html', context={'item': item})
 
 
 class ItemView(generic.DetailView):

@@ -25,8 +25,11 @@ SECRET_KEY = '79^t2vx2pdut4cv*kqc!7(qc7s6cv!4ea#lokx7w=x()&66zw*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', '10.0.0.34']
-
+ALLOWED_HOSTS = ['127.0.0.1',
+                 'localhost',
+                 'testserver',
+                 '192.168.1.7'  # Tristan Laptop Home (used for testing mobile)
+                 ]
 
 # Application definition
 
