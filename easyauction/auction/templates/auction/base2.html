@@ -30,6 +30,11 @@
                             <v-list-item-title>Home</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item href="{% url 'auction:enter_local_code' %}">
+                        <v-list-item-content>
+                            <v-list-item-title>Join an Existing Auction</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item href="{% url 'auction:create_auction' %}">
                         <v-list-item-content>
                             <v-list-item-title>Host an Auction</v-list-item-title>
