@@ -3,14 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_account.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_edit_account.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/temp_signup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/easyauction/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/easyauction/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -103,6 +99,9 @@
       <workItem from="1571688961491" duration="96000" />
       <workItem from="1571952026023" duration="35000" />
       <workItem from="1571952061842" duration="8557000" />
+      <workItem from="1572901349973" duration="133000" />
+      <workItem from="1572903183612" duration="10003000" />
+      <workItem from="1573063104243" duration="10461000" />
     </task>
     <servers />
   </component>

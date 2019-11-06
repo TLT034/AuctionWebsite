@@ -1,0 +1,87 @@
+{% extends 'auction/base2.html' %}
+
+{% block title %}{{item.name}}{% endblock %}
+
+{% block content %}
+ <v-card class="d-inline-block mx-auto" max-width="850">
+    <v-container>
+        <v-row>
+            <v-col cols="auto">
+                <v-img
+                    max_height="500"
+                    max_width="500"
+                    src="{{ item.main_pic.url }}"
+                ></v-img>
+            </v-col>
+            <v-col class="text-center">
+
+                {% if admin %}
+                <v-layout justify-end>
+                    <v-btn icon @click="edit =!edit">
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                </v-layout>
+                {% endif %}
+
+                {% if item.is_sold %}
+                <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
+                {% endif %}
+
+                <v-text-field
+                    value="{{ item.name }}"
+                    :readonly="!edit"
+                ></v-text-field>
+
+                <v-text-field
+                    value="$ {{ item.starting_price }}"
+                    :readonly="!edit"
+                ></v-text-field>
+
+                {% if item.winner %}
+                <v-text-field
+                    value="{{ item.winner.username }}"
+                    :readonly="!edit"
+                ></v-text-field>
+                {% endif %}
+
+            </v-col>
+        </v-row>
+
+        <v-card-actions>
+            <v-btn icon @click="show = !show">
+                <v-icon>[[ show ? 'mdi-chevron-up' : 'mdi-chevron-down' ]]</v-icon>
+            </v-btn>
+        </v-card-actions>
+
+        <v-expand-transition>
+            <div v-show="show">
+                <v-spacer></v-spacer>
+                <v-textarea
+                    label="Description"
+                    value="{{ item.description }}"
+                    :readonly="!edit"
+                    filled
+                ></v-textarea>
+            </div>
+        </v-expand-transition>
+
+    </v-container>
+  </v-card>
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+    assorted_vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            drawer: false,
+            show: false,
+            edit: false
+        },
+        delimiters: ["[[", "]]"]
+    });
+
+    </script>
+{% endblock %}

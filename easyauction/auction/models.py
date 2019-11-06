@@ -30,8 +30,11 @@ class AuctionUser(AbstractUser):
         else:
             return True
 
-    def is_admin(self):
-        return self.auction_set.filter(published=True).exists()
+    def is_admin(self, pk: int = None):
+        if pk:
+            return self.auction_set.filter(pk=pk).exists()
+        else:
+            return self.auction_set.filter(published=True).exists()
 
     def is_participant(self):
         return self.joined_auctions.exists()
