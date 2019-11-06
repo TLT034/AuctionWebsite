@@ -91,7 +91,7 @@
     <v-row>
        {% for item in items %}
            <v-col cols="3">
-                <v-card href="{% url 'auction:item_detail' item.pk %}">
+                <v-card href="{% url 'auction:item' item.pk %}">
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
                             <v-card-title class="headline">{{ item.name }}</v-card-title>
