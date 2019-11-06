@@ -62,7 +62,7 @@
                     dark
             >
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-                <v-toolbar-title>{% block v_title %}Easy Auction{% endblock %}</v-toolbar-title>
+                <v-toolbar-title>{% block v_title %}<a style="text-decoration: none; color: inherit" href="{% url 'auction:home' %}">Easy Auction</a>{% endblock %}</v-toolbar-title>
             </v-app-bar>
 
             <v-content>
