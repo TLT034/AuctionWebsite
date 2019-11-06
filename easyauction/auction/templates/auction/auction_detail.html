@@ -1,12 +1,132 @@
-{% extends "auction/base.html" %}
+{% extends "auction/base2.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block stylesheets %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+{% endblock %}
 
-{% block title %}{% endblock %}
+# Sets page title
+{% block title %}{{ auction.name }}{% endblock %}
 
 {% block content %}
-    <h2>{{ auction.name }}</h2>
-    <h5>Owner: {{ auction.admin.username }}</h5>
-    <h5>Created on {{ auction.time_created }}</h5>
-    {% for item in auction.item_set.all %}
-    	<p>{{ item.name }} - Highest bid: "item.bid_set.order_by('amount').desc()[0]"</p>
-    {% endfor %}
+    <v-row>
+        <v-col cols="6">
+            <v-card raised=True>
+                <div class="d-flex flex-no-wrap justify-space-between">
+                    <div>
+                        <v-card-title>{{ auction.name }}</v-card-title>
+                        <v-card-subtitle>
+                            <p>Owner: {{ auction.admin.username }}</p>
+                            <p>Created on {{ auction.time_created }}</p>
+                            <p>Number of bidders: {{ auction.participant_set.count }}</p>
+                            <p>Items: {{ items|length }}</p>
+                        </v-card-subtitle>
+                    </div>
+                    <v-avatar class="ma-3" size="125" tile>
+                        <v-img src="{{ item.image.url }}"></v-img>
+                    </v-avatar>
+                </div>
+            </v-card>
+        </v-col>
+        {% if user_is_admin %}
+        <v-col cols="6" id="add_item_col">
+            <div>
+                <v-btn @click="show_add_item = !show_add_item">
+                    Add item <v-icon color="blue">add</v-icon>
+                </v-btn>
+            </div>
+            <v-expand-transition>
+                <div v-show="show_add_item">
+                    <v-divider></v-divider>
+                    <div class="input-cart col s12 m10 push-m1 z-depth-2 grey lighten-5">
+                        <div class="col s12 m5 item_form">
+                            <form id="add_item_form" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="item_name">{{ item_form.name.label }}</label>
+                                    {% render_field item_form.name class="form-control" placeholder="Enter item name" id="item_name" type="text" %}
+                                    {% if item_form.name.errors %}
+                                       {% for error in form.name.errors %}
+                                           <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                                       {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="item_price">{{ item_form.starting_price.label }}</label>
+                                    {% render_field item_form.starting_price class="form-control" type="number" min="0.01" step="0.01" placeholder="Enter starting item price" id="item_price" %}
+                                    {% if item_form.starting_price.errors %}
+                                       {% for error in form.starting_price.errors %}
+                                           <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                                       {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="item_image">{{ item_form.image.label }}</label>
+                                    {% render_field item_form.image class="form-control" placeholder="Enter starting item price" id="item_image" %}
+                                    {% if item_form.image.errors %}
+                                       {% for error in form.image.errors %}
+                                           <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                                       {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="item_desc">{{ item_form.description.label }}</label>
+                                    {% render_field item_form.description class="form-control" placeholder="Enter item description" id="item_desc" %}
+                                    {% if item_form.description.errors %}
+                                       {% for error in form.description.errors %}
+                                           <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                                       {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <v-btn type="submit" form="add_item_form">Submit</v-btn>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </v-expand-transition>
+        </v-col>
+        {% endif %}
+    </v-row>
+    <v-row>
+       {% for item in items %}
+           <v-col cols="3">
+                <v-card href="{% url 'auction:item_detail' item.pk %}">
+                    <div class="d-flex flex-no-wrap justify-space-between">
+                        <div>
+                            <v-card-title class="headline">{{ item.name }}</v-card-title>
+
+                            <v-card-subtitle>
+                                {# Requires bid_set to be ordered by price descending #}
+                                <p>item.bid_set.first</p>
+                                <p>item.bid_set|length</p>
+                            </v-card-subtitle>
+                        </div>
+
+                        <v-avatar class="ma-3" size="125" tile>
+                            <v-img src="{{ item.image.url }}"></v-img>
+                        </v-avatar>
+                    </div>
+                </v-card>
+           </v-col>
+       {% endfor %}
+    </v-row>
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    assorted_vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            drawer: false,
+            n_items: {{ items|length }},
+            n_items_per_row: 4,
+            show_add_item: false,
+        },
+        delimiters: ["[[", "]]"]
+    });
+    </script>
 {% endblock %}

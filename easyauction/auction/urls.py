@@ -5,6 +5,9 @@ from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
 from .decorators import anon_required, redirected_from
 from . import views
+from easyauction import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 app_name = 'auction'
 urlpatterns = [
@@ -38,7 +41,6 @@ urlpatterns += [
          name='reset_password_complete'),
 ]
 
-
 # Auction management urls
 urlpatterns += [
   path('auction/create_auction/', login_required(views.create_auction), name='create_auction'),
@@ -46,3 +48,6 @@ urlpatterns += [
   path('auction/auction_detail/<int:pk>', login_required(views.auction_detail), name='auction_detail'),
   path('auction/item/<int:item_id>', login_required(views.item_view), name='item'),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

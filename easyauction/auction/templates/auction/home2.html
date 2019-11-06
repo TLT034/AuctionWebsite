@@ -5,7 +5,7 @@
 {% block content %}
 <v-row>
     <v-col>
-        {% if my_auctions.exists %}
+        {% if hosted_auctions.exists %}
         <v-list>
             <v-subheader>My Auctions</v-subheader>
             {% for auction in hosted_auctions %}
@@ -61,13 +61,11 @@
     <script>
     Vue.use(Vuetify);
 
-    window.App = new Vue({
+    home_vue = new Vue({
             el: '#app',
             vuetify: new Vuetify(),
             data: {
                 drawer: false,
-                my_auctions: {{ my_auctions_json|safe }},
-                joined_auctions: {{ joined_auctions_json|safe }},
             },
             delimiters: ["[[", "]]"],
     });

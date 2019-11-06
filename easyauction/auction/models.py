@@ -48,10 +48,10 @@ class Auction(models.Model):
     name = models.CharField(max_length=200)
     time_created = models.DateTimeField(auto_now_add=True)
     entry_code = models.IntegerField(default=random_entry_code)
-    image = models.ImageField(default="default_item_pic.jpg", upload_to="static/auction/auction_pics")
+    image = models.ImageField(default="default_item_pic.jpg", upload_to="auction_pics")
     published = models.BooleanField(default=False)
     admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
-    description = models.TextField(default='Auction description')
+    description = models.TextField()
     participants = models.ManyToManyField(AuctionUser, related_name='joined_auctions', related_query_name='joined_auction')
 
     def __str__(self):
@@ -65,7 +65,7 @@ class Auction(models.Model):
         self.published = False
 
     def add_item(self, name, starting_price, item_desc):
-        self.item_set.create(name=name, starting_price=starting_price, item_desc=item_desc)
+        self.item_set.create(name=name, starting_price=starting_price, description=item_desc)
 
     def remove_item(self, pk):
         self.item_set.filter(pk=pk).first().delete()
@@ -74,8 +74,8 @@ class Auction(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=200)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
-    main_pic = models.ImageField(default="default_item_pic.jpg", upload_to="static/auction/item_pics")
-    description = models.TextField(default="Item description")
+    image = models.ImageField(default="item_pics/default_item_pic.jpg", upload_to="item_pics")
+    description = models.TextField()
     is_sold = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
     is_open = models.BooleanField(default=False)

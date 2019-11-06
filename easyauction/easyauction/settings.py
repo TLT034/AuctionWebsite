@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['127.0.0.1',
                  '192.168.1.7'  # Tristan Laptop Home (used for testing mobile)
                  ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
