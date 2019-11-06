@@ -41,9 +41,9 @@
         <h2>This is the Menu</h2>
         <div id="my_auctions">
             <h3>My Auctions</h3>
-            {% if my_auctions %}
+            {% if hosted_auctions %}
                 <ul>
-                {% for auction in my_auctions %}
+                {% for auction in hosted_auctions %}
                     <li><a href="{% url 'auction:auction_detail' auction.id %}" >{{auction.name}}</a>
                     <br />
                 {% endfor %}
