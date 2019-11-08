@@ -52,6 +52,16 @@
                                        {% endfor %}
                                     {% endif %}
                                 </div>
+                                <!-- <div class="form-group">
+                                    <label for="item_auction_type">{{ item_form.auction_type.label }}</label>
+                                    {% render_field item_form.name class="form-control" id="item_auction_type" type="radio" label="silent" %}
+                                    {% render_field item_form.name class="form-control" id="item_auction_type" type="radio" label="live" %}
+                                    {% if item_form.name.errors %}
+                                       {% for error in form.auction_type.errors %}
+                                           <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                                       {% endfor %}
+                                    {% endif %}
+                                </div> -->
                                 <div class="form-group">
                                     <label for="item_price">{{ item_form.starting_price.label }}</label>
                                     {% render_field item_form.starting_price class="form-control" type="number" min="0.01" step="0.01" placeholder="Enter starting item price" id="item_price" %}
@@ -89,27 +99,83 @@
         {% endif %}
     </v-row>
     <v-row>
-       {% for item in items %}
-           <v-col cols="3">
-                <v-card href="{% url 'auction:item' item.pk %}">
-                    <div class="d-flex flex-no-wrap justify-space-between">
-                        <div>
-                            <v-card-title class="headline">{{ item.name }}</v-card-title>
+        <v-tabs color="cyan" centered grow>
+            <v-tab>
+                Silent Items
+            </v-tab>
+            <v-tab>
+                Live Items
+            </v-tab>
+            <v-tab-item>
+                <container>
+                    <v-row>
+                        {% if not silent_items %}
+                            <v-col>
+                                <v-card flat>
+                                    <v-card-text>This auction has no silent items.</v-card-text>
+                                </v-card>
+                            </v-col>
+                        {% endif %}
+                        {% for item in silent_items %}
+                            <v-col cols="3">
+                                <v-card href="{% url 'auction:item' item.pk %}">
+                                    <div class="d-flex flex-no-wrap justify-space-between">
+                                        <div>
+                                            <v-card-title class="headline">{{ item.name }}</v-card-title>
 
-                            <v-card-subtitle>
-                                {# Requires bid_set to be ordered by price descending #}
-                                <p>item.bid_set.first</p>
-                                <p>item.bid_set|length</p>
-                            </v-card-subtitle>
-                        </div>
+                                            <v-card-subtitle>
+                                                {# Requires bid_set to be ordered by price descending #}
+                                                <p>item.bid_set.first</p>
+                                                <p>item.bid_set|length</p>
+                                            </v-card-subtitle>
+                                        </div>
 
-                        <v-avatar class="ma-3" size="125" tile>
-                            <v-img src="{{ item.image.url }}"></v-img>
-                        </v-avatar>
-                    </div>
-                </v-card>
-           </v-col>
-       {% endfor %}
+                                        <v-avatar class="ma-3" size="125" tile>
+                                            <v-img src="{{ item.image.url }}"></v-img>
+                                        </v-avatar>
+                                    </div>
+                                </v-card>
+                            </v-col>
+                        {% endfor %}
+                    </v-row>
+                </container>
+            </v-tab-item>
+            <v-tab-item>
+                <container>
+                    <v-row>
+                        {% if not live_items %}
+                            <v-col>
+                                <v-card flat>
+                                    <v-card-text>This auction has no live items.</v-card-text>
+                                </v-card>
+                            </v-col>
+                        {% endif %}
+                        {% for item in live_items %}
+                            <v-col cols="3">
+                                <v-card href="{% url 'auction:item' item.pk %}">
+                                    <div class="d-flex flex-no-wrap justify-space-between">
+                                        <div>
+                                            <v-card-title class="headline">{{ item.name }}</v-card-title>
+
+                                            <v-card-subtitle>
+                                                {# Requires bid_set to be ordered by price descending #}
+                                                <p>item.bid_set.first</p>
+                                                <p>item.bid_set|length</p>
+                                            </v-card-subtitle>
+                                        </div>
+
+                                        <v-avatar class="ma-3" size="125" tile>
+                                            <v-img src="{{ item.image.url }}"></v-img>
+                                        </v-avatar>
+                                    </div>
+                                </v-card>
+                            </v-col>
+                        {% endfor %}
+                    </v-row>
+                </container>
+            </v-tab-item>
+        </v-tabs>
+
     </v-row>
 {% endblock %}
 

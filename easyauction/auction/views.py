@@ -62,12 +62,14 @@ def auction_detail(request, pk):
     if user.auction_set.filter(pk=pk).exists():
         user_is_admin = True
         auction = user.auction_set.get(pk=pk)
-        items = auction.item_set.all()
+        live_items = auction.item_set.filter(auction_type='live')
+        silent_items = auction.item_set.filter(auction_type='silent')
     elif user.joined_auctions.filter(pk=pk).exists():
         # TODO: implement count-down on items and only show items with positive countdowns
         user_is_admin = False
         auction = user.joined_auctions.get(pk=pk)
-        items = auction.item_set.all()
+        live_items = auction.item_set.filter(auction_type='live')
+        silent_items = auction.item_set.filter(auction_type='silent')
     elif Auction.objects.filter(pk=pk).exists():
         return HttpResponseForbidden()
     else:
@@ -86,7 +88,8 @@ def auction_detail(request, pk):
 
     context = {
         'auction': auction,
-        'items': items,
+        'live_items': live_items,
+        'silent_items': silent_items,
         'item_form': item_form,
         'user_is_admin': user_is_admin
     }

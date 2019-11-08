@@ -72,16 +72,19 @@ class Auction(models.Model):
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=200)
-    starting_price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(default="item_pics/default_item_pic.jpg", upload_to="item_pics")
-    description = models.TextField()
-    is_sold = models.BooleanField(default=False)
-    is_paid = models.BooleanField(default=False)
-    is_open = models.BooleanField(default=False)
-    paid_time = models.DateTimeField(null=True, blank=True)
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    winner = models.ForeignKey(AuctionUser, on_delete=models.SET_NULL, null=True, blank=True)
+	AUCTION_TYPES = [('live', 'live'), ('silent', 'silent')]
 
-    def __str__(self):
-        return self.name
+	name = models.CharField(max_length=200)
+	starting_price = models.DecimalField(max_digits=10, decimal_places=2)
+	image = models.ImageField(default="defaults/default_item_pic.jpg", upload_to="item_pics")
+	description = models.TextField()
+	auction_type = models.CharField(max_length=6, choices=AUCTION_TYPES, default='silent')
+	is_sold = models.BooleanField(default=False)
+	is_paid = models.BooleanField(default=False)
+	is_open = models.BooleanField(default=False)
+	paid_time = models.DateTimeField(null=True, blank=True)
+	auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
+	winner = models.ForeignKey(AuctionUser, on_delete=models.SET_NULL, null=True, blank=True)
+
+	def __str__(self):
+	    return self.name
