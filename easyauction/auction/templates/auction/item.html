@@ -10,14 +10,14 @@
                 <v-img
                     max_height="500"
                     max_width="500"
-                    src="{{ item.main_pic.url }}"
+                    src="{{ item.image.url }}"
                 ></v-img>
             </v-col>
             <v-col class="text-center">
 
                 {% if admin %}
                 <v-layout justify-end>
-                    <v-btn icon @click="edit =!edit">
+                    <v-btn icon @click="edit = !edit">
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                 </v-layout>

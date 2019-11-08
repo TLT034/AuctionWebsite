@@ -97,50 +97,58 @@
                 Silent Items
             </v-tab>
             <v-tab-item>
-                {% for item in live_items %}
-                    <v-col cols="3">
-                        <v-card href="{% url 'auction:item' item.pk %}">
-                            <div class="d-flex flex-no-wrap justify-space-between">
-                                <div>
-                                    <v-card-title class="headline">{{ item.name }}</v-card-title>
+                <container>
+                    <v-row>
+                        {% for item in live_items %}
+                            <v-col cols="3">
+                                <v-card href="{% url 'auction:item' item.pk %}">
+                                    <div class="d-flex flex-no-wrap justify-space-between">
+                                        <div>
+                                            <v-card-title class="headline">{{ item.name }}</v-card-title>
 
-                                    <v-card-subtitle>
-                                        {# Requires bid_set to be ordered by price descending #}
-                                        <p>item.bid_set.first</p>
-                                        <p>item.bid_set|length</p>
-                                    </v-card-subtitle>
-                                </div>
+                                            <v-card-subtitle>
+                                                {# Requires bid_set to be ordered by price descending #}
+                                                <p>item.bid_set.first</p>
+                                                <p>item.bid_set|length</p>
+                                            </v-card-subtitle>
+                                        </div>
 
-                                <v-avatar class="ma-3" size="125" tile>
-                                    <v-img src="{{ item.image.url }}"></v-img>
-                                </v-avatar>
-                            </div>
-                        </v-card>
-                    </v-col>
-                {% endfor %}
+                                        <v-avatar class="ma-3" size="125" tile>
+                                            <v-img src="{{ item.image.url }}"></v-img>
+                                        </v-avatar>
+                                    </div>
+                                </v-card>
+                            </v-col>
+                        {% endfor %}
+                    </v-row>
+                </container>
             </v-tab-item>
             <v-tab-item>
-                {% for item in silent_items %}
-                    <v-col cols="3">
-                        <v-card href="{% url 'auction:item' item.pk %}">
-                            <div class="d-flex flex-no-wrap justify-space-between">
-                                <div>
-                                    <v-card-title class="headline">{{ item.name }}</v-card-title>
+                <container>
+                    <v-row>
+                        {% for item in silent_items %}
+                            <v-col cols="3">
+                                <v-card href="{% url 'auction:item' item.pk %}">
+                                    <div class="d-flex flex-no-wrap justify-space-between">
+                                        <div>
+                                            <v-card-title class="headline">{{ item.name }}</v-card-title>
 
-                                    <v-card-subtitle>
-                                        {# Requires bid_set to be ordered by price descending #}
-                                        <p>item.bid_set.first</p>
-                                        <p>item.bid_set|length</p>
-                                    </v-card-subtitle>
-                                </div>
+                                            <v-card-subtitle>
+                                                {# Requires bid_set to be ordered by price descending #}
+                                                <p>item.bid_set.first</p>
+                                                <p>item.bid_set|length</p>
+                                            </v-card-subtitle>
+                                        </div>
 
-                                <v-avatar class="ma-3" size="125" tile>
-                                    <v-img src="{{ item.image.url }}"></v-img>
-                                </v-avatar>
-                            </div>
-                        </v-card>
-                    </v-col>
-                {% endfor %}
+                                        <v-avatar class="ma-3" size="125" tile>
+                                            <v-img src="{{ item.image.url }}"></v-img>
+                                        </v-avatar>
+                                    </div>
+                                </v-card>
+                            </v-col>
+                        {% endfor %}
+                    </v-row>
+                </container>
             </v-tab-item>
         </v-tabs>
 

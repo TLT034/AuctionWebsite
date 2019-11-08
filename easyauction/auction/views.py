@@ -127,7 +127,7 @@ def item_view(request, item_id):
     except Item.DoesNotExist:
         raise Http404("Item does not exist")
 
-    return render(request, 'auction/item.html', context={'item': item})
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
 
 
 class ItemView(generic.DetailView):
