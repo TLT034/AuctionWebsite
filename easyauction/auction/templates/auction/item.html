@@ -5,7 +5,8 @@
 {% block content %}
  <v-card class="d-inline-block mx-auto" max-width="850">
     {# Use item.id or item.pk?? or is it the same?? #}
-    <form action="{% url "auction:edit_item" item.id %}">
+    <form action="{% url "auction:edit_item" item.id %}" method="post">
+        {% csrf_token %}
         <v-container>
             <v-row>
                 <v-col cols="auto">
@@ -18,9 +19,14 @@
                 <v-col class="text-center">
 
                     {% if admin %}
-                    <v-layout justify-end>
-                        <v-btn icon @click="edit =!edit">
+                    <v-layout v-show="!edit" justify-end>
+                        <v-btn icon @click="edit =!edit" >
                             <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                    </v-layout>
+                    <v-layout v-show="edit" justify-end>
+                        <v-btn icon type="submit" >
+                            <v-icon>mdi-check</v-icon>
                         </v-btn>
                     </v-layout>
                     {% endif %}
@@ -31,20 +37,21 @@
                         {% endif %}
 
                         <v-text-field
-                            id="name"
+                            name="name"
                             value="{{ item.name }}"
                             :readonly="!edit"
                         ></v-text-field>
 
                         <v-text-field
-                            id="starting_price"
-                            value="$ {{ item.starting_price }}"
+                            name="starting_price"
+                            label="US Dollars $"
+                            value="{{ item.starting_price }}"
                             :readonly="!edit"
                         ></v-text-field>
 
                         {% if item.winner %}
                         <v-text-field
-                            id="winner"
+                            name="winner"
                             value="{{ item.winner.username }}"
                             :readonly="!edit"
                         ></v-text-field>
@@ -62,7 +69,7 @@
                 <div v-show="show">
                     <v-spacer></v-spacer>
                     <v-textarea
-                        id="description"
+                        name="description"
                         label="Description"
                         value="{{ item.description }}"
                         :readonly="!edit"
