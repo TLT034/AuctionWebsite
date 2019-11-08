@@ -76,6 +76,7 @@ class Item(models.Model):
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(default="item_pics/default_item_pic.jpg", upload_to="item_pics")
     description = models.TextField()
+    is_live_item = models.BooleanField(default=False)
     is_sold = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
     is_open = models.BooleanField(default=False)
