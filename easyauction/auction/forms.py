@@ -22,7 +22,7 @@ class UserSignUpForm(UserCreationForm):
 
 
 class AddItemForm(forms.ModelForm):
-    auction_type = forms.ChoiceField(choices=Item.AUCTION_TYPES, widget=forms.RadioSelect())
+    auction_type = forms.ChoiceField(choices=Item.AUCTION_TYPES)
     class Meta:
         model = Item
         fields = ['name', 'starting_price', 'description', 'image', 'auction_type']
