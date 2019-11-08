@@ -72,7 +72,7 @@ class Auction(models.Model):
 
 
 class Item(models.Model):
-	AUCTION_TYPES = [('live', 'live'), ('silent', 'silent')]
+	AUCTION_TYPES = [('silent', 'silent'), ('live', 'live')]
 
 	name = models.CharField(max_length=200)
 	starting_price = models.DecimalField(max_digits=10, decimal_places=2)

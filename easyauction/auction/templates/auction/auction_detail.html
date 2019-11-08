@@ -52,16 +52,15 @@
                                        {% endfor %}
                                     {% endif %}
                                 </div>
-                                <!-- <div class="form-group">
+                                <div class="form-group">
                                     <label for="item_auction_type">{{ item_form.auction_type.label }}</label>
-                                    {% render_field item_form.name class="form-control" id="item_auction_type" type="radio" label="silent" %}
-                                    {% render_field item_form.name class="form-control" id="item_auction_type" type="radio" label="live" %}
-                                    {% if item_form.name.errors %}
+                                    {% render_field item_form.auction_type class="form-control" id="item_auction_type" %}
+                                    {% if item_form.auction_type.errors %}
                                        {% for error in form.auction_type.errors %}
                                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
                                        {% endfor %}
                                     {% endif %}
-                                </div> -->
+                                </div>
                                 <div class="form-group">
                                     <label for="item_price">{{ item_form.starting_price.label }}</label>
                                     {% render_field item_form.starting_price class="form-control" type="number" min="0.01" step="0.01" placeholder="Enter starting item price" id="item_price" %}
