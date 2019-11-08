@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 # TODO: Validate that the random number is unique (not already in use by another auction)
 def random_entry_code():
-    pass
+    return randrange(10000)
 
 
 # Extends the base user class to preserve compatibility with Django's auth backend
