@@ -71,7 +71,7 @@ def auction_detail(request, pk):
     elif Auction.objects.filter(pk=pk).exists():
         return HttpResponseForbidden()
     else:
-        return HttpResponseNotFound()
+        return Http404()
 
     # Save object from form or create new form to put in context
     if request.method == 'POST':
