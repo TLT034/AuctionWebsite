@@ -116,16 +116,22 @@ def enter_local_code(request):
 def item_view(request, item_id):
     user = request.user
 
-    if user.is_admin(user.pk):
-        admin = True
-
     try:
         item = Item.objects.get(pk=item_id)
     except Item.DoesNotExist:
         raise Http404("Item does not exist")
 
-    return render(request, 'auction/item.html', context={'item': item})
+    if user.is_admin(item.auction.pk):
+        admin = True
 
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
 
-class ItemView(generic.DetailView):
-    model = Item
+def edit_item(request, item_id):
+    try:
+        item = Item.objects.get(pk=item_id)
+        item.name = request.POST['name']
+        item.starting_price = request.POST['starting_price']
+        item.winner = request.POST['winner']
+        item.description = request.POST['description']
+    except Item.DoesNotExist:
+        raise Http404("Item does not exist")
