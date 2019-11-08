@@ -1,9 +1,9 @@
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import AuctionUser
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, HttpResponseNotFound
 from django.urls import reverse
 from django.core import serializers
 
@@ -119,16 +119,32 @@ def enter_local_code(request):
 def item_view(request, item_id):
     user = request.user
 
-    if user.is_admin(user.pk):
-        admin = True
-
     try:
         item = Item.objects.get(pk=item_id)
     except Item.DoesNotExist:
         raise Http404("Item does not exist")
 
+    if user.is_admin(item.auction.pk):
+        admin = True
+
     return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
 
 
-class ItemView(generic.DetailView):
-    model = Item
+def edit_item(request, item_id):
+    try:
+        item = Item.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        raise Http404("Item does not exist")
+
+    item.name = request.POST.get('name', item.name)
+    item.starting_price = request.POST.get('starting_price', item.starting_price)
+    item.description = request.POST.get('description', item.description)
+
+    if item.winner:
+        new_winner_username = request.POST.get('winner', item.winner.username)
+        if new_winner_username != item.winner.username and AuctionUser.objects.get(username=new_winner_username).is_participant():
+            item.winner = AuctionUser.objects.get(username=new_winner_username)
+
+    item.save()
+
+    return redirect('auction:item', item.id)

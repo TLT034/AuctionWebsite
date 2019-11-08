@@ -4,68 +4,82 @@
 
 {% block content %}
  <v-card class="d-inline-block mx-auto" max-width="850">
-    <v-container>
-        <v-row>
-            <v-col cols="auto">
-                <v-img
-                    max_height="500"
-                    max_width="500"
-                    src="{{ item.image.url }}"
-                ></v-img>
-            </v-col>
-            <v-col class="text-center">
+    {# Use item.id or item.pk?? or is it the same?? #}
+    <form action="{% url "auction:edit_item" item.id %}" method="post">
+        {% csrf_token %}
+        <v-container>
+            <v-row>
+                <v-col cols="auto">
+                    <v-img
+                        max_height="200"
+                        max_width="200"
+                        src="{{ item.image.url }}"
+                    ></v-img>
+                </v-col>
+                <v-col class="text-center">
 
-                {% if admin %}
-                <v-layout justify-end>
-                    <v-btn icon @click="edit = !edit">
-                        <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                </v-layout>
-                {% endif %}
+                    {% if admin %}
+                    <v-layout v-show="!edit" justify-end>
+                        <v-btn icon @click="edit =!edit" >
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                    </v-layout>
+                    <v-layout v-show="edit" justify-end>
+                        <v-btn icon type="submit" >
+                            <v-icon>mdi-check</v-icon>
+                        </v-btn>
+                    </v-layout>
+                    {% endif %}
 
-                {% if item.is_sold %}
-                <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
-                {% endif %}
+                        {# TODO: Add checkbox to mark/unmark sold when in edit mode. #}
+                        {% if item.is_sold %}
+                        <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
+                        {% endif %}
 
-                <v-text-field
-                    value="{{ item.name }}"
-                    :readonly="!edit"
-                ></v-text-field>
+                        <v-text-field
+                            name="name"
+                            value="{{ item.name }}"
+                            :readonly="!edit"
+                        ></v-text-field>
 
-                <v-text-field
-                    value="$ {{ item.starting_price }}"
-                    :readonly="!edit"
-                ></v-text-field>
+                        <v-text-field
+                            name="starting_price"
+                            label="US Dollars $"
+                            value="{{ item.starting_price }}"
+                            :readonly="!edit"
+                        ></v-text-field>
 
-                {% if item.winner %}
-                <v-text-field
-                    value="{{ item.winner.username }}"
-                    :readonly="!edit"
-                ></v-text-field>
-                {% endif %}
+                        {% if item.winner %}
+                        <v-text-field
+                            name="winner"
+                            value="{{ item.winner.username }}"
+                            :readonly="!edit"
+                        ></v-text-field>
+                        {% endif %}
+                </v-col>
+            </v-row>
 
-            </v-col>
-        </v-row>
+            <v-card-actions>
+                <v-btn icon @click="show = !show">
+                    <v-icon>[[ show ? 'mdi-chevron-up' : 'mdi-chevron-down' ]]</v-icon>
+                </v-btn>
+            </v-card-actions>
 
-        <v-card-actions>
-            <v-btn icon @click="show = !show">
-                <v-icon>[[ show ? 'mdi-chevron-up' : 'mdi-chevron-down' ]]</v-icon>
-            </v-btn>
-        </v-card-actions>
+            <v-expand-transition>
+                <div v-show="show">
+                    <v-spacer></v-spacer>
+                    <v-textarea
+                        name="description"
+                        label="Description"
+                        value="{{ item.description }}"
+                        :readonly="!edit"
+                        filled
+                    ></v-textarea>
+                </div>
+            </v-expand-transition>
 
-        <v-expand-transition>
-            <div v-show="show">
-                <v-spacer></v-spacer>
-                <v-textarea
-                    label="Description"
-                    value="{{ item.description }}"
-                    :readonly="!edit"
-                    filled
-                ></v-textarea>
-            </div>
-        </v-expand-transition>
-
-    </v-container>
+        </v-container>
+    </form>
   </v-card>
 {% endblock %}
 

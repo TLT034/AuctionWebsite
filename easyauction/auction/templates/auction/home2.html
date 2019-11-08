@@ -21,7 +21,7 @@
         <v-list>
             <v-subheader>My Auctions</v-subheader>
             <v-list-item>
-                <v-card>
+                <v-card href="{% url 'auction:create_auction' %}">
                     <v-card-title>No Auctions Created</v-card-title>
                     <v-card-subtitle>Click here to create an auction</v-card-subtitle>
                 </v-card>
@@ -46,7 +46,7 @@
         <v-list>
             <v-subheader>Joined Auctions</v-subheader>
             <v-list-item>
-                <v-card>
+                <v-card href="{% url 'auction:enter_local_code' %}">
                     <v-card-title>No Auctions Joined</v-card-title>
                     <v-card-subtitle>Enter auction code here</v-card-subtitle>
                 </v-card>
