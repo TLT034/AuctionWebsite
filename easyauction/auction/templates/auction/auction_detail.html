@@ -19,7 +19,7 @@
                         <v-card-subtitle>
                             <p>Owner: {{ auction.admin.username }}</p>
                             <p>Created on {{ auction.time_created }}</p>
-                            <p>Number of bidders: {{ auction.participant_set.count }}</p>
+                            <p>Number of bidders: {{ auction.participant_set|length }}</p>
                             <p>Items: {{ total_items|length }}</p>
                         </v-card-subtitle>
                     </div>
