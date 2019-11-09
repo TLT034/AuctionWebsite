@@ -13,6 +13,9 @@
                 <v-card href="{% url 'auction:auction_detail' pk=auction.pk %}">
                     <v-card-title>{{ auction.name }}</v-card-title>
                     <v-card-subtitle>{{ auction.time_created }}</v-card-subtitle>
+                    <v-avatar class="ma-3" size="125" tile>
+                        <v-img src="{{ auction.image.url }}"></v-img>
+                    </v-avatar>
                 </v-card>
             </v-list-item>
             {% endfor %}
