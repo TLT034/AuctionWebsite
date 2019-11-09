@@ -20,7 +20,7 @@
                             <p>Owner: {{ auction.admin.username }}</p>
                             <p>Created on {{ auction.time_created }}</p>
                             <p>Number of bidders: {{ auction.participant_set.count }}</p>
-                            <p>Items: {{ items|length }}</p>
+                            <p>Items: {{ total_items|length }}</p>
                         </v-card-subtitle>
                     </div>
                     <v-avatar class="ma-3" size="125" tile>
