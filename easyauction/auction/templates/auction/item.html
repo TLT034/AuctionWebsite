@@ -38,24 +38,61 @@
 
                         <v-text-field
                             name="name"
+                            label="Item Name"
                             value="{{ item.name }}"
                             :readonly="!edit"
                         ></v-text-field>
 
+                        {% if not item.is_open and not item.is_sold%}
                         <v-text-field
                             name="starting_price"
-                            label="US Dollars $"
+                            label="Starting Price $"
                             value="{{ item.starting_price }}"
                             :readonly="!edit"
                         ></v-text-field>
+                        {% endif %}
+
+
+                        {% if item.is_sold %}
+                         <v-text-field
+                            name="final_price"
+                            label="Final Price $"
+                            value="{{ item.bid_set.first }}"
+                            :readonly="!edit"
+                        ></v-text-field>
+                        {% endif %}
+
 
                         {% if item.winner %}
                         <v-text-field
                             name="winner"
+                            label="The Winner of this Item"
                             value="{{ item.winner.username }}"
                             :readonly="!edit"
                         ></v-text-field>
                         {% endif %}
+
+
+                        {% if item.is_open %}
+                        <v-text-field
+                            name="current_price"
+                            label="Current Bid $"
+                            {% if item.bid_set %}
+                                value="{{ item.bid_set.first }}"
+                            {% else %}
+                                value="{{ item.starting_price }}"
+                            {% endif %}
+                            :readonly="!edit"
+                        ></v-text-field>
+                        {% else %}
+                            This Item is Not Currently Open for Bidding
+                        {% endif %}
+
+
+                        {% if item.is_open and not item.is_sold %}
+                            {# TODO: implement bidding here #}
+                        {% endif %}
+
                 </v-col>
             </v-row>
 
@@ -70,7 +107,7 @@
                     <v-spacer></v-spacer>
                     <v-textarea
                         name="description"
-                        label="Description"
+                        label="Item Description"
                         value="{{ item.description }}"
                         :readonly="!edit"
                         filled
