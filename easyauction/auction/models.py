@@ -89,5 +89,11 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+
 class Bid(models.Model):
-    pass
+    bidder = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'Bid for ${self.price} on item {self.item.name} by user {self.bidder.username}'
