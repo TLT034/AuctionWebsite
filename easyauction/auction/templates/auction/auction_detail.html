@@ -64,6 +64,7 @@
                                 <div class="form-group">
                                     <label for="item_price">{{ item_form.starting_price.label }}</label>
                                     {% render_field item_form.starting_price class="form-control" type="number" min="0.01" step="0.01" placeholder="Enter starting item price" id="item_price" %}
+                                    item_form.current_price = item_form.starting_price
                                     {% if item_form.starting_price.errors %}
                                        {% for error in form.starting_price.errors %}
                                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
@@ -123,9 +124,13 @@
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
-                                                {# Requires bid_set to be ordered by price descending #}
-                                                <p>item.bid_set.first</p>
-                                                <p>item.bid_set|length</p>
+                                                {% if item.bid_set %}
+                                                    Current Price: $ {{ item.bid_set.first }}
+                                                {% else %}
+                                                    Current Price: $ {{ item.starting_price }}
+                                                {% endif %}
+                                                <br/>
+                                                Total Bids: {{ item.bid_set|length }}
                                             </v-card-subtitle>
                                         </div>
 
@@ -157,9 +162,13 @@
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
-                                                {# Requires bid_set to be ordered by price descending #}
-                                                <p>item.bid_set.first</p>
-                                                <p>item.bid_set|length</p>
+                                                {% if item.bid_set %}
+                                                    Current Price: $ {{ item.bid_set.first }}
+                                                {% else %}
+                                                    Current Price: $ {{ item.starting_price }}
+                                                {% endif %}
+                                                <br/>
+                                                Total Bids: {{ item.bid_set|length }}
                                             </v-card-subtitle>
                                         </div>
 
