@@ -19,8 +19,8 @@
                         <v-card-subtitle>
                             <p>Owner: {{ auction.admin.username }}</p>
                             <p>Created on {{ auction.time_created }}</p>
-                            <p>Number of bidders: {{ auction.participant_set.count }}</p>
-                            <p>Items: {{ items|length }}</p>
+                            <p>Number of bidders: {{ auction.participant_set|length }}</p>
+                            <p>Items: {{ total_items|length }}</p>
                         </v-card-subtitle>
                     </div>
                     <v-avatar class="ma-3" size="125" tile>
@@ -64,6 +64,7 @@
                                 <div class="form-group">
                                     <label for="item_price">{{ item_form.starting_price.label }}</label>
                                     {% render_field item_form.starting_price class="form-control" type="number" min="0.01" step="0.01" placeholder="Enter starting item price" id="item_price" %}
+                                    item_form.current_price = item_form.starting_price
                                     {% if item_form.starting_price.errors %}
                                        {% for error in form.starting_price.errors %}
                                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
@@ -118,20 +119,33 @@
                         {% for item in silent_items %}
                             <v-col cols="3">
                                 <v-card href="{% url 'auction:item' item.pk %}">
-                                    <div class="d-flex flex-no-wrap justify-space-between">
+                                    <div class="flex-no-wrap justify-space-between">
+                                        <v-avatar class="ma-3" size="125" tile>
+                                            <v-img src="{{ item.image.url }}"></v-img>
+                                        </v-avatar>
+
                                         <div>
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
-                                                {# Requires bid_set to be ordered by price descending #}
-                                                <p>item.bid_set.first</p>
-                                                <p>item.bid_set|length</p>
+                                                {% if item.bid_set %}
+                                                    Current Price: $ {{ item.bid_set.first }}
+                                                {% else %}
+                                                    Current Price: $ {{ item.starting_price }}
+                                                {% endif %}
+                                                <br/>
+                                                Total Bids: {{ item.bid_set|length }}
+                                                <br/>
+                                                {% if item.is_open %}
+                                                    Time Remaining: {{ item.time_remaining }}
+                                                {% else %}
+                                                    <div style="color:red">Not Open</div>
+                                                {% endif %}
+
                                             </v-card-subtitle>
                                         </div>
 
-                                        <v-avatar class="ma-3" size="125" tile>
-                                            <v-img src="{{ item.image.url }}"></v-img>
-                                        </v-avatar>
+
                                     </div>
                                 </v-card>
                             </v-col>
@@ -152,20 +166,30 @@
                         {% for item in live_items %}
                             <v-col cols="3">
                                 <v-card href="{% url 'auction:item' item.pk %}">
-                                    <div class="d-flex flex-no-wrap justify-space-between">
+                                    <div class="flex-no-wrap justify-space-between">
+                                        <v-avatar class="ma-3" size="125" tile>
+                                            <v-img src="{{ item.image.url }}"></v-img>
+                                        </v-avatar>
+
                                         <div>
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
-                                                {# Requires bid_set to be ordered by price descending #}
-                                                <p>item.bid_set.first</p>
-                                                <p>item.bid_set|length</p>
+                                                {% if item.bid_set %}
+                                                    Current Price: $ {{ item.bid_set.first }}
+                                                {% else %}
+                                                    Current Price: $ {{ item.starting_price }}
+                                                {% endif %}
+                                                <br/>
+                                                Total Bids: {{ item.bid_set|length }}
+                                                <br/>
+                                                {% if item.is_open %}
+                                                    <div style="color:green">Open for Bidding</div>
+                                                {% else %}
+                                                    <div style="color:red">Not Open</div>
+                                                {% endif %}
                                             </v-card-subtitle>
                                         </div>
-
-                                        <v-avatar class="ma-3" size="125" tile>
-                                            <v-img src="{{ item.image.url }}"></v-img>
-                                        </v-avatar>
                                     </div>
                                 </v-card>
                             </v-col>
@@ -174,7 +198,6 @@
                 </container>
             </v-tab-item>
         </v-tabs>
-
     </v-row>
 {% endblock %}
 
