@@ -76,6 +76,8 @@ class Item(models.Model):
 
     name = models.CharField(max_length=200)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
+    current_price = models.DecimalField(max_digits=10, decimal_places=2)
+    bid_increment = models.DecimalField(max_digits=10, decimal_places=2, default=5)
     image = models.ImageField(default="defaults/default_item_pic.jpg", upload_to="item_pics")
     description = models.TextField()
     auction_type = models.CharField(max_length=6, choices=AUCTION_TYPES, default='silent')
@@ -94,6 +96,7 @@ class Bid(models.Model):
     bidder = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Bid for ${self.price} on item {self.item.name} by user {self.bidder.username}'

@@ -1,15 +1,17 @@
+import decimal
+
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import AuctionUser
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, HttpResponseNotFound
 from django.urls import reverse
 from django.core import serializers
+from decimal import Decimal
 
 from .forms import AuctionForm, UserSignUpForm, AddItemForm
 
-from .models import Auction, AuctionUser, Item
+from .models import Auction, AuctionUser, Item, Bid
 
 
 # Presents sign up form and submits
@@ -56,6 +58,8 @@ TODO: add toggle for switching between live and silent auctions.
 The toggle could put a flag in the post data, which the view can use to
 pick which items to load
 """
+
+
 def auction_detail(request, pk):
     # Get context items
     user = request.user
@@ -81,6 +85,8 @@ def auction_detail(request, pk):
         if item_form.is_valid():
             item = item_form.save(commit=False)
             item.auction = auction
+            item.current_price = item.starting_price
+            item.bid_increment = item.current_price / 10
             item.save()
             return HttpResponseRedirect(reverse('auction:auction_detail', args=[auction.pk]))
     else:
@@ -119,33 +125,60 @@ def enter_local_code(request):
 
 def item_view(request, item_id):
     user = request.user
+    admin = False
 
     try:
         item = Item.objects.get(pk=item_id)
     except Item.DoesNotExist:
-        raise Http404("Item does not exist")
+        raise Http404("The item you are trying to view does not exist or may have been deleted")
 
     if user.is_admin(item.auction.pk):
         admin = True
 
-    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
+    item_bids = Bid.objects.filter(item=item).order_by('-price')
+
+
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'item_bids': item_bids})
 
 
 def edit_item(request, item_id):
     try:
         item = Item.objects.get(pk=item_id)
     except Item.DoesNotExist:
-        raise Http404("Item does not exist")
+        raise Http404("The item you are trying to edit does not exist or may have been deleted")
 
-    item.name = request.POST.get('name', item.name)
-    item.starting_price = request.POST.get('starting_price', item.starting_price)
-    item.description = request.POST.get('description', item.description)
+    if request.method == 'POST':
+        item.name = request.POST.get('name', default=item.name)
+        item.current_price = float(request.POST.get('current_price', default=item.current_price))
+        item.bid_increment = item.current_price / 10
+        item.description = request.POST.get('description', default=item.description)
 
-    if item.winner:
-        new_winner_username = request.POST.get('winner', item.winner.username)
-        if new_winner_username != item.winner.username and AuctionUser.objects.get(username=new_winner_username).is_participant():
-            item.winner = AuctionUser.objects.get(username=new_winner_username)
+        if item.winner:
+            new_winner_username = request.POST.get('winner', item.winner.username)
+            if new_winner_username != item.winner.username and AuctionUser.objects.get(username=new_winner_username).is_participant():
+                item.winner = AuctionUser.objects.get(username=new_winner_username)
 
-    item.save()
+        item.save()
+
+    return redirect('auction:item', item.id)
+
+
+def submit_bid(request, item_id):
+
+    user = request.user
+    try:
+        item = Item.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        raise Http404("The item you are trying to bid on does not exist or may have been deleted")
+
+    if request.method == 'POST':
+        bid_amount = Decimal(request.POST.get('bid', -1))
+
+        if bid_amount != -1:
+            bid = Bid(item=item, bidder=user, price=bid_amount)
+            bid.save()
+
+            item.current_price += bid_amount - item.current_price
+            item.save()
 
     return redirect('auction:item', item.id)
