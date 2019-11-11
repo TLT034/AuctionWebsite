@@ -127,19 +127,29 @@
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
-                                                Current Price: $ {{ item.current_price }}
-                                                <br/>
-                                                Total Bids: {{ item.bid_set|length }}
-                                                <br/>
-                                                {% if item.is_open %}
+
+                                                {% if item.is_open %}  {# If the item is open for bidding #}
+                                                    Current Price: $ {{ item.current_price }}
+                                                    <br/>
+                                                    Total Bids: {{ item.bid_set|length }}
+                                                    <br/>
                                                     Time Remaining: {{ item.time_remaining }}
-                                                {% else %}
-                                                    <div style="color:red">Not Open</div>
+                                                {% else %}  {# If the item is NOT open for bidding #}
+                                                    {% if item.is_sold %}  {# If the item is not open because it is sold #}
+                                                        Final Price: $ {{ item.current_price }}
+                                                        <br/>
+                                                        Total Bids: {{ item.bid_set|length }}
+                                                        <br/>
+                                                        <div style="color:red">SOLD</div> %}
+                                                    {% else %}  {# If the item is not open for bidding yet #}
+                                                        Starting Price: $ {{ item.starting_price }}
+                                                        <br/>
+                                                        <div style="color:red">Not Open</div>
+                                                    {% endif %}
                                                 {% endif %}
 
                                             </v-card-subtitle>
                                         </div>
-
 
                                     </div>
                                 </v-card>
@@ -170,15 +180,27 @@
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
-                                                Current Price: $ {{ item.current_price }}
-                                                <br/>
-                                                Total Bids: {{ item.bid_set|length }}
-                                                <br/>
-                                                {% if item.is_open %}
+
+                                                {% if item.is_open %}  {# If the item is open for bidding #}
+                                                    Current Price: $ {{ item.current_price }}
+                                                    <br/>
+                                                    Total Bids: {{ item.bid_set|length }}
+                                                    <br/>
                                                     <div style="color:green">Open for Bidding</div>
-                                                {% else %}
-                                                    <div style="color:red">Not Open</div>
+                                                {% else %}  {# If the item is NOT open for bidding #}
+                                                    {% if item.is_sold %}  {# If the item is not open because it is sold #}
+                                                        Final Price: $ {{ item.current_price }}
+                                                        <br/>
+                                                        Total Bids: {{ item.bid_set|length }}
+                                                        <br/>
+                                                        <div style="color:red">SOLD</div> %}
+                                                    {% else %}  {# If the item is not open for bidding yet #}
+                                                        Starting Price: $ {{ item.starting_price }}
+                                                        <br/>
+                                                        <div style="color:red">Not Open</div>
+                                                    {% endif %}
                                                 {% endif %}
+
                                             </v-card-subtitle>
                                         </div>
                                     </div>

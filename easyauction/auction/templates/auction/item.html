@@ -75,7 +75,6 @@
 
                     {# Text input for user to bid #}
                     {% if not item.is_sold %} {# !!! USE 'if item.is_open and not item.is_sold' for Production !!! #}
-                    {# TODO: implement bidding here #}
                         <v-text-field
                             v-model="bid_amount"
                             form="bid_form"
@@ -94,15 +93,19 @@
                         Open for bidding in 'hh:mm:ss' ('start_time')
                     {% endif %}
 
+                    {# Displays the number of bids #}
+                  {#  {% if item.is_open %} #}    {# uncomment for production #}
+                        <p>{{ item_bids.count }} Bids</p>
+
                     {# Displays winner #}
                     {% if item.winner %}
-                    <v-text-field
-                        form="edit_item_form"
-                        name="winner"
-                        label="Winner"
-                        value="{{ item.winner.username }}"
-                        :readonly="!edit"
-                    ></v-text-field>
+                        <v-text-field
+                            form="edit_item_form"
+                            name="winner"
+                            label="Winner"
+                            value="{{ item.winner.username }}"
+                            :readonly="!edit"
+                        ></v-text-field>
                     {% endif %}
 
                 </v-col>
