@@ -48,6 +48,7 @@ urlpatterns += [
   path('auction/auction_detail/<int:pk>', login_required(views.auction_detail), name='auction_detail'),
   path('auction/item/<int:item_id>', login_required(views.item_view), name='item'),
   path('auction/edit_item/<int:item_id>', login_required(views.edit_item), name='edit_item'),
+  path('auction/item/<int:item_id>/submit_bid/', login_required(views.submit_bid), name='submit_bid'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

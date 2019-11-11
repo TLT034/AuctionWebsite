@@ -127,23 +127,16 @@
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
+
                                                 {% if item.is_open %}  {# If the item is open for bidding #}
-                                                    {% if item.bid_set.first != null %}
-                                                        Current Price: $ {{ item.bid_set.first }}
-                                                    {% else %}
-                                                        Current Price: $ {{ item.starting_price }}
-                                                    {% endif %}
+                                                    Current Price: $ {{ item.current_price }}
                                                     <br/>
                                                     Total Bids: {{ item.bid_set|length }}
                                                     <br/>
                                                     Time Remaining: {{ item.time_remaining }}
                                                 {% else %}  {# If the item is NOT open for bidding #}
                                                     {% if item.is_sold %}  {# If the item is not open because it is sold #}
-                                                        {% if item.bid_set.first != null %}
-                                                            Final Price: $ {{ item.bid_set.first }}
-                                                        {% else %}
-                                                            Final Price: $ {{ item.starting_price }}
-                                                        {% endif %}
+                                                        Final Price: $ {{ item.current_price }}
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
@@ -157,7 +150,6 @@
 
                                             </v-card-subtitle>
                                         </div>
-
 
                                     </div>
                                 </v-card>
@@ -188,23 +180,16 @@
                                             <v-card-title class="headline">{{ item.name }}</v-card-title>
 
                                             <v-card-subtitle>
+
                                                 {% if item.is_open %}  {# If the item is open for bidding #}
-                                                    {% if item.bid_set.first != null %}
-                                                        Current Price: $ {{ item.bid_set.first }}
-                                                    {% else %}
-                                                        Current Price: $ {{ item.starting_price }}
-                                                    {% endif %}
+                                                    Current Price: $ {{ item.current_price }}
                                                     <br/>
                                                     Total Bids: {{ item.bid_set|length }}
                                                     <br/>
                                                     <div style="color:green">Open for Bidding</div>
                                                 {% else %}  {# If the item is NOT open for bidding #}
                                                     {% if item.is_sold %}  {# If the item is not open because it is sold #}
-                                                        {% if item.bid_set.first != null %}
-                                                            Final Price: $ {{ item.bid_set.first }}
-                                                        {% else %}
-                                                            Final Price: $ {{ item.starting_price }}
-                                                        {% endif %}
+                                                        Final Price: $ {{ item.current_price }}
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
