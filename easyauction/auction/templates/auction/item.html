@@ -75,9 +75,16 @@
 
                         {% if item.is_open %}
                         <v-text-field
+                            name="total_bids"
+                            label="Number of Bids"
+                            value="{{ item.bid_set|length }}"
+                            :readonly="!edit"
+                        ></v-text-field>
+
+                        <v-text-field
                             name="current_price"
                             label="Current Bid $"
-                            {% if item.bid_set %}
+                            {% if item.bid_set.first != null %}
                                 value="{{ item.bid_set.first }}"
                             {% else %}
                                 value="{{ item.starting_price }}"
