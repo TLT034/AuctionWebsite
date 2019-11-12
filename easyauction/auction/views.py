@@ -3,10 +3,9 @@ import decimal
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
-from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.urls import reverse
-from django.core import serializers
+import json
 from decimal import Decimal
 
 from .forms import AuctionForm, UserSignUpForm, AddItemForm
@@ -182,3 +181,38 @@ def submit_bid(request, item_id):
             item.save()
 
     return redirect('auction:item', item.id)
+
+
+class MyBidListView(generic.ListView):
+    model = Bid
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        filters = [{'text': 'Winning Bids', 'value': '{"item__winner__pk": %d}' % self.request.user.pk},
+                   {'text': 'Open Bids', 'value': '{"item__is_open": "True"}'}]
+        context['filters'] = filters
+        orderings = [{'text': 'Date', 'value': '-timestamp'},
+                     {'text': 'Price', 'value': '-price'}]
+        context['orderings'] = orderings
+
+        return context
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = self.model.objects.filter(bidder__pk=user.pk)
+
+        filtering_json = self.request.GET.get('filter', None)
+        if filtering_json:
+            filtering = json.loads(filtering_json)
+            filtered_queryset = queryset.filter(**filtering)
+        else:
+            filtered_queryset = queryset.filter()
+
+        ordering = self.request.GET.get('order', '-timestamp')
+        if ordering:
+            ordered_queryset = filtered_queryset.order_by(ordering, '-timestamp')
+        else:
+            ordered_queryset = filtered_queryset.order_by('-timestamp')
+
+        return ordered_queryset

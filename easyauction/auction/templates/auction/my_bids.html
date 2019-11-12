@@ -1,0 +1,81 @@
+{% extends "auction/base2.html" %}
+
+# Sets page title
+{% block title %}My Bids{% endblock %}
+
+{% block content %}
+<form method="GET">
+    {% csrf_token %}
+    <v-row>
+        <v-col cols="4">
+            <input type="hidden" name="filter" :value="[[selected_filter]]">
+            <v-select
+                    :items="filters"
+                    label="Filter"
+                    v-model="selected_filter"
+            >
+            </v-select>
+        </v-col>
+        <v-col cols="4">
+            <input type="hidden" name="order" :value="[[selected_ordering]]">
+            <v-select
+                    :items="orderings"
+                    label="Order by"
+                    v-model="selected_ordering"
+            >
+            </v-select>
+        </v-col>
+        <v-col cols="4">
+            <v-btn color="primary" type="submit">Submit</v-btn>
+        </v-col>
+    </v-row>
+</form>
+    {% if object_list %}
+        <v-row>
+            <v-col cols="12">
+                <v-list>
+                    {% for bid in object_list %}
+                        <v-list-item>
+                            <v-card href="{% url 'auction:item' bid.item.pk %}">
+                                <v-card-text>
+                                    <p>Item: {{ bid.item.name }}</p>
+                                    <p>Auction: {{ bid.item.auction.name }}</p>
+                                    <p>Amount: {{ bid.amount }}</p>
+                                    <p>Bid placed on {{ bid.timestamp }}</p>
+                                </v-card-text>
+                            </v-card>
+                        </v-list-item>
+                    {% endfor %}
+                </v-list>
+            </v-col>
+        </v-row>
+    {% else %}
+        <v-row>
+            <v-col cols="12">
+                <v-card>
+                    <v-card-title>You haven't placed any bids yet.</v-card-title>
+                    <v-card-text>Join an auction and start bidding!</v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    {% endif %}
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    assorted_vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            drawer: false,
+            filters: {{ filters|safe }},
+            selected_filter: null,
+            orderings: {{ orderings|safe }},
+            selected_ordering: null
+        },
+        delimiters: ["[[", "]]"]
+    });
+    </script>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.db import models
 from random import randrange
 from django.contrib.auth.models import AbstractUser
-
+import decimal
 
 # TODO: Validate that the random number is unique (not already in use by another auction)
 def random_entry_code():
@@ -9,6 +9,7 @@ def random_entry_code():
 
 
 # Extends the base user class to preserve compatibility with Django's auth backend
+# TODO: catch errors
 class AuctionUser(AbstractUser):
     # Creates auction setting the current user as admin
     def create_auction(self, name: str, description: str = None):
@@ -65,7 +66,7 @@ class Auction(models.Model):
         self.published = False
 
     def add_item(self, name, starting_price, item_desc):
-        self.item_set.create(name=name, starting_price=starting_price, description=item_desc)
+        self.item_set.create(name=name, starting_price=starting_price, current_price=starting_price, description=item_desc)
 
     def remove_item(self, pk):
         self.item_set.filter(pk=pk).first().delete()
