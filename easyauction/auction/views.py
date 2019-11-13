@@ -52,13 +52,6 @@ def home(request):
     return render(request, 'auction/home2.html', context=context)
 
 
-"""
-TODO: add toggle for switching between live and silent auctions.
-The toggle could put a flag in the post data, which the view can use to
-pick which items to load
-"""
-
-
 def auction_detail(request, pk):
     # Get context items
     user = request.user
@@ -78,6 +71,7 @@ def auction_detail(request, pk):
     else:
         return Http404()
 
+    # TODO: field for admin to set fixed bid increment when creating/editing item (default $1)
     # Save object from form or create new form to put in context
     if request.method == 'POST':
         item_form = AddItemForm(request.POST, request.FILES)
@@ -136,10 +130,10 @@ def item_view(request, item_id):
 
     item_bids = Bid.objects.filter(item=item).order_by('-price')
 
-
     return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'item_bids': item_bids})
 
 
+# TODO: field for admin to set fixed bid increment when creating/editing item (default $1)
 def edit_item(request, item_id):
     try:
         item = Item.objects.get(pk=item_id)
@@ -148,15 +142,15 @@ def edit_item(request, item_id):
 
     if request.method == 'POST':
         item.name = request.POST.get('name', default=item.name)
+        item.starting_price = float(request.POST.get('starting_price', default=item.starting_price))
         item.current_price = float(request.POST.get('current_price', default=item.current_price))
         item.bid_increment = item.current_price / 10
         item.description = request.POST.get('description', default=item.description)
 
-        if item.winner:
-            new_winner_username = request.POST.get('winner', item.winner.username)
-            if new_winner_username != item.winner.username and AuctionUser.objects.get(username=new_winner_username).is_participant():
-                item.winner = AuctionUser.objects.get(username=new_winner_username)
-
+        winner = request.POST.get('winner')
+        # if the winner is not the default from the post (AKA: if the winner field was actually updated)
+        if winner:
+            item.winner = AuctionUser.objects.get(username=winner)
         item.save()
 
     return redirect('auction:item', item.id)
@@ -178,6 +172,7 @@ def submit_bid(request, item_id):
             bid.save()
 
             item.current_price += bid_amount - item.current_price
+            item.bid_increment = item.current_price / 10
             item.save()
 
     return redirect('auction:item', item.id)
