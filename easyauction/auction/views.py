@@ -184,7 +184,7 @@ class MyBidListView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        filters = [{'text': 'Winning Bids', 'value': '{"item__winner__pk": %d}' % self.request.user.pk},
+        filters = [{'text': 'Winning Bids', 'value': '{"won": "True"}'},
                    {'text': 'Open Bids', 'value': '{"item__is_open": "True"}'}]
         context['filters'] = filters
         orderings = [{'text': 'Date', 'value': '-timestamp'},
