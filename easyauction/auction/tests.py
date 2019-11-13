@@ -284,15 +284,18 @@ class BidTests(TestCase):
         bid2.save()
 
         # Make bidder the winner of item 1
+        bid1.won = True
+        bid1.save()
         item1.winner = bidder
         item1.save()
 
         # Verify that only the won item is displayed
         self.client.login(username=username2, password=password2)
-        data = {'filter': '{"item__winner__pk": %d}' % bidder.pk,
+        data = {'filter': '{"won": "True"}',
                 'order': ''}
         response = self.client.get(reverse('auction:my_bids'), data=data)
         queryset = response.context['object_list']
+        print('QUERYSET', queryset)
         self.assertTrue(len(queryset) == 1 and queryset[0].pk == item1.pk)
 
     def test_open_filter(self):
@@ -408,14 +411,18 @@ class BidTests(TestCase):
         bid4.save()
 
         # Make bidder the winner of items 1 and 2
+        bid1.won = True
+        bid1.save()
         item1.winner = bidder
         item1.save()
+        bid2.won = True
+        bid2.save()
         item2.winner = bidder
         item2.save()
 
         # Verify that only the won items are displayed ordered by price
         self.client.login(username=username2, password=password2)
-        data = {'filter': '{"item__winner__pk": %d}' % bidder.pk,
+        data = {'filter': '{"won": "True"}',
                 'order': '-price'}
         response = self.client.get(reverse('auction:my_bids'), data=data)
         queryset = response.context['object_list']
