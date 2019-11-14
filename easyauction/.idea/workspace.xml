@@ -3,17 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/migrations/0002_item_is_live_item.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/migrations/0003_item_auction_type.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/migrations/0004_remove_item_is_live_item.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/migrations/0005_auto_20191108_1409.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/templates/auction/item.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/item.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/item_detail.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
