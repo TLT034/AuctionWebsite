@@ -127,9 +127,9 @@ def item_view(request, item_id):
     if user.is_admin(item.auction.pk):
         admin = True
 
-    item_bids = Bid.objects.filter(item=item).order_by('-price')
+    # item_bids = Bid.objects.filter(item=item).order_by('-price')
 
-    return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'item_bids': item_bids})
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
 
 
 def edit_item(request, item_id):
@@ -180,7 +180,7 @@ def remove_bid(request, item_id, bid_id):
     if bid == item.bid_set.latest('timestamp') and item.bid_set.count() > 1:
         item.current_price = item.bid_set.all().order_by('-timestamp')[1].price
         item.min_bid = item.current_price + item.bid_increment
-    else:
+    elif item.bid_set.count() == 1:
         item.current_price = item.starting_price
         item.min_bid = item.starting_price
 

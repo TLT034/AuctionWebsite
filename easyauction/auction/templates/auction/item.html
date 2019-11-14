@@ -61,7 +61,7 @@
                         <v-text-field
                             {% if item.is_sold %}
                                 label="Final Bid"
-                            {% elif item_bids.count > 0 %}
+                            {% elif item.bid_set.count > 0 %}
                                 label="Current Bid"
                             {% else %}
                                 label="Starting Price"
@@ -69,7 +69,7 @@
                             prefix="$" value="{{ item.current_price }}"
                             type="number" step=".01" readonly v-show="!edit"
                         ></v-text-field>
-                        {% if item_bids.count == 0 %}
+                        {% if item.bid_set.count == 0 %}
                             <v-text-field
                                 form="edit_item_form" name="starting_price"
                                 label="Edit Starting Price"
@@ -120,7 +120,7 @@
 
                     {# Displays the number of bids #}
                     {% if item.auction_type == 'silent' %}    {# !!! USE '... and if item.is_open' for Production !!! #}
-                        <span>{{ item_bids.count }} [[{{ item_bids.count }} == 1 ? 'Bid' : 'Bids']]</span>
+                        <span>{{ item.bid_set.count }} [[{{ item.bid_set.count }} == 1 ? 'Bid' : 'Bids']]</span>
                     {% endif %}
 
 
@@ -194,9 +194,9 @@
             {% if item.auction_type == 'silent' %}
                 <v-expand-transition>
                     <div v-show="show_bids" class="text-center">
-                        {% if item_bids.count > 0 %}
+                        {% if item.bid_set.count > 0 and admin %}
                         <v-btn small outlined color="red"
-                               href="{% url 'auction:remove_bid' item.id item_bids.first.id %}">
+                               href="{% url 'auction:remove_bid' item.id item.bid_set.first.id %}">
                             <v-icon color="red" small>delete</v-icon>
                             Delete latest bid
                         </v-btn>
@@ -221,9 +221,10 @@
 
     /** Used for showing bid history **/
     bid_objects = [];
-    {% for b in item_bids %}
+    {% for b in item.bid_set.all %}
         bid_objects.push({bidder: '{{ b.bidder }}', amount: '$ {{ b.price }}', time: '{{ b.timestamp }}' });
     {% endfor %}
+    bid_objects.reverse();
 
     /** Lists participants for admin to choose winner of live item**/
     participants = [];
