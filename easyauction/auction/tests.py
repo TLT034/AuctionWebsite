@@ -194,17 +194,51 @@ class AuctionTests(TestCase):
         data = {'name': 'test item',
                 'starting_price': 5.00,
                 'description': 'desc for test item',
-                'auction_type': 'silent'}
+                'auction_type': 'silent',
+                'bid_increment': 1.00}
 
         item_form = AddItemForm(data)
         item_form.is_valid()
         item = item_form.save(commit=False)
         item.auction = auction
         item.current_price = item.starting_price
+        item.min_bid = item.starting_price
         item.save()
 
         updated_auction = user.auction_set.get(name='test auction')
         self.assertTrue(updated_auction.item_set.filter(name='test item').exists())
+
+        def test_auction_detail_displays_winner(self):
+            # Admin
+            username1 = 'admin'
+            password1 = 'test12345'
+            create_user(username1, password1)
+            admin = AuctionUser.objects.get(username=username1)
+            admin.create_auction(name='Test Auction')
+
+            auction = admin.auction_set.first()
+            auction_pk = auction.pk
+
+            # Participant
+            username2 = 'user'
+            password2 = 'test12345'
+            create_user(username2, password1)
+            participant = AuctionUser.objects.get(username=username2)
+
+            # Set participant as item winner
+            auction.participants.add(participant)
+            auction.add_item(name='test item', starting_price=5, item_desc='test desc')
+            auction.save()
+            item = auction.item_set.first()
+            item.winner = user
+            item.is_open = False
+            item.is_sold = True
+            item.save()
+
+            # Test that the item correctly renders the winner
+            self.client.login(username=username2, password=password2)
+            response = self.client.get(reverse('auction:auction_detail', args=auction.pk))
+            self.assertContains(response, 'Winner: user', status_code=200)
 
 
 class BidTests(TestCase):

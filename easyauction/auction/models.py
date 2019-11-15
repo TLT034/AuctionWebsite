@@ -66,7 +66,11 @@ class Auction(models.Model):
         self.published = False
 
     def add_item(self, name, starting_price, item_desc):
-        self.item_set.create(name=name, starting_price=starting_price, current_price=starting_price, description=item_desc)
+        self.item_set.create(name=name,
+                             starting_price=starting_price,
+                             current_price=starting_price,
+                             min_bid=starting_price,
+                             description=item_desc)
 
     def remove_item(self, pk):
         self.item_set.filter(pk=pk).first().delete()

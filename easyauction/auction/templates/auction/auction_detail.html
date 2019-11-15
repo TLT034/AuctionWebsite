@@ -149,7 +149,8 @@
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
-                                                        <div style="color:red">SOLD</div> %}
+                                                        Winner: {{ item.winner }}
+                                                        <div style="color:red">SOLD</div>
                                                     {% else %}  {# If the item is not open for bidding yet #}
                                                         Starting Price: $ {{ item.starting_price }}
                                                         <br/>
@@ -202,6 +203,7 @@
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
+                                                        Winner: {{ item.winner }}
                                                         <div style="color:red">SOLD</div> %}
                                                     {% else %}  {# If the item is not open for bidding yet #}
                                                         Starting Price: $ {{ item.starting_price }}
