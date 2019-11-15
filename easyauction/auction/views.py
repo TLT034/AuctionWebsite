@@ -71,7 +71,6 @@ def auction_detail(request, pk):
     else:
         return Http404()
 
-    # TODO: field for admin to set fixed bid increment when creating/editing item (default $1)
     # Save object from form or create new form to put in context
     if request.method == 'POST':
         item_form = AddItemForm(request.POST, request.FILES)
@@ -79,7 +78,7 @@ def auction_detail(request, pk):
             item = item_form.save(commit=False)
             item.auction = auction
             item.current_price = item.starting_price
-            item.bid_increment = item.current_price / 10
+            item.min_bid = item.starting_price
             item.save()
             return HttpResponseRedirect(reverse('auction:auction_detail', args=[auction.pk]))
     else:
@@ -128,12 +127,11 @@ def item_view(request, item_id):
     if user.is_admin(item.auction.pk):
         admin = True
 
-    item_bids = Bid.objects.filter(item=item).order_by('-price')
+    # item_bids = Bid.objects.filter(item=item).order_by('-price')
 
-    return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'item_bids': item_bids})
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
 
 
-# TODO: field for admin to set fixed bid increment when creating/editing item (default $1)
 def edit_item(request, item_id):
     try:
         item = Item.objects.get(pk=item_id)
@@ -143,15 +141,51 @@ def edit_item(request, item_id):
     if request.method == 'POST':
         item.name = request.POST.get('name', default=item.name)
         item.starting_price = float(request.POST.get('starting_price', default=item.starting_price))
-        item.current_price = float(request.POST.get('current_price', default=item.current_price))
-        item.bid_increment = item.current_price / 10
+        item.bid_increment = float(request.POST.get('bid_increment', default=item.bid_increment))
         item.description = request.POST.get('description', default=item.description)
 
+        if item.starting_price > item.current_price:
+            item.current_price = item.starting_price
+
+        if item.bid_set.count() > 0:
+            item.min_bid = float(item.current_price) + float(item.bid_increment)
+        else:
+            item.min_bid = item.starting_price
+
         winner = request.POST.get('winner')
-        # if the winner is not the default from the post (AKA: if the winner field was actually updated)
         if winner:
             item.winner = AuctionUser.objects.get(username=winner)
+
         item.save()
+
+    return redirect('auction:item', item.id)
+
+
+def remove_bid(request, item_id, bid_id):
+
+    try:
+        item = Item.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        raise Http404("The item you are trying to remove a bid from does not exist or may have been deleted")
+    try:
+        bid = Bid.objects.get(pk=bid_id)
+    except Bid.DoesNotExist:
+        raise Http404("The bid you are trying to remove does not exist or may have already been deleted")
+
+    # if there are more bids than just the one bid that we are deleting
+    if bid == item.bid_set.latest('timestamp'):
+        print("\nTrue\n")
+    else:
+        print("\nFalse\n")
+    if bid == item.bid_set.latest('timestamp') and item.bid_set.count() > 1:
+        item.current_price = item.bid_set.all().order_by('-timestamp')[1].price
+        item.min_bid = item.current_price + item.bid_increment
+    elif item.bid_set.count() == 1:
+        item.current_price = item.starting_price
+        item.min_bid = item.starting_price
+
+    bid.delete()
+    item.save()
 
     return redirect('auction:item', item.id)
 
@@ -171,8 +205,8 @@ def submit_bid(request, item_id):
             bid = Bid(item=item, bidder=user, price=bid_amount)
             bid.save()
 
-            item.current_price += bid_amount - item.current_price
-            item.bid_increment = item.current_price / 10
+            item.current_price = bid_amount
+            item.min_bid = item.current_price + item.bid_increment
             item.save()
 
     return redirect('auction:item', item.id)

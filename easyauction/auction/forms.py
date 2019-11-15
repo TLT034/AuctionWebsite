@@ -26,4 +26,4 @@ class AddItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ['name', 'starting_price', 'description', 'image', 'auction_type']
+        fields = ['name', 'starting_price', 'bid_increment', 'description', 'image', 'auction_type']

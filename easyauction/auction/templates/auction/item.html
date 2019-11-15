@@ -42,7 +42,9 @@
 
                     {# Displays if item is sold #}
                     {% if item.is_sold %}
-                    <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
+                        <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
+                    {% elif item.bid_set.last.bidder == user %}
+                        <p style="color:green; font-size: 15px"><strong>You are currently winning!</strong></p>
                     {% endif %}
 
 
@@ -53,27 +55,43 @@
                         :readonly="!edit"
                     ></v-text-field>
 
-                    {# TODO: implement 'current highest bidder' #}
 
-                    {# TODO: Only allow admin to change starting price and not current price.#}
-                    {# TODO: Implement ability to remove last bid which will automatically adjust current price#}
                     {# Displays current price / winning price / starting price #}
                     {% if item.auction_type == "silent" %}
                         <v-text-field
-                            form="edit_item_form" name="current_price"
                             {% if item.is_sold %}
-                                label="Winning Bid"
-                            {% else %}
+                                label="Final Bid"
+                            {% elif item.bid_set.count > 0 %}
                                 label="Current Bid"
+                            {% else %}
+                                label="Starting Price"
                             {% endif %}
                             prefix="$" value="{{ item.current_price }}"
-                            type="number" step=".01" :readonly="!edit"
+                            type="number" step=".01" readonly v-show="!edit"
                         ></v-text-field>
+                        {% if item.bid_set.count == 0 %}
+                            <v-text-field
+                                form="edit_item_form" name="starting_price"
+                                label="Edit Starting Price"
+                                prefix="$" value="{{ item.starting_price }}"
+                                type="number" step=".01" v-show="edit"
+                            ></v-text-field>
+                        {% endif %}
                     {% else %}
                         <v-text-field
                             form="edit_item_form" name="starting_price" label="Starting Bid"
                             prefix="$" value="{{ item.starting_price }}" type="number"
                             step=".01" :readonly="!edit"
+                        ></v-text-field>
+                    {% endif %}
+
+
+                    {# Displays the minimum bid increment #}
+                    {% if item.auction_type == "silent" %}
+                        <v-text-field
+                            form="edit_item_form" name="bid_increment" label="Minimum Bid Increment"
+                            prefix="$" value="{{ item.bid_increment }}" type="number"
+                            step=".01" v-show="edit"
                         ></v-text-field>
                     {% endif %}
 
@@ -85,11 +103,11 @@
                                 v-model="bid_amount" form="bid_form"
                                 name="bid" label="Enter Bid" prefix="$"
                                 type="number" step=".01" :rules="[rules.amount]"
-                                :readonly="edit"
+                                v-show="!edit"
                             ></v-text-field>
                             <v-btn
                                 :disabled="!isCorrectAmt" :rules="[rules.amount]"
-                                form="bid_form" type="submit" form="bid_form"
+                                form="bid_form" type="submit" form="bid_form" v-show="!edit"
                             >
                             Place Bid
                             </v-btn>
@@ -102,7 +120,7 @@
 
                     {# Displays the number of bids #}
                     {% if item.auction_type == 'silent' %}    {# !!! USE '... and if item.is_open' for Production !!! #}
-                        <span>{{ item_bids.count }} Bids</span>
+                        <span>{{ item.bid_set.count }} [[{{ item.bid_set.count }} == 1 ? 'Bid' : 'Bids']]</span>
                     {% endif %}
 
 
@@ -171,16 +189,24 @@
                 </div>
             </v-expand-transition>
 
-            {# TODO: implement feature for admin to remove bids and have it auto adjust price #}
+
             {# Displays bids when drop down is clicked #}
             {% if item.auction_type == 'silent' %}
                 <v-expand-transition>
-                    <div v-show="show_bids">
+                    <div v-show="show_bids" class="text-center">
+                        {% if item.bid_set.count > 0 and admin %}
+                        <v-btn small outlined color="red"
+                               href="{% url 'auction:remove_bid' item.id item.bid_set.first.id %}">
+                            <v-icon color="red" small>delete</v-icon>
+                            Delete latest bid
+                        </v-btn>
+                        {% endif %}
                         <v-data-table
                             :headers="headers"
                             :items="bids"
                             :items-per-page="5"
-                        ></v-data-table>
+                        >
+                        </v-data-table>
                     </div>
                 </v-expand-transition>
             {% endif %}
@@ -191,13 +217,14 @@
 {% block vue %}
     <script>
     /** Used for checking if users bid amount is enough **/
-    min_bid_amount = {{ item.current_price }} + {{ item.bid_increment }};
+    min_bid_amount = {{ item.min_bid }};
 
     /** Used for showing bid history **/
     bid_objects = [];
-    {% for b in item_bids %}
+    {% for b in item.bid_set.all %}
         bid_objects.push({bidder: '{{ b.bidder }}', amount: '$ {{ b.price }}', time: '{{ b.timestamp }}' });
     {% endfor %}
+    bid_objects.reverse();
 
     /** Lists participants for admin to choose winner of live item**/
     participants = [];
@@ -217,7 +244,7 @@
             bid_amount: null,
             rules: {
                 amount: function(value) {
-                    if (value <= min_bid_amount)
+                    if (value < min_bid_amount)
                         return 'Bid Minimum: $' + min_bid_amount.toFixed(2).toString()
                     else return true
                 },
