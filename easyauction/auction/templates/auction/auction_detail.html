@@ -21,6 +21,7 @@
                             <p>Created on {{ auction.time_created }}</p>
                             <p>Number of bidders: {{ auction.participant_set|length }}</p>
                             <p>Items: {{ total_items|length }}</p>
+                            <p><a href="{% url 'auction:participants' auction.id%}">View auction participants</a></p>
                         </v-card-subtitle>
                     </div>
                     <v-avatar class="ma-3" size="125" tile>

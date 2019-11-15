@@ -44,7 +44,6 @@ class AuctionUser(AbstractUser):
         auction = self.get_auction(pk=pk)
         auction.archive()
 
-
 class Auction(models.Model):
     name = models.CharField(max_length=200)
     time_created = models.DateTimeField(auto_now_add=True)

@@ -245,3 +245,40 @@ class MyBidListView(generic.ListView):
             ordered_queryset = filtered_queryset.order_by('-timestamp')
 
         return ordered_queryset
+
+
+def participants_list(request, auction_id):
+    # Get auction
+    try:
+        auction = Auction.objects.get(id=auction_id)
+    except Auction.DoesNotExist:
+        return Http404()
+
+    if request.method == 'GET':
+        # Get participants based on filter
+        if 'filter' in request.GET and request.GET['filter'] == 'true':
+            won_items = auction.item_set.exclude(winner=None)
+            participants = []
+            for item in won_items:
+                participants.append(item.winner)
+        else:
+            participants = auction.participants.all()
+    else:
+        participants = auction.participants.all()
+
+    # Build list of participant json objects to be rendered by v-data-table
+    participant_objs = []
+    for participant in participants:
+        items_won = auction.item_set.filter(winner__id=participant.id)
+        participant_obj = {'name': participant.username,
+                            'id': participant.id,
+                            'items_won': list(map(lambda x: x['name'], items_won.values('name'))),
+                            'total_cost': 0}
+        for item in items_won:
+            participant_obj['total_cost'] += float(item.current_price)
+        participant_objs.append(participant_obj)
+
+    participants_json = json.dumps(participant_objs)
+
+    context = {'participants': participants_json, 'n_participants': len(participants)}
+    return render(request, 'auction/participants.html', context=context)
