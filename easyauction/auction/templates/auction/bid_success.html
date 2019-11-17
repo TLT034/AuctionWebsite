@@ -1,0 +1,30 @@
+{% extends 'auction/base2.html' %}
+{% block title %}Bid Successful{% endblock %}
+{% block content %}
+    <v-dialog persistent v-model="dialog">
+        <v-card>
+            <v-card-title>Bid Successful!</v-card-title>
+            <v-card-text>Your bid for ${{ bid.price }} on the {{ bid.item.name }} has been placed successfully!</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn href="{% url 'auction:item' bid.item.id %}">Okay</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+{% endblock %}
+
+{% block vue %}
+        <script>
+        Vue.use(Vuetify);
+
+        base_vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                drawer: false,
+                dialog: true
+            },
+            delimiters: ["[[", "]]"],
+        });
+        </script>
+{% endblock %}

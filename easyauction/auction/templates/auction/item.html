@@ -3,23 +3,24 @@
 {% block title %}{{item.name}}{% endblock %}
 
 {% block content %}
+    <v-form id="edit_item_form" action="{% url "auction:edit_item" item.id %}" method="POST">{% csrf_token %}</v-form>
+    <form id="bid_form" action="{% url "auction:submit_bid" item.id %}" method="POST">{% csrf_token %}</form>
+
     <div style="align-self: start">
         <v-btn href="{% url 'auction:auction_detail' item.auction.id %}">
             <v-icon>mdi-chevron-left</v-icon>
             Back to Auction
         </v-btn>
     </div>
-    <v-form id="edit_item_form" action="{% url "auction:edit_item" item.id %}" method="POST">{% csrf_token %}</v-form>
-    <form id="bid_form" action="{% url "auction:submit_bid" item.id %}" method="POST">{% csrf_token %}</form>
 
     <v-card class="d-inline-block mx-auto">
         <v-container>
             <v-row>
+                {# TODO: Format image to universal size. Also change what the card looks like if on mobile #}
                 {# Displays item image #}
                 <v-col cols="auto">
                     <v-img
-                        max_height="200"
-                        max_width="200"
+                        width="220"
                         src="{{ item.image.url }}"
                     ></v-img>
                 </v-col>
@@ -96,6 +97,7 @@
                     {% endif %}
 
 
+                    {# TODO: Don't allow users to bid if they are highest bidder. Don't let admin bid. (Implement when done with testing) #}
                     {# Text input for user to bid or timer display for when item opens #}
                     {% if item.auction_type == "silent" %}
                         {% if not item.is_sold %} {# !!! USE '... and if item.is_open' for Production !!! #}
@@ -120,7 +122,7 @@
 
                     {# Displays the number of bids #}
                     {% if item.auction_type == 'silent' %}    {# !!! USE '... and if item.is_open' for Production !!! #}
-                        <span>{{ item.bid_set.count }} [[{{ item.bid_set.count }} == 1 ? 'Bid' : 'Bids']]</span>
+                        <span>  [{{ item.bid_set.count }} [[{{ item.bid_set.count }} == 1 ? 'Bid' : 'Bids']]]</span>
                     {% endif %}
 
 
@@ -196,7 +198,7 @@
                     <div v-show="show_bids" class="text-center">
                         {% if item.bid_set.count > 0 and admin %}
                         <v-btn small outlined color="red"
-                               href="{% url 'auction:remove_bid' item.id item.bid_set.first.id %}">
+                               href="{% url 'auction:remove_bid' item.id item.bid_set.last.id %}">
                             <v-icon color="red" small>delete</v-icon>
                             Delete latest bid
                         </v-btn>
