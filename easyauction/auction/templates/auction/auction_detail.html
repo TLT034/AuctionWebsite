@@ -21,6 +21,7 @@
                             <p>Created on {{ auction.time_created }}</p>
                             <p>Number of bidders: {{ auction.participant_set|length }}</p>
                             <p>Items: {{ total_items|length }}</p>
+                            <p><a href="{% url 'auction:participants' auction.id%}">View auction participants</a></p>
                             <p>Local Code: {{ auction.pk }}</p>
                         </v-card-subtitle>
                     </div>
@@ -150,7 +151,8 @@
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
-                                                        <div style="color:red">SOLD</div> %}
+                                                        Winner: {{ item.winner }}
+                                                        <div style="color:red">SOLD</div>
                                                     {% else %}  {# If the item is not open for bidding yet #}
                                                         Starting Price: $ {{ item.starting_price }}
                                                         <br/>
@@ -203,6 +205,7 @@
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
+                                                        Winner: {{ item.winner }}
                                                         <div style="color:red">SOLD</div> %}
                                                     {% else %}  {# If the item is not open for bidding yet #}
                                                         Starting Price: $ {{ item.starting_price }}

@@ -1,0 +1,69 @@
+{% extends 'auction/base2.html' %}
+
+# Sets page title
+{% block title %}Auction Participants{% endblock %}
+
+{% block content %}
+    {# button to filter by winners #}
+    <form method="GET">
+        {% csrf_token %}
+        <v-row>
+            <v-col cols="6">
+                <input type="hidden" name="filter" :value="[[selected_filter]]">
+                <v-select
+                        :items="filters"
+                        label="Filter"
+                        v-model="selected_filter"
+                >
+              </v-select>
+            </v-col>
+            <v-col cols="6">
+                <v-btn color="primary" type="submit">Submit</v-btn>
+            </v-col>
+        </v-row>
+    </form>
+    {# v-data-table showing name, id, items won, total cost #}
+    <v-row>
+        <v-col>
+            <v-card>
+                <v-card-title>
+                    No results
+                </v-card-title>
+            </v-card>
+        </v-col>
+    </v-row>
+    <v-row>
+        <p>Results: {{ n_participants }}</p>
+        <v-data-table
+            :headers="headers"
+            :items="participants"
+            :items-per-page="10"
+        >
+        </v-data-table>
+    </v-row>
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    assorted_vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            drawer: false,
+            filters: [{'text': 'All participants', 'value': false},
+                      {'text': 'Winners', 'value': true}],
+            selected_filter: null,
+            participants: {{ participants|safe }},
+            headers: [
+                {text: "Bidder", value: "bidder", align: 'left'},
+                {text: "ID", value: "id"},
+                {text: "Items won", value: "items_won"},
+                {text: "Total cost", value: "total_cost"}
+            ]
+        },
+        delimiters: ["[[", "]]"]
+    });
+    </script>
+{% endblock %}

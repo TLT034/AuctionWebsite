@@ -44,7 +44,6 @@ class AuctionUser(AbstractUser):
         auction = self.get_auction(pk=pk)
         auction.archive()
 
-
 class Auction(models.Model):
     name = models.CharField(max_length=200)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -66,7 +65,13 @@ class Auction(models.Model):
         self.published = False
 
     def add_item(self, name, starting_price, item_desc):
-        self.item_set.create(name=name, starting_price=starting_price, current_price=starting_price, description=item_desc)
+        item = self.item_set.create(name=name,
+                             starting_price=starting_price,
+                             current_price=starting_price,
+                             min_bid=starting_price,
+                             description=item_desc)
+        return item
+
 
     def remove_item(self, pk):
         self.item_set.filter(pk=pk).first().delete()
