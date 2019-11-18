@@ -10,6 +10,9 @@
 {% block title %}{{ auction.name }}{% endblock %}
 
 {% block content %}
+    <form id="publish_form" action="{% url 'auction:publish' auction.id %}" method="POST">{% csrf_token %}</form>
+    <form id="archive_form" action="{% url 'auction:archive' auction.id %}" method="POST">{% csrf_token %}</form>
+
     <v-row>
         <v-col cols="6">
             <v-card raised>
@@ -27,6 +30,11 @@
                     <v-avatar class="ma-3" size="125" tile>
                         <v-img src="{{ auction.image.url }}"></v-img>
                     </v-avatar>
+                    {% if user_is_admin and not auction.published %}
+                        <v-btn type="submit" form="publish_form">Publish</v-btn>
+                    {% elif user_is_admin and auction.published %}
+                        <v-btn type="submit" form="archive_form">Archive</v-btn>
+                    {% endif %}
                 </div>
             </v-card>
         </v-col>

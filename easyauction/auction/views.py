@@ -1,5 +1,3 @@
-import decimal
-
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
@@ -244,3 +242,29 @@ class MyBidListView(generic.ListView):
             ordered_queryset = filtered_queryset.order_by('-timestamp')
 
         return ordered_queryset
+
+
+def publish(request, pk):
+    try:
+        auction = Auction.objects.get(pk=pk)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to publish does not exist or may have been deleted")
+
+    if request.method == "POST":
+        auction.publish()
+        auction.save()
+
+    return redirect("auction:auction_detail", pk)
+
+
+def archive(request, pk):
+    try:
+        auction = Auction.objects.get(pk=pk)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to archive does not exist or may have been deleted")
+
+    if request.method == "POST":
+        auction.archive()
+        auction.save()
+
+    return redirect("auction:auction_detail", pk)
