@@ -28,6 +28,10 @@
                 <span class="text-black fs-25">Last Name:</span>
                 <span class="float-r text-white fs-20">{{ auctionuser.last_name }}</span>
             </div>
+            <div class="wrap-input100">
+                <span class="text-black fs-25">User ID:</span>
+                <span class="float-r text-white fs-20">{{ auctionuser.id }}</span>
+            </div>
 
             <div class="text-center p-t-50">
                 <a class="txt1" href={% url "auction:edit_account" %}>Edit Account</a>
