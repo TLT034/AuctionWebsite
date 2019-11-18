@@ -251,6 +251,8 @@ def participants_list(request, auction_id):
     # Get auction
     try:
         auction = Auction.objects.get(id=auction_id)
+        if auction.admin.pk != request.user.pk:
+            return HttpResponseForbidden()
     except Auction.DoesNotExist:
         return Http404()
 
@@ -258,9 +260,10 @@ def participants_list(request, auction_id):
         # Get participants based on filter
         if 'filter' in request.GET and request.GET['filter'] == 'true':
             won_items = auction.item_set.exclude(winner=None)
-            participants = []
+            participants = set()
             for item in won_items:
-                participants.append(item.winner)
+                if item.winner not in participants:
+                    participants.add(item.winner)
         else:
             participants = auction.participants.all()
     else:
