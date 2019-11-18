@@ -84,13 +84,16 @@ def auction_detail(request, pk):
     else:
         item_form = AddItemForm()
 
+    page_url = request.build_absolute_uri(reverse('auction:auction_detail', args=(pk, )))
+
     context = {
         'auction': auction,
         'live_items': live_items,
         'silent_items': silent_items,
         'total_items': live_items.union(silent_items),
         'item_form': item_form,
-        'user_is_admin': user_is_admin
+        'user_is_admin': user_is_admin,
+        'page_url': page_url
     }
 
     return render(request, 'auction/auction_detail.html', context=context)
@@ -127,9 +130,11 @@ def item_view(request, item_id):
     if user.is_admin(item.auction.pk):
         admin = True
 
+    page_url = request.build_absolute_uri(reverse('auction:item', args=(item_id, )))
+
     # item_bids = Bid.objects.filter(item=item).order_by('-price')
 
-    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'page_url': page_url})
 
 
 def edit_item(request, item_id):
