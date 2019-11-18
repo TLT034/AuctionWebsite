@@ -1,13 +1,9 @@
-<!DOCTYPE html>
+{% extends "auction/base2.html" %}
 {% load static %}
+{% load widget_tweaks %}
+{% block stylesheets %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+{% endblock %}
+{% block title %}Enter Local Code{% endblock %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'auction/style.css' %}">
-    <title>Enter Local Code</title>
-</head>
-<body>
-enter local code
-</body>
-</html>

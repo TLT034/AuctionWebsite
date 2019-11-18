@@ -97,10 +97,10 @@
                     {% endif %}
 
 
-                    {# TODO: Don't allow users to bid if they are highest bidder. Don't let admin bid. (Implement when done with testing) #}
+                    {# TODO: Don't allow users to bid if they are highest bidder. (Implement when done with testing) #}
                     {# Text input for user to bid or timer display for when item opens #}
-                    {% if item.auction_type == "silent" %}
-                        {% if not item.is_sold %} {# !!! USE '... and if item.is_open' for Production !!! #}
+                    {% if item.auction_type == "silent" %}  {# TODO: USE '... and not admin' for Production #}
+                        {% if not item.is_sold %} {# TODO: USE '... and item.is_open' for Production #}
                             <v-text-field
                                 v-model="bid_amount" form="bid_form"
                                 name="bid" label="Enter Bid" prefix="$"
