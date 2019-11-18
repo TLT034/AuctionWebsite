@@ -162,7 +162,6 @@ def edit_item(request, item_id):
 
 
 def remove_bid(request, item_id, bid_id):
-
     try:
         item = Item.objects.get(pk=item_id)
     except Item.DoesNotExist:
@@ -173,25 +172,21 @@ def remove_bid(request, item_id, bid_id):
         raise Http404("The bid you are trying to remove does not exist or may have already been deleted")
 
     # if there are more bids than just the one bid that we are deleting
-    if bid == item.bid_set.latest('timestamp'):
-        print("\nTrue\n")
-    else:
-        print("\nFalse\n")
     if bid == item.bid_set.latest('timestamp') and item.bid_set.count() > 1:
-        item.current_price = item.bid_set.all().order_by('-timestamp')[1].price
+        item.current_price = item.bid_set.all().order_by('-price')[1].price
         item.min_bid = item.current_price + item.bid_increment
+        bid.delete()
+        item.save()
     elif item.bid_set.count() == 1:
         item.current_price = item.starting_price
         item.min_bid = item.starting_price
-
-    bid.delete()
-    item.save()
+        bid.delete()
+        item.save()
 
     return redirect('auction:item', item.id)
 
 
 def submit_bid(request, item_id):
-
     user = request.user
     try:
         item = Item.objects.get(pk=item_id)
@@ -202,13 +197,17 @@ def submit_bid(request, item_id):
         bid_amount = Decimal(request.POST.get('bid', -1))
 
         if bid_amount != -1:
-            bid = Bid(item=item, bidder=user, price=bid_amount)
-            bid.save()
+            if Bid.objects.count() == 0 or bid_amount >= item.min_bid:
+                bid = Bid(item=item, bidder=user, price=bid_amount)
+                bid.save()
 
-            item.current_price = bid_amount
-            item.min_bid = item.current_price + item.bid_increment
-            item.save()
+                item.current_price = bid_amount
+                item.min_bid = item.current_price + item.bid_increment
+                item.save()
+                return render(request, 'auction/bid_success.html', context={'bid': bid})
 
+        return render(request, 'auction/bid_fail.html', context={'bid': {'item': item, 'price': bid_amount}})
+    # if not a post, then just redirect to item
     return redirect('auction:item', item.id)
 
 
