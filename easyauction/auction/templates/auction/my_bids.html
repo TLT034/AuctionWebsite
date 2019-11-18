@@ -52,7 +52,7 @@
     {% else %}
         <v-row>
             <v-col cols="12">
-                <v-card>
+                <v-card href="{% url 'auction:enter_local_code' %}">
                     <v-card-title>You haven't placed any bids yet.</v-card-title>
                     <v-card-text>Join an auction and start bidding!</v-card-text>
                 </v-card>
