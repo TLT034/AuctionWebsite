@@ -47,6 +47,17 @@ def home(request):
                 'hosted_auctions': hosted_auctions,
                 'joined_auctions': joined_auctions}
 
+    # Join auction
+    if request.method == 'POST':
+        auction_code = request.POST['auction_code']
+        try:
+            auction = Auction.objects.get(pk=auction_code)
+            auction.participants.add(user)
+            auction.save()
+        except Auction.DoesNotExist:
+            error_msg = 'Invalid auction code'
+            context['error_msg'] = error_msg
+
     return render(request, 'auction/home2.html', context=context)
 
 

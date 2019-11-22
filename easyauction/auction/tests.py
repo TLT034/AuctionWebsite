@@ -337,6 +337,51 @@ class AuctionTests(TestCase):
             response = self.client.get(reverse('auction:participants', args=[auction.id]))
             self.assertTrue(response.status_code == 404)
 
+        def test_join_valid_auction(self):
+            # Admin
+            admin_username = 'admin'
+            admin_password = 'test12345'
+            create_user(admin_username, admin_password)
+            admin = AuctionUser.objects.get(username='admin')
+
+            # Create auction
+            admin.create_auction(name='test auction', description='test desc')
+
+            # Create non-admin
+            username = 'non-admin'
+            password = 'test12345'
+            create_user(username, password)
+
+            # Enter auction code
+            self.client.login(username=username, password=password)
+            self.client.get(reverse('auction:home'))
+            response = self.client.post(reverse('auction:home'), data={'auction_code': 1})
+
+            # Verify user was added to auction
+            self.assertContains(response, text='test auction', status_code=200)
+
+        def test_join_invalid_auction(self):
+            # Admin
+            admin_username = 'admin'
+            admin_password = 'test12345'
+            create_user(admin_username, admin_password)
+            admin = AuctionUser.objects.get(username='admin')
+
+            # Create auction
+            admin.create_auction(name='test auction', description='test desc')
+
+            # Create non-admin
+            username = 'non-admin'
+            password = 'test12345'
+            create_user(username, password)
+
+            # Enter invalid auction code
+            self.client.login(username=username, password=password)
+            self.client.get(reverse('auction:home'))
+            response = self.client.post(reverse('auction:home'), data={'auction_code': 3})
+
+            # Verify user was not added to auction
+            self.assertContains(response, text='Invalid auction code', status_code=200)
 
 class BidTests(TestCase):
     def test_render_no_bids(self):
