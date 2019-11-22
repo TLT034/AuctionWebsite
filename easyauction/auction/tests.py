@@ -383,6 +383,7 @@ class AuctionTests(TestCase):
             # Verify user was not added to auction
             self.assertContains(response, text='Invalid auction code', status_code=200)
 
+
 class BidTests(TestCase):
     def test_render_no_bids(self):
         username = 'test_user'
