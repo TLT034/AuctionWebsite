@@ -52,8 +52,11 @@ def home(request):
         auction_code = request.POST['auction_code']
         try:
             auction = Auction.objects.get(pk=auction_code)
-            auction.participants.add(user)
-            auction.save()
+            if auction.published:
+                auction.participants.add(user)
+                auction.save()
+            else:
+                error_msg = 'This auction has not been published'
         except Auction.DoesNotExist:
             error_msg = 'Invalid auction code'
             context['error_msg'] = error_msg
