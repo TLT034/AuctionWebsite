@@ -1,7 +1,5 @@
 {% extends 'auction/base2.html' %}
 
-{% load qr_code %}
-
 {% block title %}{{item.name}}{% endblock %}
 
 {% block content %}
@@ -212,7 +210,6 @@
                     </div>
                 </v-expand-transition>
             {% endif %}
-            {% qr_from_text page_url size="T" %}
         </v-container>
     </v-card>
 {% endblock %}

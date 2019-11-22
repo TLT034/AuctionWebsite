@@ -1,0 +1,48 @@
+{% extends "auction/base2.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% load qr_code %}
+{% block stylesheets %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+{% endblock %}
+
+# Sets page title
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+	<v-card class="d-inline-block mx-auto">
+		<v-container>
+			<v-row>
+				<v-col>
+				    {% qr_from_text page_url size="L" %}
+				</v-col>
+				<v-col>
+					<v-img
+                        max_height="200"
+                        max_width="200"
+                        src="{{ item.image.url }}"
+                    ></v-img>
+				</v-col>
+			</v-row>
+		</v-container>
+	</v-card>
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    assorted_vue = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            drawer: false,
+            n_items: {{ items|length }},
+            n_items_per_row: 4,
+            show_add_item: false,
+        },
+        delimiters: ["[[", "]]"]
+    });
+    </script>
+{% endblock %}

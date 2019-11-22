@@ -217,6 +217,23 @@ def submit_bid(request, item_id):
     return redirect('auction:item', item.id)
 
 
+def item_qr(request, item_id):
+    user = request.user
+    admin = False
+
+    try:
+        item = Item.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        raise Http404("The item you are trying to view does not exist or may have been deleted")
+
+    if user.is_admin(item.auction.pk):
+        admin = True
+
+    page_url = request.build_absolute_uri(reverse('auction:item', args=(item_id, )))
+
+    return render(request, 'auction/item_qr.html', context={'item': item, 'admin': admin, 'page_url': page_url})
+
+
 class MyBidListView(generic.ListView):
     model = Bid
 
