@@ -1,12 +1,22 @@
 import decimal
+import io
+import os
 
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, FileResponse
 from django.urls import reverse
+from django.conf import settings
+
 import json
 from decimal import Decimal
+
+from reportlab.pdfgen import canvas
+from reportlab.graphics.shapes import Drawing 
+from reportlab.graphics.barcode.qr import QrCodeWidget 
+from reportlab.graphics import renderPDF
+from reportlab.lib.pagesizes import letter
 
 from .forms import AuctionForm, UserSignUpForm, AddItemForm
 
@@ -217,21 +227,95 @@ def submit_bid(request, item_id):
     return redirect('auction:item', item.id)
 
 
-def item_qr(request, item_id):
+def auction_qr_codes(request, pk):
     user = request.user
     admin = False
 
     try:
-        item = Item.objects.get(pk=item_id)
-    except Item.DoesNotExist:
-        raise Http404("The item you are trying to view does not exist or may have been deleted")
+        auction = Auction.objects.get(pk=pk)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to view does not exist or may have been deleted")
 
-    if user.is_admin(item.auction.pk):
+    if user.is_admin(auction.pk):
         admin = True
 
-    page_url = request.build_absolute_uri(reverse('auction:item', args=(item_id, )))
+    buffer = io.BytesIO()
 
-    return render(request, 'auction/item_qr.html', context={'item': item, 'admin': admin, 'page_url': page_url})
+    # 612.0 x 792.0 (letter size)
+    p = canvas.Canvas(buffer, pagesize=letter)
+    xRes = 612
+    yRes = 792
+
+    imageWidth = 170
+    imageHeight = 170
+    qrWidth = 130
+    qrHeight = 130
+    textSize = 20
+    spaceBetween = (yRes / 2 - imageHeight - qrHeight - textSize) / 4
+
+    index = 0
+
+    p.line(306, 0, 306, 792)
+    p.line(0, 396, 612, 396)
+    p.setFont("Times-Roman", textSize)
+
+    for item in auction.item_set.all():
+        if index != 0 and index % 4 == 0:
+            p.showPage()
+            p.line(306, 0, 306, 792)
+            p.line(0, 396, 612, 396)
+            p.setFont("Times-Roman", textSize)
+
+        page_url = request.build_absolute_uri(reverse('auction:item', args=(item.id, )))
+
+        qrw = QrCodeWidget(page_url) 
+        b = qrw.getBounds()
+
+        w = b[2] - b[0] 
+        h = b[3] - b[1] 
+
+        d = Drawing()
+        d.add(qrw)
+
+        xOffset = xRes / 2
+        if index & 1 == 0:
+            xOffset = 0
+
+        yOffset = 0
+        if index & 2 == 0:
+            yOffset = yRes / 2
+
+        index += 1
+
+        d.translate(xOffset + xRes / 4 - qrWidth / 2, yOffset + spaceBetween)
+
+        d.scale(qrWidth / w, qrHeight / h)
+
+        renderPDF.draw(d, p, 1, 1)
+
+        p.drawCentredString(xOffset + xRes / 4, yOffset + qrHeight + imageHeight + 3 * spaceBetween, item.name)
+
+        p.drawImage(settings.BASE_DIR + item.image.url,
+            xOffset + xRes / 4 - imageWidth / 2, yOffset + qrHeight + 2 * spaceBetween,
+            imageWidth, imageHeight)
+
+        # d.translate(xOffset + xRes / 4 - qrWidth / 2, yOffset - qrHeight / 2 + 74)
+
+        # d.scale(qrWidth / w, qrHeight / h)
+
+        # renderPDF.draw(d, p, 1, 1)
+
+        # p.drawCentredString(xOffset + xRes / 4, yOffset + 330, item.name)
+
+        # p.drawImage(settings.BASE_DIR + item.image.url,
+        #     xOffset + xRes / 4 - imageWidth / 2, yOffset + yRes / 4 - imageHeight / 2 + 25,
+        #     imageWidth, imageHeight)
+
+    p.save()
+
+    buffer.seek(0)
+
+    return FileResponse(buffer, as_attachment=True, filename='QR Codes Printout.pdf')
 
 
 class MyBidListView(generic.ListView):

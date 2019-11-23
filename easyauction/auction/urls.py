@@ -51,7 +51,7 @@ urlpatterns += [
   path('auction/item/<int:item_id>/submit_bid/', login_required(views.submit_bid), name='submit_bid'),
   path('auction/item/<int:item_id>/remove_bid/<int:bid_id>', login_required(views.remove_bid), name='remove_bid'),
   path('auction/my_bids', login_required(views.MyBidListView.as_view(template_name='auction/my_bids.html')), name='my_bids'),
-  path('auction/item/<int:item_id>/qr_code', login_required(views.item_qr), name='item_qr'),
+  path('auction/auction_detail/<int:pk>/qr_codes', login_required(views.auction_qr_codes), name='auction_qr_codes'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
