@@ -241,26 +241,51 @@ def auction_qr_codes(request, pk):
     x_res = 612
     y_res = 792
 
+    include_images = 'include_images' in request.POST
+
+    num_rows = 4
+    num_cols = 2
+
+    if include_images:
+        num_rows = 2
+        num_cols = 2
+
+    block_width = x_res / num_cols
+    block_height = y_res / num_rows
+
     image_width = 170
     image_height = 170
     qr_width = 130
     qr_height = 130
     text_size = 20
-    space_between = (y_res / 2 - image_height - qr_height - text_size) / 4
+    space_between = (block_height - qr_height - text_size) / 3
+
+    if include_images:
+        space_between = (block_height - image_height - qr_height - text_size) / 4
 
     index = 0
 
-    p.line(306, 0, 306, 792)
-    p.line(0, 396, 612, 396)
+    # Draw divider lines on first page
+    for r in range(1, num_rows):
+        for c in range(1, num_cols):
+            p.line(c * block_width, 0, c * block_width, y_res)
+            p.line(0, r * block_height, x_res, r * block_height)
+
     p.setFont("Times-Roman", text_size)
 
     for item in auction.item_set.all():
-        if index != 0 and index % 4 == 0:
+        if index != 0 and index % (num_rows * num_cols) == 0:
+            # Change to new page, draw divider lines, and reset font
             p.showPage()
-            p.line(306, 0, 306, 792)
-            p.line(0, 396, 612, 396)
+
+            for r in range(1, num_rows):
+                for c in range(1, num_cols):
+                    p.line(c * block_width, 0, c * block_width, y_res)
+                    p.line(0, r * block_height, x_res, r * block_height)
+
             p.setFont("Times-Roman", text_size)
 
+        # Generate QR code from item page URL
         page_url = request.build_absolute_uri(reverse('auction:item', args=(item.id, )))
 
         qrw = QrCodeWidget(page_url) 
@@ -272,32 +297,33 @@ def auction_qr_codes(request, pk):
         d = Drawing()
         d.add(qrw)
 
-        x_offset = x_res / 2
-        if index & 1 == 0:
-            x_offset = 0
+        # Bottom left corner of block
+        x_offset = (index % num_cols) * block_width
+        y_offset = (num_rows - 1 - (index // num_cols) % num_rows) * block_height
 
-        y_offset = 0
-        if index & 2 == 0:
-            y_offset = y_res / 2
-
-        index += 1
-
-        d.translate(x_offset + x_res / 4 - qr_width / 2, y_offset + space_between)
+        # Draw QR code
+        d.translate(x_offset + block_width / 2 - qr_width / 2, y_offset + space_between)
 
         d.scale(qr_width / w, qr_height / h)
 
         renderPDF.draw(d, p, 1, 1)
 
-        p.drawCentredString(x_offset + x_res / 4, y_offset + qr_height + image_height + 3 * space_between, item.name)
+        # Draw item name
+        p.drawCentredString(x_offset + block_width / 2, y_offset + block_height - text_size - space_between, item.name)
 
-        p.drawImage(settings.BASE_DIR + item.image.url,
-            x_offset + x_res / 4 - image_width / 2, y_offset + qr_height + 2 * space_between,
-            image_width, image_height)
+        if include_images:
+            # Draw item image
+            p.drawImage(settings.BASE_DIR + item.image.url,
+                x_offset + x_res / 4 - image_width / 2, y_offset + qr_height + 2 * space_between,
+                image_width, image_height)
+
+        index += 1
 
     p.save()
 
     buffer.seek(0)
 
+    # Return rendered PDF file
     return FileResponse(buffer, as_attachment=True, filename='QR Codes Printout.pdf')
 
 

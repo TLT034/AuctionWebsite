@@ -29,6 +29,8 @@
                     <v-avatar class="ma-3" size="125" tile>
                         <v-img src="{{ auction.image.url }}"></v-img>
                     </v-avatar>
+
+                    <v-checkbox form="download_qr_codes_form" name="include_images" label="Include images"></v-checkbox>
                     <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
                 </div>
             </v-card>
