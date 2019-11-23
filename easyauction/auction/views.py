@@ -94,16 +94,13 @@ def auction_detail(request, pk):
     else:
         item_form = AddItemForm()
 
-    page_url = request.build_absolute_uri(reverse('auction:auction_detail', args=(pk, )))
-
     context = {
         'auction': auction,
         'live_items': live_items,
         'silent_items': silent_items,
         'total_items': live_items.union(silent_items),
         'item_form': item_form,
-        'user_is_admin': user_is_admin,
-        'page_url': page_url
+        'user_is_admin': user_is_admin
     }
 
     return render(request, 'auction/auction_detail.html', context=context)
@@ -140,11 +137,9 @@ def item_view(request, item_id):
     if user.is_admin(item.auction.pk):
         admin = True
 
-    page_url = request.build_absolute_uri(reverse('auction:item', args=(item_id, )))
-
     # item_bids = Bid.objects.filter(item=item).order_by('-price')
 
-    return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'page_url': page_url})
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
 
 
 def edit_item(request, item_id):
@@ -298,18 +293,6 @@ def auction_qr_codes(request, pk):
         p.drawImage(settings.BASE_DIR + item.image.url,
             x_offset + x_res / 4 - image_width / 2, y_offset + qr_height + 2 * space_between,
             image_width, image_height)
-
-        # d.translate(x_offset + x_res / 4 - qr_width / 2, y_offset - qr_height / 2 + 74)
-
-        # d.scale(qr_width / w, qr_height / h)
-
-        # renderPDF.draw(d, p, 1, 1)
-
-        # p.drawCentredString(x_offset + x_res / 4, y_offset + 330, item.name)
-
-        # p.drawImage(settings.BASE_DIR + item.image.url,
-        #     x_offset + x_res / 4 - image_width / 2, y_offset + yRes / 4 - image_height / 2 + 25,
-        #     image_width, image_height)
 
     p.save()
 
