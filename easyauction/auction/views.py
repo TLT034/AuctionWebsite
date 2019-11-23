@@ -243,28 +243,28 @@ def auction_qr_codes(request, pk):
 
     # 612.0 x 792.0 (letter size)
     p = canvas.Canvas(buffer, pagesize=letter)
-    xRes = 612
-    yRes = 792
+    x_res = 612
+    y_res = 792
 
-    imageWidth = 170
-    imageHeight = 170
-    qrWidth = 130
-    qrHeight = 130
-    textSize = 20
-    spaceBetween = (yRes / 2 - imageHeight - qrHeight - textSize) / 4
+    image_width = 170
+    image_height = 170
+    qr_width = 130
+    qr_height = 130
+    text_size = 20
+    space_between = (y_res / 2 - image_height - qr_height - text_size) / 4
 
     index = 0
 
     p.line(306, 0, 306, 792)
     p.line(0, 396, 612, 396)
-    p.setFont("Times-Roman", textSize)
+    p.setFont("Times-Roman", text_size)
 
     for item in auction.item_set.all():
         if index != 0 and index % 4 == 0:
             p.showPage()
             p.line(306, 0, 306, 792)
             p.line(0, 396, 612, 396)
-            p.setFont("Times-Roman", textSize)
+            p.setFont("Times-Roman", text_size)
 
         page_url = request.build_absolute_uri(reverse('auction:item', args=(item.id, )))
 
@@ -277,39 +277,39 @@ def auction_qr_codes(request, pk):
         d = Drawing()
         d.add(qrw)
 
-        xOffset = xRes / 2
+        x_offset = x_res / 2
         if index & 1 == 0:
-            xOffset = 0
+            x_offset = 0
 
-        yOffset = 0
+        y_offset = 0
         if index & 2 == 0:
-            yOffset = yRes / 2
+            y_offset = y_res / 2
 
         index += 1
 
-        d.translate(xOffset + xRes / 4 - qrWidth / 2, yOffset + spaceBetween)
+        d.translate(x_offset + x_res / 4 - qr_width / 2, y_offset + space_between)
 
-        d.scale(qrWidth / w, qrHeight / h)
+        d.scale(qr_width / w, qr_height / h)
 
         renderPDF.draw(d, p, 1, 1)
 
-        p.drawCentredString(xOffset + xRes / 4, yOffset + qrHeight + imageHeight + 3 * spaceBetween, item.name)
+        p.drawCentredString(x_offset + x_res / 4, y_offset + qr_height + image_height + 3 * space_between, item.name)
 
         p.drawImage(settings.BASE_DIR + item.image.url,
-            xOffset + xRes / 4 - imageWidth / 2, yOffset + qrHeight + 2 * spaceBetween,
-            imageWidth, imageHeight)
+            x_offset + x_res / 4 - image_width / 2, y_offset + qr_height + 2 * space_between,
+            image_width, image_height)
 
-        # d.translate(xOffset + xRes / 4 - qrWidth / 2, yOffset - qrHeight / 2 + 74)
+        # d.translate(x_offset + x_res / 4 - qr_width / 2, y_offset - qr_height / 2 + 74)
 
-        # d.scale(qrWidth / w, qrHeight / h)
+        # d.scale(qr_width / w, qr_height / h)
 
         # renderPDF.draw(d, p, 1, 1)
 
-        # p.drawCentredString(xOffset + xRes / 4, yOffset + 330, item.name)
+        # p.drawCentredString(x_offset + x_res / 4, y_offset + 330, item.name)
 
         # p.drawImage(settings.BASE_DIR + item.image.url,
-        #     xOffset + xRes / 4 - imageWidth / 2, yOffset + yRes / 4 - imageHeight / 2 + 25,
-        #     imageWidth, imageHeight)
+        #     x_offset + x_res / 4 - image_width / 2, y_offset + yRes / 4 - image_height / 2 + 25,
+        #     image_width, image_height)
 
     p.save()
 
