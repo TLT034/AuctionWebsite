@@ -1,10 +1,22 @@
+import decimal
+import io
+import os
+
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, FileResponse
 from django.urls import reverse
+from django.conf import settings
+
 import json
 from decimal import Decimal
+
+from reportlab.pdfgen import canvas
+from reportlab.graphics.shapes import Drawing 
+from reportlab.graphics.barcode.qr import QrCodeWidget 
+from reportlab.graphics import renderPDF
+from reportlab.lib.pagesizes import letter
 
 from .forms import AuctionForm, UserSignUpForm, AddItemForm
 
@@ -221,6 +233,111 @@ def submit_bid(request, item_id):
         return render(request, 'auction/bid_fail.html', context={'bid': {'item': item, 'price': bid_amount}})
     # if not a post, then just redirect to item
     return redirect('auction:item', item.id)
+
+
+def auction_qr_codes(request, pk):
+    user = request.user
+    admin = False
+
+    try:
+        auction = Auction.objects.get(pk=pk)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to view does not exist or may have been deleted")
+
+    if user.is_admin(auction.pk):
+        admin = True
+
+    buffer = io.BytesIO()
+
+    # 612.0 x 792.0 (letter size)
+    p = canvas.Canvas(buffer, pagesize=letter)
+    x_res = 612
+    y_res = 792
+
+    include_images = 'include_images' in request.POST
+
+    num_rows = 4
+    num_cols = 2
+
+    if include_images:
+        num_rows = 2
+        num_cols = 2
+
+    block_width = x_res / num_cols
+    block_height = y_res / num_rows
+
+    image_width = 170
+    image_height = 170
+    qr_width = 130
+    qr_height = 130
+    text_size = 20
+    space_between = (block_height - qr_height - text_size) / 3
+
+    if include_images:
+        space_between = (block_height - image_height - qr_height - text_size) / 4
+
+    index = 0
+
+    # Draw divider lines on first page
+    for r in range(1, num_rows):
+        for c in range(1, num_cols):
+            p.line(c * block_width, 0, c * block_width, y_res)
+            p.line(0, r * block_height, x_res, r * block_height)
+
+    p.setFont("Times-Roman", text_size)
+
+    for item in auction.item_set.all():
+        if index != 0 and index % (num_rows * num_cols) == 0:
+            # Change to new page, draw divider lines, and reset font
+            p.showPage()
+
+            for r in range(1, num_rows):
+                for c in range(1, num_cols):
+                    p.line(c * block_width, 0, c * block_width, y_res)
+                    p.line(0, r * block_height, x_res, r * block_height)
+
+            p.setFont("Times-Roman", text_size)
+
+        # Generate QR code from item page URL
+        page_url = request.build_absolute_uri(reverse('auction:item', args=(item.id, )))
+
+        qrw = QrCodeWidget(page_url) 
+        b = qrw.getBounds()
+
+        w = b[2] - b[0] 
+        h = b[3] - b[1] 
+
+        d = Drawing()
+        d.add(qrw)
+
+        # Bottom left corner of block
+        x_offset = (index % num_cols) * block_width
+        y_offset = (num_rows - 1 - (index // num_cols) % num_rows) * block_height
+
+        # Draw QR code
+        d.translate(x_offset + block_width / 2 - qr_width / 2, y_offset + space_between)
+
+        d.scale(qr_width / w, qr_height / h)
+
+        renderPDF.draw(d, p, 1, 1)
+
+        # Draw item name
+        p.drawCentredString(x_offset + block_width / 2, y_offset + block_height - text_size - space_between, item.name)
+
+        if include_images:
+            # Draw item image
+            p.drawImage(settings.BASE_DIR + item.image.url,
+                x_offset + x_res / 4 - image_width / 2, y_offset + qr_height + 2 * space_between,
+                image_width, image_height)
+
+        index += 1
+
+    p.save()
+
+    buffer.seek(0)
+
+    # Return rendered PDF file
+    return FileResponse(buffer, as_attachment=True, filename='QR Codes Printout.pdf')
 
 
 class MyBidListView(generic.ListView):

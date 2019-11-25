@@ -1,6 +1,7 @@
 {% extends "auction/base2.html" %}
 {% load static %}
 {% load widget_tweaks %}
+{% load qr_code %}
 {% block stylesheets %}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -10,6 +11,7 @@
 {% block title %}{{ auction.name }}{% endblock %}
 
 {% block content %}
+    <form id="download_qr_codes_form" action="{% url 'auction:auction_qr_codes' auction.id %}" method="POST">{% csrf_token %}</form>
     <form id="publish_form" action="{% url 'auction:publish' auction.id %}" method="POST">{% csrf_token %}</form>
     <form id="archive_form" action="{% url 'auction:archive' auction.id %}" method="POST">{% csrf_token %}</form>
 
@@ -31,6 +33,10 @@
                     <v-avatar class="ma-3" size="125" tile>
                         <v-img src="{{ auction.image.url }}"></v-img>
                     </v-avatar>
+
+                    <v-checkbox form="download_qr_codes_form" name="include_images" label="Include images"></v-checkbox>
+                    <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
+              
                     {% if user_is_admin and not auction.published %}
                         <v-btn type="submit" form="publish_form">Publish</v-btn>
                     {% elif user_is_admin and auction.published %}
