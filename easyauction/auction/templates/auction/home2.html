@@ -33,6 +33,30 @@
         {% endif %}
     </v-col>
     <v-col>
+        <v-row justify="end">
+            <v-col cols="4">
+                {% if error_msg %}
+                    <p style="color: red">{{ error_msg }}</p>
+                {% endif %}
+                <form id="join_form" method="POST">
+                    {% csrf_token %}
+                    <v-text-field
+                        label="Join an auction"
+                        placeholder="Enter auction code"
+                        outlined
+                        form="join_form"
+                        name="auction_code"
+                        type="number"
+                        min="1"
+                        step="1"
+                    >
+                    </v-text-field>
+                </form>
+            </v-col>
+            <v-col>
+                <v-btn form="join_form" type="submit">Submit</v-btn>
+            </v-col>
+        </v-row>
         {% if joined_auctions.exists %}
         <v-list>
             <v-subheader>Joined Auctions</v-subheader>

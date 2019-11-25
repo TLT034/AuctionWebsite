@@ -13,9 +13,10 @@
 * Django 2.2.5
 
 # Build instructions
+* pip install django
 * pip install django-widget-tweaks
 
 # Unit testing instructions
-* Django built in Unit Testing
+To run unit tests, navigate to .../Repo-1.08/easyauction and run `python manage.py test auction`
 
 # System testing instructions

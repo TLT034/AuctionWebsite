@@ -12,6 +12,8 @@
 
 {% block content %}
     <form id="download_qr_codes_form" action="{% url 'auction:auction_qr_codes' auction.id %}" method="POST">{% csrf_token %}</form>
+    <form id="publish_form" action="{% url 'auction:publish' auction.id %}" method="POST">{% csrf_token %}</form>
+    <form id="archive_form" action="{% url 'auction:archive' auction.id %}" method="POST">{% csrf_token %}</form>
 
     <v-row>
         <v-col cols="6">
@@ -24,6 +26,8 @@
                             <p>Created on {{ auction.time_created }}</p>
                             <p>Number of bidders: {{ auction.participant_set|length }}</p>
                             <p>Items: {{ total_items|length }}</p>
+                            <p><a href="{% url 'auction:participants' auction.id%}">View auction participants</a></p>
+                            <p>Local Code: {{ auction.pk }}</p>
                         </v-card-subtitle>
                     </div>
                     <v-avatar class="ma-3" size="125" tile>
@@ -32,6 +36,12 @@
 
                     <v-checkbox form="download_qr_codes_form" name="include_images" label="Include images"></v-checkbox>
                     <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
+              
+                    {% if user_is_admin and not auction.published %}
+                        <v-btn type="submit" form="publish_form">Publish</v-btn>
+                    {% elif user_is_admin and auction.published %}
+                        <v-btn type="submit" form="archive_form">Archive</v-btn>
+                    {% endif %}
                 </div>
             </v-card>
         </v-col>
@@ -155,7 +165,8 @@
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
-                                                        <div style="color:red">SOLD</div> %}
+                                                        Winner: {{ item.winner }}
+                                                        <div style="color:red">SOLD</div>
                                                     {% else %}  {# If the item is not open for bidding yet #}
                                                         Starting Price: $ {{ item.starting_price }}
                                                         <br/>
@@ -208,6 +219,7 @@
                                                         <br/>
                                                         Total Bids: {{ item.bid_set|length }}
                                                         <br/>
+                                                        Winner: {{ item.winner }}
                                                         <div style="color:red">SOLD</div> %}
                                                     {% else %}  {# If the item is not open for bidding yet #}
                                                         Starting Price: $ {{ item.starting_price }}

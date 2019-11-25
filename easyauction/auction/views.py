@@ -59,6 +59,20 @@ def home(request):
                 'hosted_auctions': hosted_auctions,
                 'joined_auctions': joined_auctions}
 
+    # Join auction
+    if request.method == 'POST':
+        auction_code = request.POST['auction_code']
+        try:
+            auction = Auction.objects.get(pk=auction_code)
+            if auction.published:
+                auction.participants.add(user)
+                auction.save()
+            else:
+                error_msg = 'This auction has not been published'
+        except Auction.DoesNotExist:
+            error_msg = 'Invalid auction code'
+            context['error_msg'] = error_msg
+
     return render(request, 'auction/home2.html', context=context)
 
 
@@ -172,7 +186,6 @@ def edit_item(request, item_id):
 
 
 def remove_bid(request, item_id, bid_id):
-
     try:
         item = Item.objects.get(pk=item_id)
     except Item.DoesNotExist:
@@ -183,25 +196,21 @@ def remove_bid(request, item_id, bid_id):
         raise Http404("The bid you are trying to remove does not exist or may have already been deleted")
 
     # if there are more bids than just the one bid that we are deleting
-    if bid == item.bid_set.latest('timestamp'):
-        print("\nTrue\n")
-    else:
-        print("\nFalse\n")
     if bid == item.bid_set.latest('timestamp') and item.bid_set.count() > 1:
-        item.current_price = item.bid_set.all().order_by('-timestamp')[1].price
+        item.current_price = item.bid_set.all().order_by('-price')[1].price
         item.min_bid = item.current_price + item.bid_increment
+        bid.delete()
+        item.save()
     elif item.bid_set.count() == 1:
         item.current_price = item.starting_price
         item.min_bid = item.starting_price
-
-    bid.delete()
-    item.save()
+        bid.delete()
+        item.save()
 
     return redirect('auction:item', item.id)
 
 
 def submit_bid(request, item_id):
-
     user = request.user
     try:
         item = Item.objects.get(pk=item_id)
@@ -212,13 +221,17 @@ def submit_bid(request, item_id):
         bid_amount = Decimal(request.POST.get('bid', -1))
 
         if bid_amount != -1:
-            bid = Bid(item=item, bidder=user, price=bid_amount)
-            bid.save()
+            if Bid.objects.count() == 0 or bid_amount >= item.min_bid:
+                bid = Bid(item=item, bidder=user, price=bid_amount)
+                bid.save()
 
-            item.current_price = bid_amount
-            item.min_bid = item.current_price + item.bid_increment
-            item.save()
+                item.current_price = bid_amount
+                item.min_bid = item.current_price + item.bid_increment
+                item.save()
+                return render(request, 'auction/bid_success.html', context={'bid': bid})
 
+        return render(request, 'auction/bid_fail.html', context={'bid': {'item': item, 'price': bid_amount}})
+    # if not a post, then just redirect to item
     return redirect('auction:item', item.id)
 
 
@@ -360,3 +373,67 @@ class MyBidListView(generic.ListView):
             ordered_queryset = filtered_queryset.order_by('-timestamp')
 
         return ordered_queryset
+
+def publish(request, pk):
+    try:
+        auction = Auction.objects.get(pk=pk)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to publish does not exist or may have been deleted")
+
+    if request.method == "POST":
+        auction.publish()
+        auction.save()
+
+    return redirect("auction:auction_detail", pk)
+
+
+def archive(request, pk):
+    try:
+        auction = Auction.objects.get(pk=pk)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to archive does not exist or may have been deleted")
+
+    if request.method == "POST":
+        auction.archive()
+        auction.save()
+
+    return redirect("auction:auction_detail", pk)
+
+def participants_list(request, auction_id):
+    # Get auction
+    try:
+        auction = Auction.objects.get(id=auction_id)
+        if auction.admin.pk != request.user.pk:
+            return HttpResponseForbidden()
+    except Auction.DoesNotExist:
+        return Http404()
+
+    if request.method == 'GET':
+        # Get participants based on filter
+        if 'filter' in request.GET and request.GET['filter'] == 'true':
+            won_items = auction.item_set.exclude(winner=None)
+            participants = set()
+            for item in won_items:
+                if item.winner not in participants:
+                    participants.add(item.winner)
+        else:
+            participants = auction.participants.all()
+    else:
+        participants = auction.participants.all()
+
+    # Build list of participant json objects to be rendered by v-data-table
+    participant_objs = []
+    for participant in participants:
+        items_won = auction.item_set.filter(winner__id=participant.id)
+        participant_obj = {'name': participant.username,
+                            'id': participant.id,
+                            'items_won': list(map(lambda x: x['name'], items_won.values('name'))),
+                            'total_cost': 0}
+        for item in items_won:
+            participant_obj['total_cost'] += float(item.current_price)
+        participant_objs.append(participant_obj)
+
+    participants_json = json.dumps(participant_objs)
+
+    context = {'participants': participants_json, 'n_participants': len(participants)}
+    return render(request, 'auction/participants.html', context=context)

@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/templates/auction/item.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/item.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/easyauction/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/easyauction/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +45,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\trist\repos\school\cs3450\auction-program\easyauction\auction\templates\auction" />
       <recent name="C:\Users\trist\repos\school\cs3450\auction-program\easyauction\auction\templates\auction\account" />
     </key>
   </component>

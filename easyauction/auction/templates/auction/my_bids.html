@@ -31,19 +31,20 @@
     </v-row>
 </form>
     {% if object_list %}
-        <v-row>
-            <v-col cols="12">
+        <v-row align="center" justify="space-around">
+            <v-col cols="4">
                 <v-list>
                     {% for bid in object_list %}
-                        <v-list-item>
-                            <v-card href="{% url 'auction:item' bid.item.pk %}">
-                                <v-card-text>
-                                    <p>Item: {{ bid.item.name }}</p>
-                                    <p>Auction: {{ bid.item.auction.name }}</p>
-                                    <p>Amount: {{ bid.amount }}</p>
-                                    <p>Bid placed on {{ bid.timestamp }}</p>
-                                </v-card-text>
-                            </v-card>
+                        <v-list-item
+                                href="{% url 'auction:item' bid.item.pk %}"
+                                style="border: 5px solid #3F51B5; border-radius: 8px;"
+                        >
+                            <v-list-item-content>
+                                <v-list-item-title>Bid on {{ bid.item.name }} for ${{ bid.price }}</v-list-item-title>
+                                <v-list-item-subtitle>Auction: {{ bid.item.auction.name }}<br>
+                                                      Placed on {{ bid.timestamp }}
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
                         </v-list-item>
                     {% endfor %}
                 </v-list>
@@ -52,7 +53,7 @@
     {% else %}
         <v-row>
             <v-col cols="12">
-                <v-card>
+                <v-card href="{% url 'auction:enter_local_code' %}">
                     <v-card-title>You haven't placed any bids yet.</v-card-title>
                     <v-card-text>Join an auction and start bidding!</v-card-text>
                 </v-card>
@@ -63,6 +64,7 @@
 
 {% block vue %}
     <script>
+
     Vue.use(Vuetify);
 
     assorted_vue = new Vue({

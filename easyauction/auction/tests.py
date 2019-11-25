@@ -3,6 +3,7 @@ from .models import AuctionUser, Bid
 from django.urls import reverse
 from .forms import AddItemForm
 import time
+import json
 
 
 class AuthTests(TestCase):
@@ -110,7 +111,8 @@ class AuthTests(TestCase):
 
 
 def create_user(username, password, email=None):
-    AuctionUser.objects.create_user(username=username, password=password, email=email).save()
+    user = AuctionUser.objects.create_user(username=username, password=password, email=email)
+    return user
 
 
 class AuctionTests(TestCase):
@@ -154,10 +156,6 @@ class AuctionTests(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTrue('id="add_item_col"' in response.content.decode())
 
-
-    def test_restrict_auction_detail_access_to_participants(self):
-        pass
-
     def test_correctly_rendered_participant_detail_view(self):
         # Admin
         username1 = 'admin'
@@ -194,17 +192,196 @@ class AuctionTests(TestCase):
         data = {'name': 'test item',
                 'starting_price': 5.00,
                 'description': 'desc for test item',
-                'auction_type': 'silent'}
+                'auction_type': 'silent',
+                'bid_increment': 1.00}
 
         item_form = AddItemForm(data)
         item_form.is_valid()
         item = item_form.save(commit=False)
         item.auction = auction
         item.current_price = item.starting_price
+        item.min_bid = item.starting_price
         item.save()
 
         updated_auction = user.auction_set.get(name='test auction')
         self.assertTrue(updated_auction.item_set.filter(name='test item').exists())
+
+    def test_auction_detail_displays_winner(self):
+        # Admin
+        username1 = 'admin'
+        password1 = 'test12345'
+        create_user(username1, password1)
+        admin = AuctionUser.objects.get(username=username1)
+        admin.create_auction(name='Test Auction')
+
+        auction = admin.auction_set.first()
+        auction_pk = auction.pk
+
+        # Participant
+        username2 = 'user'
+        password2 = 'test12345'
+        create_user(username2, password1)
+        participant = AuctionUser.objects.get(username=username2)
+
+        # Set participant as item winner
+        auction.participants.add(participant)
+        auction.add_item(name='test item', starting_price=5, item_desc='test desc')
+        auction.save()
+        item = auction.item_set.first()
+        item.winner = participant
+        item.is_open = False
+        item.is_sold = True
+        item.save()
+
+        # Test that the item correctly renders the winner
+        self.client.login(username=username2, password=password2)
+        response = self.client.get(reverse('auction:auction_detail', args=[auction.pk]))
+        self.assertContains(response, 'Winner: user', status_code=200)
+
+    def test_participants_view(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction and items
+        admin.create_auction(name='test auction', description='test desc')
+        auction = admin.auction_set.first()
+        items = []
+        for x in range(5):
+            item = auction.add_item(name=f'test item {x}', item_desc='test desc', starting_price=1)
+            items.append(item)
+
+        # Bidders
+        users = []
+        for x in range(1, 4+1):
+            username = f'bidder{x}'
+            password = 'test12345'
+            user = create_user(username, password)
+            auction.participants.add(user)
+            auction.save()
+            users.append(user)
+
+        # Place bids
+        for item in items:
+            for i, user in enumerate(users):
+                bid = Bid(price=i, bidder=user, item=item)
+                bid.save()
+            item.winner = users[-1]
+            item.save()
+
+        # Check that default response works
+        self.client.login(username=admin_username, password=admin_password)
+
+        response = self.client.get(reverse('auction:participants', args=[auction.id]))
+        participants = json.loads(response.context['participants'])
+        self.assertTrue(len(participants) == 4)
+
+    def test_participants_view_with_winners_filter(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction and items
+        admin.create_auction(name='test auction', description='test desc')
+        auction = admin.auction_set.first()
+        items = []
+        for x in range(5):
+            item = auction.add_item(name=f'test item {x}', item_desc='test desc', starting_price=1)
+            items.append(item)
+
+        # Bidders
+        users = []
+        for x in range(1, 4+1):
+            username = f'bidder{x}'
+            password = 'test12345'
+            user = create_user(username, password)
+            users.append(user)
+
+        # Place bids
+        for item in items:
+            for i, user in enumerate(users):
+                bid = Bid(price=i, bidder=user, item=item)
+                bid.save()
+            item.winner = users[-1]
+            item.save()
+
+        # Check that only winners are shown
+        self.client.login(username=admin_username, password=admin_password)
+        data = {'filter': 'true'}
+        response = self.client.get(reverse('auction:participants', args=[auction.id]), data=data)
+        participants = json.loads(response.context['participants'])
+        self.assertTrue(len(participants) == 1)
+
+    def test_participants_view_access(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction
+        admin.create_auction(name='test auction', description='test desc')
+        auction = admin.auction_set.first()
+
+        # Create non-admin
+        username = 'non-admin'
+        password = 'test12345'
+        create_user(username, password)
+
+        # Assert that non-admin cannot access page
+        self.client.login(username=username, password=password)
+        response = self.client.get(reverse('auction:participants', args=[auction.id]))
+        self.assertTrue(response.status_code == 403)
+
+    def test_join_valid_auction(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction
+        admin.create_auction(name='test auction', description='test desc')
+
+        # Create non-admin
+        username = 'non-admin'
+        password = 'test12345'
+        create_user(username, password)
+
+        # Enter auction code
+        self.client.login(username=username, password=password)
+        self.client.get(reverse('auction:home'))
+        response = self.client.post(reverse('auction:home'), data={'auction_code': 1})
+
+        # Verify user was added to auction
+        self.assertContains(response, text='test auction', status_code=200)
+
+    def test_join_invalid_auction(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction
+        admin.create_auction(name='test auction', description='test desc')
+
+        # Create non-admin
+        username = 'non-admin'
+        password = 'test12345'
+        create_user(username, password)
+
+        # Enter invalid auction code
+        self.client.login(username=username, password=password)
+        self.client.get(reverse('auction:home'))
+        response = self.client.post(reverse('auction:home'), data={'auction_code': 3})
+
+        # Verify user was not added to auction
+        self.assertContains(response, text='Invalid auction code', status_code=200)
 
 
 class BidTests(TestCase):
@@ -295,7 +472,6 @@ class BidTests(TestCase):
                 'order': ''}
         response = self.client.get(reverse('auction:my_bids'), data=data)
         queryset = response.context['object_list']
-        print('QUERYSET', queryset)
         self.assertTrue(len(queryset) == 1 and queryset[0].pk == item1.pk)
 
     def test_open_filter(self):
