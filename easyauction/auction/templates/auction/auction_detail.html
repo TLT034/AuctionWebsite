@@ -41,7 +41,7 @@
                     href="{% url 'auction:participants' auction.id%}"
                 {% endif %}
             >
-                Participants: {{ auction.particpant_set|length }}
+                Participants: {{ total_participants }}
             </v-list-item>
 
         {# Items #}

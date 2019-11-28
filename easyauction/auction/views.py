@@ -116,7 +116,8 @@ def auction_detail(request, pk):
         'silent_items': silent_items,
         'total_items': live_items.union(silent_items),
         'item_form': item_form,
-        'user_is_admin': user_is_admin
+        'user_is_admin': user_is_admin,
+        'total_participants': auction.participants.count()
     }
 
     return render(request, 'auction/auction_detail.html', context=context)
