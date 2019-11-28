@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['127.0.0.1',
                  'localhost',
                  'testserver',
                  '192.168.1.2'  # Tristan Laptop Home (used for testing mobile)
+                 '10.1.10.77',  # Garrett Laptop Home
+                 '144.39.224.45',   # Garrett Laptop Class
                  ]
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'qr_code',
 ]
 
 MIDDLEWARE = [

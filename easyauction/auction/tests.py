@@ -316,26 +316,72 @@ class AuctionTests(TestCase):
         participants = json.loads(response.context['participants'])
         self.assertTrue(len(participants) == 1)
 
-        def test_participants_view_access(self):
-            # Admin
-            admin_username = 'admin'
-            admin_password = 'test12345'
-            create_user(admin_username, admin_password)
-            admin = AuctionUser.objects.get(username='admin')
+    def test_participants_view_access(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
 
-            # Create auction
-            admin.create_auction(name='test auction', description='test desc')
-            auction = admin.auction_set.first()
+        # Create auction
+        admin.create_auction(name='test auction', description='test desc')
+        auction = admin.auction_set.first()
 
-            # Create non-admin
-            username = 'non-admin'
-            password = 'test12345'
-            create_user(username, password)
+        # Create non-admin
+        username = 'non-admin'
+        password = 'test12345'
+        create_user(username, password)
 
-            # Assert that non-admin cannot access page
-            self.client.login(username=username, password=password)
-            response = self.client.get(reverse('auction:participants', args=[auction.id]))
-            self.assertTrue(response.status_code == 404)
+        # Assert that non-admin cannot access page
+        self.client.login(username=username, password=password)
+        response = self.client.get(reverse('auction:participants', args=[auction.id]))
+        self.assertTrue(response.status_code == 403)
+
+    def test_join_valid_auction(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction
+        admin.create_auction(name='test auction', description='test desc')
+
+        # Create non-admin
+        username = 'non-admin'
+        password = 'test12345'
+        create_user(username, password)
+
+        # Enter auction code
+        self.client.login(username=username, password=password)
+        self.client.get(reverse('auction:home'))
+        response = self.client.post(reverse('auction:home'), data={'auction_code': 1})
+
+        # Verify user was added to auction
+        self.assertContains(response, text='test auction', status_code=200)
+
+    def test_join_invalid_auction(self):
+        # Admin
+        admin_username = 'admin'
+        admin_password = 'test12345'
+        create_user(admin_username, admin_password)
+        admin = AuctionUser.objects.get(username='admin')
+
+        # Create auction
+        admin.create_auction(name='test auction', description='test desc')
+
+        # Create non-admin
+        username = 'non-admin'
+        password = 'test12345'
+        create_user(username, password)
+
+        # Enter invalid auction code
+        self.client.login(username=username, password=password)
+        self.client.get(reverse('auction:home'))
+        response = self.client.post(reverse('auction:home'), data={'auction_code': 3})
+
+        # Verify user was not added to auction
+        self.assertContains(response, text='Invalid auction code', status_code=200)
 
 
 class BidTests(TestCase):
