@@ -51,6 +51,7 @@ class Auction(models.Model):
     admin = models.ForeignKey(AuctionUser, on_delete=models.CASCADE)
     description = models.TextField()
     participants = models.ManyToManyField(AuctionUser, related_name='joined_auctions', related_query_name='joined_auction')
+    opened_for_bidding = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -60,6 +61,18 @@ class Auction(models.Model):
 
     def archive(self):
         self.published = False
+
+    def open_bidding(self):
+        self.opened_for_bidding = True
+        for item in self.item_set.all():
+            item.is_open = True
+            item.save()
+
+    def close_bidding(self):
+        self.opened_for_bidding = False
+        for item in self.item_set.all():
+            item.is_open = False
+            item.save()
 
     def add_item(self, name, starting_price, item_desc):
         item = self.item_set.create(name=name,

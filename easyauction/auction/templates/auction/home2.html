@@ -25,6 +25,7 @@
                                     <v-list-item-subtitle>{{ auction.time_created }}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
+                            <v-divider></v-divider>
                         {% endfor %}
                     {% else %}
                         <v-list-item href="{% url 'auction:create_auction' %}">
@@ -38,26 +39,6 @@
             </v-tab-item>
 
             <v-tab-item>
-
-                {% if error_msg %}
-                    <p style="color: red">{{ error_msg }}</p>
-                {% endif %}
-                <form id="join_form" method="POST">
-                    {% csrf_token %}
-                    <v-text-field
-                        label="Join an auction"
-                        placeholder="Enter auction code"
-                        outlined
-                        form="join_form"
-                        name="auction_code"
-                        type="number"
-                        min="1"
-                        step="1"
-                    >
-                    </v-text-field>
-                </form>
-                <v-btn form="join_form" type="submit">Submit</v-btn>
-
                 <v-list>
                     <v-subheader>Joined Auctions</v-subheader>
                     {% if joined_auctions.exists %}
@@ -69,16 +50,36 @@
                                     <v-list-item-subtitle>{{ auction.time_created }}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
+                            <v-divider></v-divider>
                         {% endfor %}
                     {% else %}
-                        <v-list-item href="{% url 'auction:enter_local_code' %}">
+                        <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-title>No Auctions Joined</v-list-item-title>
-                                <v-list-item-subtitle>Click here to enter auction code</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
+                        <v-divider></v-divider>
                     {% endif %}
                 </v-list>
+                {% if error_msg %}
+                    <p style="color: red">{{ error_msg }}</p>
+                {% endif %}
+                <form id="join_form" method="POST">
+                    {% csrf_token %}
+                    <v-text-field
+                        class="mt-5"
+                        label="Join an auction"
+                        placeholder="Enter auction code"
+                        outlined
+                        form="join_form"
+                        name="auction_code"
+                        type="number"
+                        min="1"
+                        step="1"
+                    >
+                    </v-text-field>
+                    <v-btn form="join_form" type="submit">Join</v-btn>
+                </form>
             </v-tab-item>
         </v-tabs>
     </v-card>

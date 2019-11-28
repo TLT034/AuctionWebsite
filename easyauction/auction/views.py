@@ -69,12 +69,14 @@ def home(request):
                 auction.save()
             else:
                 error_msg = 'This auction has not been published'
+                context['error_msg'] = error_msg
+                return render(request, 'auction/home2.html', context=context)
         except Auction.DoesNotExist:
             error_msg = 'Invalid auction code'
             context['error_msg'] = error_msg
-
+            return render(request, 'auction/home2.html', context=context)
+        return redirect('auction:auction_detail', auction.id)
     return render(request, 'auction/home2.html', context=context)
-
 
 def auction_detail(request, pk):
     # Get context items
@@ -114,7 +116,8 @@ def auction_detail(request, pk):
         'silent_items': silent_items,
         'total_items': live_items.union(silent_items),
         'item_form': item_form,
-        'user_is_admin': user_is_admin
+        'user_is_admin': user_is_admin,
+        'total_participants': auction.participants.count()
     }
 
     return render(request, 'auction/auction_detail.html', context=context)
@@ -186,6 +189,19 @@ def edit_item(request, item_id):
     return redirect('auction:item', item.id)
 
 
+def delete_item(request, item_id):
+    try:
+        item = Item.objects.get(pk=item_id)
+        auction_id = item.auction.id
+    except Item.DoesNotExist:
+        raise Http404("The item you are trying to delete does not exist or may have already been deleted")
+
+    if request.method == 'POST':
+        item.delete()
+
+    return redirect('auction:auction_detail', auction_id)
+
+
 def remove_bid(request, item_id, bid_id):
     try:
         item = Item.objects.get(pk=item_id)
@@ -208,6 +224,15 @@ def remove_bid(request, item_id, bid_id):
         bid.delete()
         item.save()
 
+    # if the item was sold then we needed to change the winner
+    if item.is_sold:
+        if item.bid_set.count() > 0:
+            item.winner = item.bid_set.latest('price').bidder
+        else:
+            item.winner = None
+            item.is_sold = False
+        item.save()
+
     return redirect('auction:item', item.id)
 
 
@@ -222,14 +247,15 @@ def submit_bid(request, item_id):
         bid_amount = Decimal(request.POST.get('bid', -1))
 
         if bid_amount != -1:
-            if Bid.objects.count() == 0 or bid_amount >= item.min_bid:
-                bid = Bid(item=item, bidder=user, price=bid_amount)
-                bid.save()
+            if item.is_open:
+                if Bid.objects.count() == 0 or bid_amount >= item.min_bid:
+                    bid = Bid(item=item, bidder=user, price=bid_amount)
+                    bid.save()
 
-                item.current_price = bid_amount
-                item.min_bid = item.current_price + item.bid_increment
-                item.save()
-                return render(request, 'auction/bid_success.html', context={'bid': bid})
+                    item.current_price = bid_amount
+                    item.min_bid = item.current_price + item.bid_increment
+                    item.save()
+                    return render(request, 'auction/bid_success.html', context={'bid': bid})
 
         return render(request, 'auction/bid_fail.html', context={'bid': {'item': item, 'price': bid_amount}})
     # if not a post, then just redirect to item
@@ -375,6 +401,7 @@ class MyBidListView(generic.ListView):
 
         return ordered_queryset
 
+
 def publish(request, pk):
     try:
         auction = Auction.objects.get(pk=pk)
@@ -382,6 +409,14 @@ def publish(request, pk):
         raise Http404("The auction you are trying to publish does not exist or may have been deleted")
 
     if request.method == "POST":
+
+        # un-assign winners
+        for item in auction.item_set.all():
+            if item.bid_set.count() > 0:
+                item.is_sold = False
+                item.winner = None
+                item.save()
+
         auction.publish()
         auction.save()
 
@@ -395,10 +430,46 @@ def archive(request, pk):
         raise Http404("The auction you are trying to archive does not exist or may have been deleted")
 
     if request.method == "POST":
+
+        # assign winners
+        for item in auction.item_set.all():
+            if item.bid_set.count() > 0:
+                item.is_sold = True
+                item.winner = item.bid_set.latest('price').bidder
+                item.save()
+
+        auction.close_bidding()
         auction.archive()
         auction.save()
 
     return redirect("auction:auction_detail", pk)
+
+
+def open_bidding(request, auction_id):
+    try:
+        auction = Auction.objects.get(pk=auction_id)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to open does not exist or may have been deleted")
+
+    if request.method == "POST":
+        auction.open_bidding()
+        auction.save()
+
+    return redirect("auction:auction_detail", auction_id)
+
+
+def close_bidding(request, auction_id):
+    try:
+        auction = Auction.objects.get(pk=auction_id)
+    except Auction.DoesNotExist:
+        raise Http404("The auction you are trying to close does not exist or may have been deleted")
+
+    if request.method == "POST":
+        auction.close_bidding()
+        auction.save()
+
+    return redirect("auction:auction_detail", auction_id)
+
 
 def participants_list(request, auction_id):
     # Get auction
@@ -436,5 +507,5 @@ def participants_list(request, auction_id):
 
     participants_json = json.dumps(participant_objs)
 
-    context = {'participants': participants_json, 'n_participants': len(participants)}
+    context = {'participants': participants_json, 'n_participants': len(participants), 'auction': auction}
     return render(request, 'auction/participants.html', context=context)
