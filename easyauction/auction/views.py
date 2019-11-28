@@ -127,7 +127,7 @@ def item_view(request, item_id):
 
     # item_bids = Bid.objects.filter(item=item).order_by('-price')
 
-    return render(request, 'auction/item.html', context={'item': item, 'admin': admin})
+    return render(request, 'auction/item.html', context={'item': item, 'admin': admin, 'user': user})
 
 
 def edit_item(request, item_id):
@@ -138,6 +138,7 @@ def edit_item(request, item_id):
 
     if request.method == 'POST':
         item.name = request.POST.get('name', default=item.name)
+        item.auction_type = request.POST.get('auction_type', default=item.auction_type)
         item.starting_price = float(request.POST.get('starting_price', default=item.starting_price))
         item.bid_increment = float(request.POST.get('bid_increment', default=item.bid_increment))
         item.description = request.POST.get('description', default=item.description)
