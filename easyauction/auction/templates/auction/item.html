@@ -4,7 +4,9 @@
 
 {% block content %}
     <v-form id="edit_item_form" action="{% url "auction:edit_item" item.id %}" method="POST">{% csrf_token %}</v-form>
+    <form id="delete_form" action="{% url "auction:delete_item" item.id %}" method="POST">{% csrf_token %}</form>
     <form id="bid_form" action="{% url "auction:submit_bid" item.id %}" method="POST">{% csrf_token %}</form>
+
 
 
     <v-card class="d-inline-block mx-auto text-center">
@@ -16,7 +18,7 @@
             {# If the user is the admin then display an edit button #}
             {% if admin %}
             <v-layout justify-end>
-                <v-btn style="margin-right: 10%" color="white" outlined @click="" >
+                <v-btn style="margin-right: 10%" color="white" outlined type="submit" form="delete_form" >
                     <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 <v-btn v-show="!edit" color="white" outlined @click="edit =!edit" >
@@ -32,16 +34,6 @@
         <v-img max-width="500" src="{{ item.image.url }}"></v-img>
 
         <v-card-text>
-
-            {# Displays if item is sold #}
-            {% if item.auction_type == 'silent' %}
-                {% if item.is_sold %}
-                    <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
-                {% elif item.bid_set.last.bidder == user %}
-                    <p style="color:green; font-size: 25px"><strong>You are currently winning!</strong></p>
-                {% endif %}
-            {% endif %}
-
 
             {# Displays item name #}
             <v-text-field
@@ -100,10 +92,10 @@
             {% endif %}
 
 
-            {# TODO: Don't allow users to bid if they are highest bidder. (Implement when done with testing) #}
-            {# Text input for user to bid or timer display for when item opens #}
-            {% if item.auction_type == "silent" %}  {# TODO: USE '... and not admin' for Production #}
-                {% if not item.is_sold %} {# TODO: USE '... and item.is_open' for Production #}
+            {# Text input for user to bid (admin cannot bid) #}
+            {% if item.auction_type == "silent" and not admin %}
+                {# if the item is open and you aren't the highest bidder then show bid input #}
+                {% if item.is_open and item.bid_set.last.bidder != user %}
                     <v-text-field
                         v-model="bid_amount" form="bid_form"
                         name="bid" label="Enter Bid" prefix="$"
@@ -117,11 +109,18 @@
                     Place Bid
                     </v-btn>
                     <span>[{{ item.bid_set.count }} [[{{ item.bid_set.count }} == 1 ? 'Bid' : 'Bids']]]</span>
-                {% elif not item.is_sold %}
-                    Not open for bidding
+                {# if the item is not sold and not open then say item is not open for bidding #}
+                {% elif not item.is_sold and not item.is_open%}
+                    <p style="color:red; font-size: 15px">Not open for bidding</p>
+                {# if the item is open and you are the highest bidder #}
+                {% elif item.is_open and item.bid_set.last.bidder == user %}
+                    <p style="color:green; font-size: 20px"><strong>You are currently winning!</strong></p>
                 {% endif %}
+            {# if the item is sold #}
             {% endif %}
-
+            {% if item.auction_type == "silent" and item.is_sold %}
+                <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
+            {% endif %}
 
 
             {% comment %}

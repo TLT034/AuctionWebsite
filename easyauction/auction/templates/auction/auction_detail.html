@@ -14,8 +14,10 @@
     <form id="download_qr_codes_form" action="{% url 'auction:auction_qr_codes' auction.id %}" method="POST">{% csrf_token %}</form>
     <form id="publish_form" action="{% url 'auction:publish' auction.id %}" method="POST">{% csrf_token %}</form>
     <form id="archive_form" action="{% url 'auction:archive' auction.id %}" method="POST">{% csrf_token %}</form>
+    <form id="open_bidding_form" action="{% url 'auction:open_bidding' auction.id %}" method="POST">{% csrf_token %}</form>
+    <form id="close_bidding_form" action="{% url 'auction:close_bidding' auction.id %}" method="POST">{% csrf_token %}</form>
 
-    <v-container class="mx-0 px-0 ">
+    <v-container class="mx-0 px-0">
         {# Auction info at top of screen #}
         <v-card outlined class="d-inline-block mx-auto my-5">
 
@@ -39,7 +41,7 @@
                     href="{% url 'auction:participants' auction.id%}"
                 {% endif %}
             >
-                Participants: {{ auction.participant_set|length }}
+                Participants: {{ auction.particpant_set|length }}
             </v-list-item>
 
         {# Items #}
@@ -48,15 +50,40 @@
         {# Local Code #}
             <v-list-item>Local Code: {{ auction.pk }}</v-list-item>
 
-            <v-checkbox form="download_qr_codes_form" name="include_images" label="Include images"></v-checkbox>
-            <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
+        {# QR Code #}
+            {% if user_is_admin %}
+                <v-divider></v-divider>
+                <v-list-item class="justify-content-around">
+                    <v-checkbox form="download_qr_codes_form" name="include_images" label="Include Images"></v-checkbox>
+                    <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
+                </v-list-item>
+            {% endif %}
 
+        {# Publish/Archive Auction & Open/Close Items #}
+            {% if user_is_admin %}
+                <v-divider></v-divider>
+                <v-list-item class="justify-content-around">
+                    {% if auction.published %}
+                        <v-btn type="submit" form="archive_form">Archive Auction</v-btn>
+                    {% else %}
+                        <v-btn type="submit" form="publish_form">Publish Auction</v-btn>
+                    {% endif %}
+                    {% if auction.opened_for_bidding %}
+                        <v-btn type="submit" form="close_bidding_form">Close Bidding</v-btn>
+                    {% else %}
+                        <v-btn
+                                {% if not auction.published %}
+                                    disabled
+                                {% endif %}
+                                type="submit"
+                                form="open_bidding_form">Open Bidding</v-btn>
+                    {% endif %}
+                </v-list-item>
+                <v-divider></v-divider>
+            {% endif %}
+
+        {# Add Item Button #}
             <v-card-actions class="justify-content-around">
-                {% if user_is_admin and not auction.published %}
-                    <v-btn type="submit" form="publish_form">Publish</v-btn>
-                {% elif user_is_admin and auction.published %}
-                    <v-btn type="submit" form="archive_form">Archive</v-btn>
-                {% endif %}
                 {% if user_is_admin %}
                     <v-btn @click="show_add_item = !show_add_item">
                         Add item <v-icon color="blue">add</v-icon>
@@ -164,14 +191,12 @@
                                         {% if item.is_open %}  {# If the item is open for bidding #}
                                             Current Price: $ {{ item.current_price }}
                                             <br/>
-                                            Total Bids: {{ item.bid_set|length }}
-                                            <br/>
-                                            Time Remaining: {{ item.time_remaining }}
+                                            Total Bids: {{ item.bid_set.count }}
                                         {% else %}  {# If the item is NOT open for bidding #}
                                             {% if item.is_sold %}  {# If the item is not open because it is sold #}
                                                 Final Price: $ {{ item.current_price }}
                                                 <br/>
-                                                Total Bids: {{ item.bid_set|length }}
+                                                Total Bids: {{ item.bid_set.count }}
                                                 <br/>
                                                 Winner: {{ item.winner }}
                                                 <div style="color:red">SOLD</div>

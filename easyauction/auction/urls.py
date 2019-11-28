@@ -48,12 +48,15 @@ urlpatterns += [
   path('auction/auction_detail/<int:pk>', login_required(views.auction_detail), name='auction_detail'),
   path('auction/item/<int:item_id>', login_required(views.item_view), name='item'),
   path('auction/edit_item/<int:item_id>', login_required(views.edit_item), name='edit_item'),
+  path('auction/delete_item/<int:item_id>', login_required(views.delete_item), name='delete_item'),
   path('auction/item/<int:item_id>/submit_bid/', login_required(views.submit_bid), name='submit_bid'),
   path('auction/item/<int:item_id>/remove_bid/<int:bid_id>', login_required(views.remove_bid), name='remove_bid'),
   path('auction/my_bids', login_required(views.MyBidListView.as_view(template_name='auction/my_bids.html')), name='my_bids'),
   path('auction/auction_detail/<int:pk>/qr_codes', login_required(views.auction_qr_codes), name='auction_qr_codes'),
   path('auction/auction_detail/<int:pk>/publish', login_required(views.publish), name='publish'),
   path('auction/auction_detail/<int:pk>/archive', login_required(views.archive), name='archive'),
+  path('auction/auction_detail/<int:auction_id>/open_bidding', login_required(views.open_bidding), name='open_bidding'),
+  path('auction/auction_detail/<int:auction_id>/close_bidding', login_required(views.close_bidding), name='close_bidding'),
   path('auction/participants/<int:auction_id>', login_required(views.participants_list), name='participants')
 ]
 

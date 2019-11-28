@@ -5,42 +5,30 @@
 
 {% block content %}
     {# button to filter by winners #}
-    <form method="GET">
-        {% csrf_token %}
-        <v-row>
-            <v-col cols="6">
+    <v-card class="d-inline-block mx-auto text-center">
+        <v-card-title center>{{ auction.name }} Participants</v-card-title>
+            <form method="GET">
+                {% csrf_token %}
+
                 <input type="hidden" name="filter" :value="[[selected_filter]]">
                 <v-select
                         :items="filters"
                         label="Filter"
                         v-model="selected_filter"
                 >
-              </v-select>
-            </v-col>
-            <v-col cols="6">
+                </v-select>
+
                 <v-btn color="primary" type="submit">Submit</v-btn>
-            </v-col>
-        </v-row>
-    </form>
-    {# v-data-table showing name, id, items won, total cost #}
-    <v-row>
-        <v-col>
-            <v-card>
-                <v-card-title>
-                    No results
-                </v-card-title>
-            </v-card>
-        </v-col>
-    </v-row>
-    <v-row>
-        <p>Results: {{ n_participants }}</p>
+            </form>
+
+        {# v-data-table showing name, id, items won, total cost #}
         <v-data-table
             :headers="headers"
             :items="participants"
             :items-per-page="10"
         >
         </v-data-table>
-    </v-row>
+    </v-card>
 {% endblock %}
 
 {% block vue %}
@@ -57,7 +45,7 @@
             selected_filter: null,
             participants: {{ participants|safe }},
             headers: [
-                {text: "Bidder", value: "bidder", align: 'left'},
+                {text: "Bidder", value: "name", align: 'left'},
                 {text: "ID", value: "id"},
                 {text: "Items won", value: "items_won"},
                 {text: "Total cost", value: "total_cost"}
