@@ -4,7 +4,6 @@
     <list default="true" id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -132,7 +131,7 @@
       <workItem from="1573748764608" duration="17269000" />
       <workItem from="1574462683528" duration="280000" />
       <workItem from="1574887830169" duration="14073000" />
-      <workItem from="1574904095908" duration="12053000" />
+      <workItem from="1574904095908" duration="12535000" />
     </task>
     <servers />
   </component>

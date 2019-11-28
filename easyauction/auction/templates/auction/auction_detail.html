@@ -86,7 +86,8 @@
             <v-card-actions class="justify-content-around">
                 {% if user_is_admin %}
                     <v-btn @click="show_add_item = !show_add_item">
-                        Add item <v-icon color="blue">add</v-icon>
+                        [[show_add_item ? 'Cancel':'Add Item']]
+                        <v-icon>[[show_add_item ? 'cancel':'add']]</v-icon>
                     </v-btn>
                 {% endif %}
             </v-card-actions>
