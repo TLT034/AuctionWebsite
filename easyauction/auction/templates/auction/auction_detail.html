@@ -15,43 +15,59 @@
     <form id="publish_form" action="{% url 'auction:publish' auction.id %}" method="POST">{% csrf_token %}</form>
     <form id="archive_form" action="{% url 'auction:archive' auction.id %}" method="POST">{% csrf_token %}</form>
 
-    <v-row>
-        <v-col cols="6">
-            <v-card raised>
-                <div class="d-flex flex-no-wrap justify-space-between">
-                    <div>
-                        <v-card-title>{{ auction.name }}</v-card-title>
-                        <v-card-subtitle>
-                            <p>Owner: {{ auction.admin.username }}</p>
-                            <p>Created on {{ auction.time_created }}</p>
-                            <p>Number of bidders: {{ auction.participant_set|length }}</p>
-                            <p>Items: {{ total_items|length }}</p>
-                            <p><a href="{% url 'auction:participants' auction.id%}">View auction participants</a></p>
-                            <p>Local Code: {{ auction.pk }}</p>
-                        </v-card-subtitle>
-                    </div>
-                    <v-avatar class="ma-3" size="125" tile>
-                        <v-img src="{{ auction.image.url }}"></v-img>
-                    </v-avatar>
+    <v-container class="mx-0 px-0 ">
+        {# Auction info at top of screen #}
+        <v-card outlined class="d-inline-block mx-auto my-5">
 
-                    <v-checkbox form="download_qr_codes_form" name="include_images" label="Include images"></v-checkbox>
-                    <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
-              
-                    {% if user_is_admin and not auction.published %}
-                        <v-btn type="submit" form="publish_form">Publish</v-btn>
-                    {% elif user_is_admin and auction.published %}
-                        <v-btn type="submit" form="archive_form">Archive</v-btn>
-                    {% endif %}
-                </div>
-            </v-card>
-        </v-col>
+        {# Title and Image #}
+            <v-list-item>
+                <v-card-title style="word-break: break-word">{{ auction.name }}</v-card-title>
+                <v-list-item-avatar size="150" tile>
+                    <v-img src="{{ auction.image.url }}"></v-img>
+                </v-list-item-avatar>
+            </v-list-item>
+
+        {# Owner #}
+            <v-list-item>Owner: {{ auction.admin.username }}</v-list-item>
+
+        {# Date Created #}
+            <v-list-item>Created on {{ auction.time_created }}</v-list-item>
+
+        {# Participants #}
+            <v-list-item
+                {% if user_is_admin %}
+                    href="{% url 'auction:participants' auction.id%}"
+                {% endif %}
+            >
+                Participants: {{ auction.participant_set|length }}
+            </v-list-item>
+
+        {# Items #}
+            <v-list-item>Items: {{ total_items|length }}</v-list-item>
+
+        {# Local Code #}
+            <v-list-item>Local Code: {{ auction.pk }}</v-list-item>
+
+            <v-checkbox form="download_qr_codes_form" name="include_images" label="Include images"></v-checkbox>
+            <v-btn type="submit" form="download_qr_codes_form">Download QR Codes</v-btn>
+
+            <v-card-actions class="justify-content-around">
+                {% if user_is_admin and not auction.published %}
+                    <v-btn type="submit" form="publish_form">Publish</v-btn>
+                {% elif user_is_admin and auction.published %}
+                    <v-btn type="submit" form="archive_form">Archive</v-btn>
+                {% endif %}
+                {% if user_is_admin %}
+                    <v-btn @click="show_add_item = !show_add_item">
+                        Add item <v-icon color="blue">add</v-icon>
+                    </v-btn>
+                {% endif %}
+            </v-card-actions>
+        </v-card>
+
+
+        {# Add item form #}
         {% if user_is_admin %}
-        <v-col cols="6" id="add_item_col">
-            <div>
-                <v-btn @click="show_add_item = !show_add_item">
-                    Add item <v-icon color="blue">add</v-icon>
-                </v-btn>
-            </div>
             <v-expand-transition>
                 <div v-show="show_add_item">
                     <v-divider></v-divider>
@@ -119,130 +135,109 @@
                     </div>
                 </div>
             </v-expand-transition>
-        </v-col>
         {% endif %}
-    </v-row>
-    <v-row>
-        <v-tabs color="cyan" centered grow>
-            <v-tab>
-                Silent Items
-            </v-tab>
-            <v-tab>
-                Live Items
-            </v-tab>
-            <v-tab-item>
-                <container>
-                    <v-row>
-                        {% if not silent_items %}
-                            <v-col>
-                                <v-card flat>
-                                    <v-card-text>This auction has no silent items.</v-card-text>
-                                </v-card>
-                            </v-col>
-                        {% endif %}
+
+
+        <v-card outlined>
+            <v-tabs color="blue" centered grow>
+                <v-tab>
+                    Silent Items
+                </v-tab>
+                <v-tab>
+                    Live Items
+                </v-tab>
+                <v-tab-item>
+                    {% if not silent_items %}
+                        <v-col>
+                            <v-card flat>
+                                <v-card-text>This auction has no silent items.</v-card-text>
+                            </v-card>
+                        </v-col>
+                    {% endif %}
+                    <v-list>
                         {% for item in silent_items %}
-                            <v-col cols="3">
-                                <v-card href="{% url 'auction:item' item.pk %}">
-                                    <div class="flex-no-wrap justify-space-between">
-                                        <v-avatar class="ma-3" size="125" tile>
-                                            <v-img src="{{ item.image.url }}"></v-img>
-                                        </v-avatar>
-
-                                        <div>
-                                            <v-card-title class="headline">{{ item.name }}</v-card-title>
-
-                                            <v-card-subtitle>
-
-                                                {% if item.is_open %}  {# If the item is open for bidding #}
-                                                    Current Price: $ {{ item.current_price }}
-                                                    <br/>
-                                                    Total Bids: {{ item.bid_set|length }}
-                                                    <br/>
-                                                    Time Remaining: {{ item.time_remaining }}
-                                                {% else %}  {# If the item is NOT open for bidding #}
-                                                    {% if item.is_sold %}  {# If the item is not open because it is sold #}
-                                                        Final Price: $ {{ item.current_price }}
-                                                        <br/>
-                                                        Total Bids: {{ item.bid_set|length }}
-                                                        <br/>
-                                                        Winner: {{ item.winner }}
-                                                        <div style="color:red">SOLD</div>
-                                                    {% else %}  {# If the item is not open for bidding yet #}
-                                                        Starting Price: $ {{ item.starting_price }}
-                                                        <br/>
-                                                        <div style="color:red">Not Open</div>
-                                                    {% endif %}
-                                                {% endif %}
-
-                                            </v-card-subtitle>
-                                        </div>
-
-                                    </div>
-                                </v-card>
-                            </v-col>
+                            <v-list-item  key={{ item.id }} href="{% url 'auction:item' item.pk %}">
+                                <v-list-item-avatar tile size="100"><v-img src="{{ item.image.url }}"></v-img></v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                    <v-list-item-subtitle>
+                                        {% if item.is_open %}  {# If the item is open for bidding #}
+                                            Current Price: $ {{ item.current_price }}
+                                            <br/>
+                                            Total Bids: {{ item.bid_set|length }}
+                                            <br/>
+                                            Time Remaining: {{ item.time_remaining }}
+                                        {% else %}  {# If the item is NOT open for bidding #}
+                                            {% if item.is_sold %}  {# If the item is not open because it is sold #}
+                                                Final Price: $ {{ item.current_price }}
+                                                <br/>
+                                                Total Bids: {{ item.bid_set|length }}
+                                                <br/>
+                                                Winner: {{ item.winner }}
+                                                <div style="color:red">SOLD</div>
+                                            {% else %}  {# If the item is not open for bidding yet #}
+                                                Starting Price: $ {{ item.starting_price }}
+                                                <br/>
+                                                <div style="color:red">Not Open</div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-divider></v-divider>
                         {% endfor %}
-                    </v-row>
-                </container>
-            </v-tab-item>
-            <v-tab-item>
-                <container>
-                    <v-row>
-                        {% if not live_items %}
-                            <v-col>
-                                <v-card flat>
-                                    <v-card-text>This auction has no live items.</v-card-text>
-                                </v-card>
-                            </v-col>
-                        {% endif %}
+                    </v-list>
+                </v-tab-item>
+                <v-tab-item>
+                    {% if not live_items %}
+                        <v-col>
+                            <v-card flat>
+                                <v-card-text>This auction has no live items.</v-card-text>
+                            </v-card>
+                        </v-col>
+                    {% endif %}
+                    <v-list>
                         {% for item in live_items %}
-                            <v-col cols="3">
-                                <v-card href="{% url 'auction:item' item.pk %}">
-                                    <div class="flex-no-wrap justify-space-between">
-                                        <v-avatar class="ma-3" size="125" tile>
-                                            <v-img src="{{ item.image.url }}"></v-img>
-                                        </v-avatar>
-
-                                        <div>
-                                            <v-card-title class="headline">{{ item.name }}</v-card-title>
-
-                                            <v-card-subtitle>
-
-                                                {% if item.is_open %}  {# If the item is open for bidding #}
-                                                    Current Price: $ {{ item.current_price }}
-                                                    <br/>
-                                                    Total Bids: {{ item.bid_set|length }}
-                                                    <br/>
-                                                    <div style="color:green">Open for Bidding</div>
-                                                {% else %}  {# If the item is NOT open for bidding #}
-                                                    {% if item.is_sold %}  {# If the item is not open because it is sold #}
-                                                        Final Price: $ {{ item.current_price }}
-                                                        <br/>
-                                                        Total Bids: {{ item.bid_set|length }}
-                                                        <br/>
-                                                        Winner: {{ item.winner }}
-                                                        <div style="color:red">SOLD</div> %}
-                                                    {% else %}  {# If the item is not open for bidding yet #}
-                                                        Starting Price: $ {{ item.starting_price }}
-                                                        <br/>
-                                                        <div style="color:red">Not Open</div>
-                                                    {% endif %}
-                                                {% endif %}
-
-                                            </v-card-subtitle>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </v-col>
+                            <v-list-item  key={{ item.id }} href="{% url 'auction:item' item.pk %}">
+                                <v-list-item-avatar tile size="100"><v-img src="{{ item.image.url }}"></v-img></v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                    <v-list-item-subtitle>
+                                        {% if item.is_open %}  {# If the item is open for bidding #}
+                                            Current Price: $ {{ item.current_price }}
+                                            <br/>
+                                            Total Bids: {{ item.bid_set|length }}
+                                            <br/>
+                                            Time Remaining: {{ item.time_remaining }}
+                                        {% else %}  {# If the item is NOT open for bidding #}
+                                            {% if item.is_sold %}  {# If the item is not open because it is sold #}
+                                                Final Price: $ {{ item.current_price }}
+                                                <br/>
+                                                Total Bids: {{ item.bid_set|length }}
+                                                <br/>
+                                                Winner: {{ item.winner }}
+                                                <div style="color:red">SOLD</div>
+                                            {% else %}  {# If the item is not open for bidding yet #}
+                                                Starting Price: $ {{ item.starting_price }}
+                                                <br/>
+                                                <div style="color:red">Not Open</div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-divider></v-divider>
                         {% endfor %}
-                    </v-row>
-                </container>
-            </v-tab-item>
-        </v-tabs>
-    </v-row>
+                    </v-list>
+                </v-tab-item>
+            </v-tabs>
+        </v-card>
+    </v-container>
 {% endblock %}
 
 {% block vue %}
     <script>
+
     Vue.use(Vuetify);
 
     assorted_vue = new Vue({

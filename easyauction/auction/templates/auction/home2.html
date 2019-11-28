@@ -3,38 +3,42 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<v-row>
-    <v-col>
-        {% if hosted_auctions.exists %}
-        <v-list>
-            <v-subheader>My Auctions</v-subheader>
-            {% for auction in hosted_auctions %}
-            <v-list-item>
-                <v-card href="{% url 'auction:auction_detail' pk=auction.pk %}">
-                    <v-card-title>{{ auction.name }}</v-card-title>
-                    <v-card-subtitle>{{ auction.time_created }}</v-card-subtitle>
-                    <v-avatar class="ma-3" size="125" tile>
-                        <v-img src="{{ auction.image.url }}"></v-img>
-                    </v-avatar>
-                </v-card>
-            </v-list-item>
-            {% endfor %}
-        </v-list>
-        {% else %}
-        <v-list>
-            <v-subheader>My Auctions</v-subheader>
-            <v-list-item>
-                <v-card href="{% url 'auction:create_auction' %}">
-                    <v-card-title>No Auctions Created</v-card-title>
-                    <v-card-subtitle>Click here to create an auction</v-card-subtitle>
-                </v-card>
-            </v-list-item>
-        </v-list>
-        {% endif %}
-    </v-col>
-    <v-col>
-        <v-row justify="end">
-            <v-col cols="4">
+
+<v-container fluid>
+    <v-card outlined>
+        <v-tabs color="blue" centered grow>
+            <v-tab>
+                Hosted Auctions
+            </v-tab>
+            <v-tab>
+                Joined Auctions
+            </v-tab>
+            <v-tab-item>
+                <v-list>
+                    <v-subheader>My Auctions</v-subheader>
+                    {% if hosted_auctions.exists %}
+                        {% for auction in hosted_auctions %}
+                            <v-list-item href="{% url 'auction:auction_detail' pk=auction.pk %}">
+                                <v-list-item-avatar tile size="100"><v-img src="{{ auction.image.url }}"></v-img></v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ auction.name }}</v-list-item-title>
+                                    <v-list-item-subtitle>{{ auction.time_created }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        {% endfor %}
+                    {% else %}
+                        <v-list-item href="{% url 'auction:create_auction' %}">
+                            <v-list-item-content>
+                                <v-list-item-title>No Auctions Created</v-list-item-title>
+                                <v-list-item-subtitle>Click here to create an auction</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    {% endif %}
+                </v-list>
+            </v-tab-item>
+
+            <v-tab-item>
+
                 {% if error_msg %}
                     <p style="color: red">{{ error_msg }}</p>
                 {% endif %}
@@ -52,36 +56,34 @@
                     >
                     </v-text-field>
                 </form>
-            </v-col>
-            <v-col>
                 <v-btn form="join_form" type="submit">Submit</v-btn>
-            </v-col>
-        </v-row>
-        {% if joined_auctions.exists %}
-        <v-list>
-            <v-subheader>Joined Auctions</v-subheader>
-            {% for auction in joined_auctions %}
-            <v-list-item>
-                <v-card href="{% url 'auction:auction_detail' pk=auction.pk %}">
-                    <v-card-title>{{ auction.name }}</v-card-title>
-                    <v-card-subtitle>{{ auction.time_created }}</v-card-subtitle>
-                </v-card>
-            </v-list-item>
-            {% endfor %}
-        </v-list>
-        {% else %}
-        <v-list>
-            <v-subheader>Joined Auctions</v-subheader>
-            <v-list-item>
-                <v-card href="{% url 'auction:enter_local_code' %}">
-                    <v-card-title>No Auctions Joined</v-card-title>
-                    <v-card-subtitle>Enter auction code here</v-card-subtitle>
-                </v-card>
-            </v-list-item>
-        </v-list>
-        {% endif %}
-    </v-col>
-</v-row>
+
+                <v-list>
+                    <v-subheader>Joined Auctions</v-subheader>
+                    {% if joined_auctions.exists %}
+                        {% for auction in joined_auctions %}
+                            <v-list-item href="{% url 'auction:auction_detail' pk=auction.pk %}">
+                                <v-list-item-avatar tile size="100"><v-img src="{{ auction.image.url }}"></v-img></v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ auction.name }}</v-list-item-title>
+                                    <v-list-item-subtitle>{{ auction.time_created }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        {% endfor %}
+                    {% else %}
+                        <v-list-item href="{% url 'auction:enter_local_code' %}">
+                            <v-list-item-content>
+                                <v-list-item-title>No Auctions Joined</v-list-item-title>
+                                <v-list-item-subtitle>Click here to enter auction code</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    {% endif %}
+                </v-list>
+            </v-tab-item>
+        </v-tabs>
+    </v-card>
+</v-container>
+
 {% endblock %}
 
 {% block vue %}

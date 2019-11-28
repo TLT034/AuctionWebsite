@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from auction.utils import rotate_image
+import os
 
 
 # Extends the base user class to preserve compatibility with Django's auth backend
@@ -90,6 +94,14 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=Item, dispatch_uid="update_image_profile")
+def update_image(sender, instance, **kwargs):
+    if instance.image:
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        fullpath = BASE_DIR + instance.image.url
+        rotate_image(fullpath)
 
 
 class Bid(models.Model):

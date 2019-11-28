@@ -28,9 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1',
                  'localhost',
                  'testserver',
+                 '192.168.1.2'  # Tristan Laptop Home (used for testing mobile)
                  '10.1.10.77',  # Garrett Laptop Home
                  '144.39.224.45',   # Garrett Laptop Class
-                 '192.168.1.9'  # Tristan Laptop Home (used for testing mobile)
                  ]
 
 # Application definition
