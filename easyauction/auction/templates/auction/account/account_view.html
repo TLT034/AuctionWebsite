@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="limiter">
-    <div class="container-login100" style="background-image: url('../../../static/auction/login/images/bg-01.jpg');">
+    <div class="container-login100">
         <div class="wrap-login100">
             <span class="login100-form-logo">
                 <i class="zmdi zmdi-landscape"></i>
@@ -33,11 +33,9 @@
                 <span class="float-r text-white fs-20">{{ auctionuser.id }}</span>
             </div>
 
-            <div class="text-center p-t-50">
-                <a class="txt1" href={% url "auction:edit_account" %}>Edit Account</a>
-            </div>
-            <div class="text-center">
-                <a class="txt1" href="{% url 'auction:change_password' %}">Change Password</a>
+            <div class="container-login100-form-btn p-t-10">
+                <a class="login100-form-btn mx-2 mb-3" href={% url "auction:edit_account" %}>Edit Account</a>
+                <a class="login100-form-btn mx-2" href="{% url 'auction:change_password' %}">Change Password</a>
             </div>
 
         </div>

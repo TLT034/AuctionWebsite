@@ -1,0 +1,22 @@
+
+
+.main-gradient {
+
+    background: #9152f8;
+    background: -webkit-linear-gradient(left, #7579ff, #b224ef);
+    background: -o-linear-gradient(left, #7579ff, #b224ef);
+    background: -moz-linear-gradient(left, #7579ff, #b224ef);
+    background: linear-gradient(left, #7579ff, #b224ef);
+}
+
+.purple-1 {
+    color: #9152f8;
+}
+
+.purple-2 {
+    color: #b224ef;
+}
+
+.blue-1 {
+    color: #7579ff;
+}

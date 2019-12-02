@@ -7,44 +7,40 @@
 {% endblock %}
 
 {% block content %}
-    <v-row>
-        <v-col cols="6" id="add_auction_col">
-            <div class="input-cart col s12 m10 push-m1 z-depth-2 grey lighten-5">
-                <div class="col s12 m5 auction_form">
-                    <form id="create_auction_form" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="auction_name">{{ auction_form.name.label }}</label>
-                            {% render_field auction_form.name class="form-control" placeholder="Enter the Auction name" id="auction_name" type="text" %}
-                            {% if auction_form.name.errors %}
-                                {% for error in form.name.errors %}
-                                    <p style="color:red"><strong>{{ error|escape }}</strong></p>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="auction_image">{{ auction_form.image.label }}</label>
-                            {% render_field auction_form.image class="form-control" id="auction_image" %}
-                            {% if auction_form.image.errors %}
-                                {% for error in form.image.errors %}
-                                    <p style="color:red"><strong>{{ error|escape }}</strong></p>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="auction_desc">{{ auction_form.description.label }}</label>
-                            {% render_field auction_form.description class="form-control" placeholder="Enter auction description" id="auction_desc" %}
-                            {% if auction_form.description.errors %}
-                                {% for error in form.description.errors %}
-                                    <p style="color:red"><strong>{{ error|escape }}</strong></p>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <v-btn type="submit" form="create_auction_form">Create</v-btn>
-                    </form>
+    <div class="input-cart col s12 m10 push-m1 z-depth-2 grey lighten-5">
+        <div class="col s12 m5 auction_form">
+            <form id="create_auction_form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="auction_name">{{ auction_form.name.label }}</label>
+                    {% render_field auction_form.name class="form-control" placeholder="Enter the Auction name" id="auction_name" type="text" %}
+                    {% if auction_form.name.errors %}
+                        {% for error in form.name.errors %}
+                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-            </div>
-        </v-col>
-    </v-row>
+                <div class="form-group">
+                    <label for="auction_image">{{ auction_form.image.label }}</label>
+                    {% render_field auction_form.image class="form-control" id="auction_image" %}
+                    {% if auction_form.image.errors %}
+                        {% for error in form.image.errors %}
+                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="auction_desc">{{ auction_form.description.label }}</label>
+                    {% render_field auction_form.description class="form-control" placeholder="Enter auction description" id="auction_desc" %}
+                    {% if auction_form.description.errors %}
+                        {% for error in form.description.errors %}
+                            <p style="color:red"><strong>{{ error|escape }}</strong></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <v-btn color="#7579ff" type="submit" form="create_auction_form">Create</v-btn>
+            </form>
+        </div>
+    </div>
 {% endblock %}
 

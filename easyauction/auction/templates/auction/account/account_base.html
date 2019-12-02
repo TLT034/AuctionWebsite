@@ -2,8 +2,6 @@
 {% load static %}
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="{% static 'auction/login/images/icons/favicon.ico' %}"/>
     <link rel="stylesheet" type="text/css" href={% static "auction/login/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "auction/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css" %}>
@@ -15,12 +13,108 @@
     <link rel="stylesheet" type="text/css" href={% static "auction/login/vendor/daterangepicker/daterangepicker.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "auction/login/css/util.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "auction/login/css/main.css" %}>
+
+    <link rel="stylesheet" type="text/css" href={% static "auction/color_theme.css" %}>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-  <main>
-    {% block content %}
-    {% endblock %}
-  </main>
+  <div id="app">
+        <v-app id="inspire">
+            <v-navigation-drawer
+                    v-model="drawer"
+                    app
+            >
+                <v-list>
+                    <v-list-item href="{% url 'auction:home' %}">
+                        <v-list-item-action>
+                            <v-icon>home</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Home</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-divider class="my-3"></v-divider>
+
+                    <v-list-item href="{% url 'auction:create_auction' %}">
+                        <v-list-item-action>
+                            <v-icon>gavel</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Host an Auction</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item href="{% url 'auction:my_bids' %}">
+                        <v-list-item-action>
+                            <v-icon>attach_money</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>My Bids</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-divider class="my-3"></v-divider>
+
+                    <v-list-item href="{% url 'auction:account' %}">
+                        <v-list-item-action>
+                            <v-icon>contact_mail</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Account</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item href="{% url 'auction:logout' %}">
+                        <v-list-item-action>
+                            <v-icon>logout</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Logout</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+
+            <v-app-bar
+                    app
+                    class="main-gradient"
+                    dark
+            >
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-toolbar-title>
+                    {% block v_title %}
+                        <a
+                            style="text-decoration: none; color: inherit; font-family: Roboto; font-size: 100%"
+                            href="{% url 'auction:home' %}"
+                        >Easy Auction</a>
+                    {% endblock %}
+                </v-toolbar-title>
+            </v-app-bar>
+
+            <v-content>
+                <v-container
+                        fluid
+                        fill-height
+                >
+                    {% block content %}
+                    {% endblock %}
+                </v-container>
+            </v-content>
+            <v-footer
+                    class="main-gradient"
+                    app
+            >
+            </v-footer>
+        </v-app>
+    </div>
 
 <script src={% static "auction/login/vendor/jquery/jquery-3.2.1.min.js" %}></script>
 <script src={% static "auction/login/vendor/animsition/js/animsition.min.js" %}></script>
@@ -32,4 +126,18 @@
 <script src={% static "auction/login/vendor/countdowntime/countdowntime.js" %}></script>
 <script src={% static "auction/login/js/main.js" %}></script>
 </body>
+{% block vue %}
+        <script>
+        Vue.use(Vuetify);
+
+        base_vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                drawer: false,
+            },
+            delimiters: ["[[", "]]"],
+        });
+        </script>
+{% endblock %}
 </html>

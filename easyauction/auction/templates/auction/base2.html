@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href={% static "auction/color_theme.css" %}>
+
     {% block stylesheets %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
@@ -21,7 +24,7 @@
                     v-model="drawer"
                     app
             >
-                <v-list dense>
+                <v-list>
                     <v-list-item href="{% url 'auction:home' %}">
                         <v-list-item-action>
                             <v-icon>home</v-icon>
@@ -30,21 +33,38 @@
                             <v-list-item-title>Home</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item href="{% url 'auction:enter_local_code' %}">
+
+                    <v-divider class="my-3"></v-divider>
+
+                    <v-list-item href="{% url 'auction:home' %}">
+                        <v-list-item-action>
+                            <v-icon>people</v-icon>
+                        </v-list-item-action>
                         <v-list-item-content>
-                            <v-list-item-title>Join an Existing Auction</v-list-item-title>
+                            <v-list-item-title>Join an Auction</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
                     <v-list-item href="{% url 'auction:create_auction' %}">
+                        <v-list-item-action>
+                            <v-icon>gavel</v-icon>
+                        </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>Host an Auction</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
                     <v-list-item href="{% url 'auction:my_bids' %}">
+                        <v-list-item-action>
+                            <v-icon>attach_money</v-icon>
+                        </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>My Bids</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
+                    <v-divider class="my-3"></v-divider>
+
                     <v-list-item href="{% url 'auction:account' %}">
                         <v-list-item-action>
                             <v-icon>contact_mail</v-icon>
@@ -53,7 +73,11 @@
                             <v-list-item-title>Account</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
                     <v-list-item href="{% url 'auction:logout' %}">
+                        <v-list-item-action>
+                            <v-icon>logout</v-icon>
+                        </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>Logout</v-list-item-title>
                         </v-list-item-content>
@@ -63,7 +87,7 @@
 
             <v-app-bar
                     app
-                    color="indigo"
+                    class="main-gradient"
                     dark
             >
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -80,7 +104,7 @@
                 </v-container>
             </v-content>
             <v-footer
-                    color="indigo"
+                    class="main-gradient"
                     app
             >
             </v-footer>

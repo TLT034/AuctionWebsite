@@ -6,7 +6,15 @@
 {% block content %}
     {# button to filter by winners #}
     <v-card class="d-inline-block mx-auto text-center">
-        <v-card-title center>{{ auction.name }} Participants</v-card-title>
+        <v-toolbar dark dense class="main-gradient mb-4">
+            <v-btn color="white" outlined href="{% url 'auction:auction_detail' auction.id %}">
+                <v-icon>mdi-chevron-left</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-toolbar-title>{{ auction.name }} Participants</v-toolbar-title>
+            <v-spacer></v-spacer>
+        </v-toolbar>
+        <div class="px-5">
             <form method="GET">
                 {% csrf_token %}
 
@@ -18,9 +26,10 @@
                 >
                 </v-select>
 
-                <v-btn color="primary" type="submit">Submit</v-btn>
+                <v-btn dark color="#7579ff" type="submit">Submit</v-btn>
             </form>
-
+        </div>
+        <v-divider class="mt-10"></v-divider>
         {# v-data-table showing name, id, items won, total cost #}
         <v-data-table
             :headers="headers"
