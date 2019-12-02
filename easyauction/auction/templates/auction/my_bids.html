@@ -5,28 +5,35 @@
 
 {% block content %}
     <v-card class="d-inline-block mx-auto text-center">
-        <v-card-title center>My Bid History</v-card-title>
-        <form method="GET">
-            {% csrf_token %}
 
-            <input type="hidden" name="filter" :value="[[selected_filter]]">
-            <v-select
-                    :items="filters"
-                    label="Filter"
-                    v-model="selected_filter"
-            >
-            </v-select>
+        <v-toolbar dark dense class="main-gradient mb-4">
+            <v-spacer></v-spacer>
+            <v-toolbar-title>My Bid History</v-toolbar-title>
+            <v-spacer></v-spacer>
+        </v-toolbar>
+        <div class="px-5">
+            <form method="GET">
+                {% csrf_token %}
 
-            <input type="hidden" name="order" :value="[[selected_ordering]]">
-            <v-select
-                    :items="orderings"
-                    label="Order by"
-                    v-model="selected_ordering"
-            >
-            </v-select>
+                <input type="hidden" name="filter" :value="[[selected_filter]]">
+                <v-select
+                        :items="filters"
+                        label="Filter"
+                        v-model="selected_filter"
+                >
+                </v-select>
 
-            <v-btn color="primary" type="submit">Submit</v-btn>
-        </form>
+                <input type="hidden" name="order" :value="[[selected_ordering]]">
+                <v-select
+                        :items="orderings"
+                        label="Order by"
+                        v-model="selected_ordering"
+                >
+                </v-select>
+
+                <v-btn color="#7579ff" dark type="submit">Submit</v-btn>
+            </form>
+        </div>
         <v-divider class="mt-10"></v-divider>
         {% if object_list %}
             <v-list>

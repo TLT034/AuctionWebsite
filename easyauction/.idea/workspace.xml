@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="">
+    <list default="true" id="76840675-ec20-4652-87e3-be4539463138" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/static/auction/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/auction/static/auction/color_theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/account_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/account_base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/account_view.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/account_view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/change_password_done.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/change_password_done.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/edit_account.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/edit_account.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/base2.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/base2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/create_auction.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/create_auction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/enter_local_code.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/home2.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/home2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/item.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/item.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/my_bids.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/my_bids.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/participants.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/participants.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,42 +29,18 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
-    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="HTML File" />
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="1SWowhoFxWUdO3EDYDsDstD3Cs5" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="1UOqf3UK4309KepLno6O0moTmXP" />
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../cs2610/cs2610-thomas-tristan-assn2/cs2610" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\trist\repos\school\cs3450\auction-program\easyauction\auction\templates\auction" />
-      <recent name="C:\Users\trist\repos\school\cs3450\auction-program\easyauction\auction\templates\auction\account" />
-    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -60,78 +54,17 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Django tests.Test: auction.tests.AuthTests">
-    <configuration name="Test: auction.tests.AuthTests" type="DjangoTestsConfigurationType" temporary="true">
-      <module name="easyauction" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="TARGET" value="auction.tests.AuthTests" />
-      <option name="SETTINGS_FILE" value="" />
-      <option name="CUSTOM_SETTINGS" value="false" />
-      <option name="USE_OPTIONS" value="false" />
-      <option name="OPTIONS" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="easyauction" type="Python.DjangoServer" factoryName="Django server">
-      <module name="easyauction" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Django tests.Test: auction.tests.AuthTests" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5d78d6cb-d9f2-413d-bece-2d9b33953dfd" name="Default Changelist" comment="" />
-      <created>1571194534850</created>
+      <changelist id="76840675-ec20-4652-87e3-be4539463138" name="Default Changelist" comment="" />
+      <created>1575238088381</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1571194534850</updated>
-      <workItem from="1571194536793" duration="6000" />
-      <workItem from="1571688961491" duration="96000" />
-      <workItem from="1571952026023" duration="35000" />
-      <workItem from="1571952061842" duration="8557000" />
-      <workItem from="1572901349973" duration="133000" />
-      <workItem from="1572903183612" duration="10003000" />
-      <workItem from="1573063104243" duration="10461000" />
-      <workItem from="1573329865394" duration="26495000" />
-      <workItem from="1573748764608" duration="17269000" />
-      <workItem from="1574462683528" duration="280000" />
-      <workItem from="1574887830169" duration="14073000" />
-      <workItem from="1574904095908" duration="12535000" />
+      <updated>1575238088381</updated>
+      <workItem from="1575238089467" duration="19856000" />
     </task>
     <servers />
   </component>
@@ -143,15 +76,10 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/easyauction$Test__auction_tests_AuthTests.coverage" NAME="Test: auction.tests.AuthTests Coverage Results" MODIFIED="1574462696575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

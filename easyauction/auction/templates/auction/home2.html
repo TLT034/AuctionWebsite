@@ -5,38 +5,15 @@
 {% block content %}
 
 <v-container fluid>
-    <v-card outlined>
-        <v-tabs color="blue" centered grow>
-            <v-tab>
-                Hosted Auctions
-            </v-tab>
+
+    <v-card max-width="900"  outlined>
+        <v-tabs color="#7579ff" centered grow>
             <v-tab>
                 Joined Auctions
             </v-tab>
-            <v-tab-item>
-                <v-list>
-                    <v-subheader>My Auctions</v-subheader>
-                    {% if hosted_auctions.exists %}
-                        {% for auction in hosted_auctions %}
-                            <v-list-item href="{% url 'auction:auction_detail' pk=auction.pk %}">
-                                <v-list-item-avatar tile size="100"><v-img src="{{ auction.image.url }}"></v-img></v-list-item-avatar>
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ auction.name }}</v-list-item-title>
-                                    <v-list-item-subtitle>{{ auction.time_created }}</v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <v-divider></v-divider>
-                        {% endfor %}
-                    {% else %}
-                        <v-list-item href="{% url 'auction:create_auction' %}">
-                            <v-list-item-content>
-                                <v-list-item-title>No Auctions Created</v-list-item-title>
-                                <v-list-item-subtitle>Click here to create an auction</v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-                    {% endif %}
-                </v-list>
-            </v-tab-item>
+            <v-tab>
+                Hosted Auctions
+            </v-tab>
 
             <v-tab-item>
                 <v-list>
@@ -78,8 +55,34 @@
                         step="1"
                     >
                     </v-text-field>
-                    <v-btn form="join_form" type="submit">Join</v-btn>
+                    <v-btn color="#7579ff" form="join_form" type="submit">Join</v-btn>
                 </form>
+            </v-tab-item>
+
+
+            <v-tab-item>
+                <v-list>
+                    <v-subheader>My Auctions</v-subheader>
+                    {% if hosted_auctions.exists %}
+                        {% for auction in hosted_auctions %}
+                            <v-list-item href="{% url 'auction:auction_detail' pk=auction.pk %}">
+                                <v-list-item-avatar tile size="100"><v-img src="{{ auction.image.url }}"></v-img></v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ auction.name }}</v-list-item-title>
+                                    <v-list-item-subtitle>{{ auction.time_created }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-divider></v-divider>
+                        {% endfor %}
+                    {% else %}
+                        <v-list-item href="{% url 'auction:create_auction' %}">
+                            <v-list-item-content>
+                                <v-list-item-title>No Auctions Created</v-list-item-title>
+                                <v-list-item-subtitle>Click here to create an auction</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    {% endif %}
+                </v-list>
             </v-tab-item>
         </v-tabs>
     </v-card>

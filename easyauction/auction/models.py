@@ -82,7 +82,6 @@ class Auction(models.Model):
                              description=item_desc)
         return item
 
-
     def remove_item(self, pk):
         self.item_set.filter(pk=pk).first().delete()
 

@@ -55,9 +55,10 @@ def home(request):
     hosted_auctions = user.auction_set.order_by('-time_created')
     joined_auctions = user.joined_auctions.order_by('-time_created')
 
-    context = {  # Used for data
-                'hosted_auctions': hosted_auctions,
-                'joined_auctions': joined_auctions}
+    context = {
+        'hosted_auctions': hosted_auctions,
+        'joined_auctions': joined_auctions,
+    }
 
     # Join auction
     if request.method == 'POST':
@@ -77,6 +78,7 @@ def home(request):
             return render(request, 'auction/home2.html', context=context)
         return redirect('auction:auction_detail', auction.id)
     return render(request, 'auction/home2.html', context=context)
+
 
 def auction_detail(request, pk):
     # Get context items
@@ -137,11 +139,6 @@ def create_auction(request):
     return render(request, 'auction/create_auction.html', context={'auction_form': auction_form})
 
 
-# TODO: add current user as a participant in the auction specified
-def enter_local_code(request):
-    return render(request, 'auction/enter_local_code.html', context={})
-
-
 def item_view(request, item_id):
     user = request.user
     admin = False
@@ -167,10 +164,20 @@ def edit_item(request, item_id):
 
     if request.method == 'POST':
         item.name = request.POST.get('name', default=item.name)
-        item.auction_type = request.POST.get('auction_type', default=item.auction_type)
         item.starting_price = float(request.POST.get('starting_price', default=item.starting_price))
         item.bid_increment = float(request.POST.get('bid_increment', default=item.bid_increment))
         item.description = request.POST.get('description', default=item.description)
+
+        auction_switch = request.POST.get('auction_type', default=item.auction_type)
+        if auction_switch:
+            item.winner = None
+            item.is_sold = False
+            item.is_open = False
+            item.current_price = item.starting_price
+            while item.bid_set.count() > 0:
+                item.bid_set.first().delete()
+            item.auction_type = request.POST.get('auction_type', default=item.auction_type)
+            item.save()
 
         if item.starting_price > item.current_price:
             item.current_price = item.starting_price
@@ -180,9 +187,17 @@ def edit_item(request, item_id):
         else:
             item.min_bid = item.starting_price
 
-        winner = request.POST.get('winner')
-        if winner:
-            item.winner = AuctionUser.objects.get(username=winner)
+        # for live items
+        if item.auction_type == 'live':
+            final_price = request.POST.get('final_price')
+            if final_price:
+                item.current_price = final_price
+
+            winner = request.POST.get('winner')
+            if winner:
+                item.winner = AuctionUser.objects.get(username=winner)
+                item.is_sold = True
+                item.is_open = False
 
         item.save()
 
@@ -411,7 +426,7 @@ def publish(request, pk):
     if request.method == "POST":
 
         # un-assign winners
-        for item in auction.item_set.all():
+        for item in auction.item_set.filter(auction_type='silent'):
             if item.bid_set.count() > 0:
                 item.is_sold = False
                 item.winner = None
@@ -432,7 +447,7 @@ def archive(request, pk):
     if request.method == "POST":
 
         # assign winners
-        for item in auction.item_set.all():
+        for item in auction.item_set.filter(auction_type='silent'):
             if item.bid_set.count() > 0:
                 item.is_sold = True
                 item.winner = item.bid_set.latest('price').bidder
