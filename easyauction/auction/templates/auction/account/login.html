@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="limiter">
-    <div class="container-login100" style="background-image: url('../../../static/auction/login/images/bg-01.jpg');">
+    <div class="container-login100">
         <div class="wrap-login100">
             <form class="login100-form validate-form" method="post">
                 {% csrf_token %}
@@ -40,12 +40,12 @@
                 </div>
 
                 <div class="text-center p-t-90">
-                    <a class="txt1" href="{% url 'auction:reset_password' %}">
+                    <a class="text-white" href="{% url 'auction:reset_password' %}">
                         Forgot Password?
                     </a>
                 </div>
                 <div class="text-center">
-                    <a class="txt1" href="{% url 'auction:signup' %}">
+                    <a class="text-white" href="{% url 'auction:signup' %}">
                         Sign Up
                     </a>
                 </div>

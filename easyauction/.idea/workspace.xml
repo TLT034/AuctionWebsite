@@ -3,25 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="76840675-ec20-4652-87e3-be4539463138" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/auction/static/auction/login/vendor/bootstrap/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/static/auction/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/auction/static/auction/color_theme.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/account_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/account_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/account_view.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/account_view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/change_password_done.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/change_password_done.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/edit_account.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/edit_account.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/auction_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/base.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/base2.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/base2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/create_auction.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/create_auction.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/enter_local_code.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/home2.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/home2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/item.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/item.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/my_bids.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/my_bids.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/templates/auction/participants.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/participants.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auction/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/auction/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auction/templates/auction/account/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/auction/templates/auction/account/login.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +46,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1575238088381</updated>
-      <workItem from="1575238089467" duration="19856000" />
+      <workItem from="1575238089467" duration="20232000" />
     </task>
     <servers />
   </component>
