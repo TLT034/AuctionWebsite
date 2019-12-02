@@ -388,6 +388,7 @@ class MyBidListView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Incredibly janky and non-extensible. Should be done with an API call in the future
         filters = [{'text': 'Winning Bids', 'value': '{"won": "True"}'},
                    {'text': 'Open Bids', 'value': '{"item__is_open": "True"}'}]
         context['filters'] = filters
@@ -449,9 +450,16 @@ def archive(request, pk):
         # assign winners
         for item in auction.item_set.filter(auction_type='silent'):
             if item.bid_set.count() > 0:
+                # Assign winner
                 item.is_sold = True
                 item.winner = item.bid_set.latest('price').bidder
                 item.save()
+
+                # Mark bid as a winning bid
+                bid = item.bid_set.latest('price')
+                bid.won = True
+                bid.save()
+
 
         auction.close_bidding()
         auction.archive()
