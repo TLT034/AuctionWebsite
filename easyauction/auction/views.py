@@ -168,15 +168,15 @@ def edit_item(request, item_id):
         item.bid_increment = float(request.POST.get('bid_increment', default=item.bid_increment))
         item.description = request.POST.get('description', default=item.description)
 
-        auction_switch = request.POST.get('auction_type', default=item.auction_type)
-        if auction_switch:
+        auction_type = request.POST.get('auction_type', default=item.auction_type)
+        if auction_type == 'live':
             item.winner = None
             item.is_sold = False
             item.is_open = False
             item.current_price = item.starting_price
             while item.bid_set.count() > 0:
                 item.bid_set.first().delete()
-            item.auction_type = request.POST.get('auction_type', default=item.auction_type)
+            item.auction_type = auction_type
             item.save()
 
         if item.starting_price > item.current_price:
