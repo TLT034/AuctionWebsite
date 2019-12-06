@@ -411,7 +411,7 @@ class MyBidListView(generic.ListView):
                     winning_bid = bid.item.bid_set.last()
                     if bid == winning_bid:
                         user_winning_bids_ids.append(bid.pk)
-                    filtered_queryset = queryset.filter(pk__in=user_winning_bids_ids)
+                filtered_queryset = queryset.filter(pk__in=user_winning_bids_ids)
             else:
                 filtering = json.loads(filtering_json)
                 filtered_queryset = queryset.filter(**filtering)

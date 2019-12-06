@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
                  '192.168.1.2',  # Tristan Laptop Home (used for testing mobile)
                  '10.1.10.77',  # Garrett Laptop Home
                  '144.39.224.45',   # Garrett Laptop Class
+                 '10.0.0.108'
                  ]
 
 # Application definition
