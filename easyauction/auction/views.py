@@ -389,7 +389,8 @@ class MyBidListView(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         # Incredibly janky and non-extensible. Should be done with an API call in the future
-        filters = [{'text': 'Winning Bids', 'value': '{"won": "True"}'},
+        filters = [{'text': 'Winning Bids', 'value': 'winning'},
+                   {'text': 'Won Bids', 'value': '{"won": "True"}'},
                    {'text': 'Open Bids', 'value': '{"item__is_open": "True"}'}]
         context['filters'] = filters
         orderings = [{'text': 'Date', 'value': '-timestamp'},
@@ -404,8 +405,16 @@ class MyBidListView(generic.ListView):
 
         filtering_json = self.request.GET.get('filter', None)
         if filtering_json:
-            filtering = json.loads(filtering_json)
-            filtered_queryset = queryset.filter(**filtering)
+            if filtering_json == 'winning':
+                user_winning_bids_ids = []
+                for bid in queryset:
+                    winning_bid = bid.item.bid_set.last()
+                    if bid == winning_bid:
+                        user_winning_bids_ids.append(bid.pk)
+                    filtered_queryset = queryset.filter(pk__in=user_winning_bids_ids)
+            else:
+                filtering = json.loads(filtering_json)
+                filtered_queryset = queryset.filter(**filtering)
         else:
             filtered_queryset = queryset.filter()
 
