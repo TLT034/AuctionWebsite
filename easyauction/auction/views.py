@@ -169,7 +169,7 @@ def edit_item(request, item_id):
         item.description = request.POST.get('description', default=item.description)
 
         auction_type = request.POST.get('auction_type', default=item.auction_type)
-        if auction_type == 'live':
+        if auction_type != item.auction_type:
             item.winner = None
             item.is_sold = False
             item.is_open = False
