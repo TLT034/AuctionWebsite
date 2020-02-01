@@ -103,6 +103,7 @@ class Item(models.Model):
     paid_time = models.DateTimeField(null=True, blank=True)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     winner = models.ForeignKey(AuctionUser, on_delete=models.SET_NULL, null=True, blank=True)
+    followers = models.ManyToManyField(AuctionUser, on_delete=)
 
     def __str__(self):
         return self.name
