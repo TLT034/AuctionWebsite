@@ -42,6 +42,15 @@ class AuctionUser(AbstractUser):
         auction = self.get_auction(pk=pk)
         auction.archive()
 
+    def watch_item(self, pk: int):
+        item = Item.objects.get(pk=pk)
+        self.watched_items.add(item)
+
+    def unwatch_item(self, pk:int):
+        item = Item.objects.get(pk=pk)
+        self.watched_items.remove(item)
+
+
 
 class Auction(models.Model):
     name = models.CharField(max_length=200)
@@ -103,7 +112,7 @@ class Item(models.Model):
     paid_time = models.DateTimeField(null=True, blank=True)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     winner = models.ForeignKey(AuctionUser, on_delete=models.SET_NULL, null=True, blank=True)
-    followers = models.ManyToManyField(AuctionUser, on_delete=)
+    followers = models.ManyToManyField(AuctionUser, related_name='watched_items', related_query_name='watched_item')
 
     def __str__(self):
         return self.name

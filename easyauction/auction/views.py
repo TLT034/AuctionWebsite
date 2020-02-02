@@ -541,3 +541,17 @@ def participants_list(request, auction_id):
 
     context = {'participants': participants_json, 'n_participants': len(participants), 'auction': auction}
     return render(request, 'auction/participants.html', context=context)
+
+
+def watch_item(request, item_id: int):
+    user = request.user
+    user.watch_item(pk=item_id)
+    user.save()
+    return item_view(request, item_id=item_id)
+
+
+def unwatch_item(request, item_id: int):
+    user = request.user
+    user.unwatch_item(pk=item_id)
+    user.save()
+    return item_view(request, item_id=item_id)

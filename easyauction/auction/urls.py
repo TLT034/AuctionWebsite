@@ -48,6 +48,8 @@ urlpatterns += [
   path('auction/item/<int:item_id>', login_required(views.item_view), name='item'),
   path('auction/edit_item/<int:item_id>', login_required(views.edit_item), name='edit_item'),
   path('auction/delete_item/<int:item_id>', login_required(views.delete_item), name='delete_item'),
+  path('auction/item/<int:item_id>/watch_item/', login_required(views.watch_item), name='watch_item'),
+  path('auction/item/<int:item_id>/unwatch_item/', login_required(views.unwatch_item), name='unwatch_item'),
   path('auction/item/<int:item_id>/submit_bid/', login_required(views.submit_bid), name='submit_bid'),
   path('auction/item/<int:item_id>/remove_bid/<int:bid_id>', login_required(views.remove_bid), name='remove_bid'),
   path('auction/my_bids', login_required(views.MyBidListView.as_view(template_name='auction/my_bids.html')), name='my_bids'),
