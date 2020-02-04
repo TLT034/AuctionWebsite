@@ -17,7 +17,8 @@ urlpatterns = [
 
 # Account management urls
 urlpatterns += [
-    path('login/', auth_views.LoginView.as_view(template_name='auction/account/login.html', redirect_authenticated_user=True),
+    path('login/', auth_views.LoginView.as_view(template_name='auction/account/login.html',
+                                                redirect_authenticated_user=True),
          name='login'),
     path('logout/', login_required(auth_views.logout_then_login),
          name='logout'),
@@ -25,6 +26,8 @@ urlpatterns += [
          name='signup'),
     path('account/', login_required(views.ViewAccountView.as_view()),
          name='account'),
+    path('account/watchlist/', login_required(views.WatchedItemsView.as_view(template_name='auction/watchlist.html')),
+         name='watchlist'),
     path('account/edit/', login_required(views.EditAccountView.as_view()),
          name='edit_account'),
     path('account/change_password/', login_required(auth_views.PasswordChangeView.as_view(success_url=reverse_lazy('auction:change_password_done'))),

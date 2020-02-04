@@ -54,6 +54,16 @@
                         </v-list-item-content>
                     </v-list-item>
 
+                    <v-list-item href="{% url 'auction:watchlist' %}">
+                        <v-list-item-action>
+                            <v-icon>view_list</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Watchlist</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+
                     <v-divider class="my-3"></v-divider>
 
                     <v-list-item href="{% url 'auction:account' %}">

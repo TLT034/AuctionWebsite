@@ -427,6 +427,16 @@ class MyBidListView(generic.ListView):
         return ordered_queryset
 
 
+class WatchedItemsView(generic.ListView):
+    model = Item
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = self.model.objects.filter(pk__in=user.watched_items.all())
+
+        return queryset
+
+
 def publish(request, pk):
     try:
         auction = Auction.objects.get(pk=pk)
