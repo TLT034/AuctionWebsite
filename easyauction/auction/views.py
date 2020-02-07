@@ -51,6 +51,10 @@ class EditAccountView(generic.UpdateView):
 
 
 def home(request):
+    return render(request, 'auction/home.html')
+
+
+def auctions(request):
     user = request.user
     hosted_auctions = user.auction_set.order_by('-time_created')
     joined_auctions = user.joined_auctions.order_by('-time_created')
@@ -64,20 +68,25 @@ def home(request):
     if request.method == 'POST':
         auction_code = request.POST['auction_code']
         try:
-            auction = Auction.objects.get(pk=auction_code)
-            if auction.published:
-                auction.participants.add(user)
-                auction.save()
+            if auction_code:
+                auction = Auction.objects.get(pk=auction_code)
+                if auction.published:
+                    auction.participants.add(user)
+                    auction.save()
+                else:
+                    error_msg = 'This auction has not been published'
+                    context['error_msg'] = error_msg
+                    return render(request, 'auction/auctions.html', context=context)
             else:
-                error_msg = 'This auction has not been published'
+                error_msg = 'Please enter auction code before clicking JOIN'
                 context['error_msg'] = error_msg
-                return render(request, 'auction/home2.html', context=context)
+                return render(request, 'auction/auctions.html', context=context)
         except Auction.DoesNotExist:
             error_msg = 'Invalid auction code'
             context['error_msg'] = error_msg
-            return render(request, 'auction/home2.html', context=context)
+            return render(request, 'auction/auctions.html', context=context)
         return redirect('auction:auction_detail', auction.id)
-    return render(request, 'auction/home2.html', context=context)
+    return render(request, 'auction/auctions.html', context=context)
 
 
 def auction_detail(request, pk):
@@ -89,7 +98,6 @@ def auction_detail(request, pk):
         live_items = auction.item_set.filter(auction_type='live')
         silent_items = auction.item_set.filter(auction_type='silent')
     elif user.joined_auctions.filter(pk=pk).exists():
-        # TODO: implement count-down on items and only show items with positive countdowns
         user_is_admin = False
         auction = user.joined_auctions.get(pk=pk)
         live_items = auction.item_set.filter(auction_type='live')

@@ -43,6 +43,7 @@ urlpatterns += [
 
 # Auction management urls
 urlpatterns += [
+  path('auctions/', login_required(views.auctions), name='auctions'),
   path('auction/create_auction/', login_required(views.create_auction), name='create_auction'),
   path('auction/auction_detail/<int:pk>', login_required(views.auction_detail), name='auction_detail'),
   path('auction/item/<int:item_id>', login_required(views.item_view), name='item'),

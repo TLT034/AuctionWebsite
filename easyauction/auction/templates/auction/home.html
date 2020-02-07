@@ -1,0 +1,26 @@
+{% extends 'auction/base2.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<v-container fluid>
+
+</v-container>
+
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    home_vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                drawer: false,
+            },
+            delimiters: ["[[", "]]"],
+    });
+    </script>
+{% endblock %}
