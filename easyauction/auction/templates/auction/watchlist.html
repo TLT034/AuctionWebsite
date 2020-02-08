@@ -5,7 +5,11 @@
 
 {% block content %}
     <v-card class="d-inline-block mx-auto text-center">
-    <v-card-title>Watchlist</v-card-title>
+        <v-toolbar dark dense class="main-gradient mb-4">
+            <v-spacer></v-spacer>
+            <v-toolbar-title>Watchlist</v-toolbar-title>
+            <v-spacer></v-spacer>
+        </v-toolbar>
         {% if object_list %}
             <v-list>
                 {% for item in object_list %}
@@ -39,7 +43,7 @@
                 {% endfor %}
             </v-list>
         {% else %}
-            <v-card-text>You haven't saved an items yet.</v-card-text>
+            <v-card-text>You haven't saved any items yet.</v-card-text>
         {% endif %}
     </v-card>
 {% endblock %}
