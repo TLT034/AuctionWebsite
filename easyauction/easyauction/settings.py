@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1',
                  'localhost',
                  'testserver',
-                 '192.168.1.2',  # Tristan Laptop Home
+                 '192.168.1.9',  # Tristan Laptop Home
                  '192.168.1.5',  # Tristan Desktop
                  '10.1.10.77',  # Garrett Laptop Home
                  '144.39.224.45',   # Garrett Laptop Class
