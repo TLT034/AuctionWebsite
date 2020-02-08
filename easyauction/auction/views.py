@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login
 
 import json
 from decimal import Decimal
+from datetime import datetime
 
 from reportlab.pdfgen import canvas
 from reportlab.graphics.shapes import Drawing 
@@ -550,6 +551,39 @@ def archive(request, pk):
         auction.archive()
         auction.save()
 
+        # csv output file
+        file = open("auction_report.csv", "w")
+        file.write(f"{auction.name} report\n")
+        file.write(f"Auction closed on:, {datetime.now().strftime('%m/%d/%Y %H:%M:%S')}\n\n")
+        file.write("Silent Items\n")
+        file.write("Item, Buyer Name, Buyer Username, Price\n")
+        for item in auction.item_set.filter(auction_type='silent'):
+            if item.winner:
+                first_name = item.winner.first_name
+                last_name = item.winner.last_name
+                user_name = item.winner.username
+                sell_price = item.current_price
+            else:
+                first_name = "N/A"
+                last_name = " "
+                user_name = "N/A"
+                sell_price = 0
+            file.write(f"{item.name}, {first_name} {last_name}, {user_name}, {sell_price}\n")
+        file.write("\nLive Items\n")
+        file.write("Item, Buyer Name, Buyer Username, Price\n")
+        for item in auction.item_set.filter(auction_type='live'):
+            if item.winner:
+                first_name = item.winner.first_name
+                last_name = item.winner.last_name
+                user_name = item.winner.username
+                sell_price = item.current_price
+            else:
+                first_name = "N/A"
+                last_name = " "
+                user_name = "N/A"
+                sell_price = 0
+            file.write(f"{item.name}, {first_name} {last_name}, {user_name}, {sell_price}\n")
+        file.close()
     return redirect("auction:auction_detail", pk)
 
 
