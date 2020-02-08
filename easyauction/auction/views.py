@@ -312,7 +312,7 @@ def submit_bid(request, item_id):
                         prev_highest_bid.bidder.save()
 
                         # send outbid notification to previous highest bidder
-                        text = f"Outbid! You have been outbid {item.bid_set.order_by('price')[1].price} on the {item}"
+                        text = f"Outbid! You have been outbid on the {item}"
                         prev_highest_bid.bidder.send_notification(text, item)
 
                     return render(request, 'auction/bid_success.html', context={'bid': bid})
