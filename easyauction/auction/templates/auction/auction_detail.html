@@ -78,7 +78,7 @@
                     <v-divider></v-divider>
                     <v-list-item class="justify-content-around">
                         {% if auction.published %}
-                            <v-btn type="submit" form="archive_form">Archive Auction</v-btn>
+                            <v-btn @click="archive_auction_dialog = !archive_auction_dialog">Archive Auction</v-btn>
                         {% else %}
                             <v-btn type="submit" form="publish_form">Publish Auction</v-btn>
                         {% endif %}
@@ -267,6 +267,19 @@
             </v-tabs>
         </v-card>
     </v-container>
+
+    {# confirmation dialog when archiving an auction #}
+    <v-dialog max-width="500" persistent v-model="archive_auction_dialog">
+        <v-card>
+            <v-card-title>End the auction?</v-card-title>
+            <v-card-text>Archiving and re-publishing the auction can cause errors.</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="archive_auction_dialog = !archive_auction_dialog" >Cancel</v-btn>
+                <v-btn type="submit" form="archive_form">End Auction</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 {% endblock %}
 
 {% block vue %}
@@ -282,6 +295,7 @@
             n_items: {{ items|length }},
             n_items_per_row: 4,
             show_add_item: false,
+            archive_auction_dialog: false
         },
         delimiters: ["[[", "]]"]
     });

@@ -33,7 +33,7 @@
                     v-model="drawer"
                     app
             >
-                <v-list>
+               <v-list>
                     <v-list-item href="{% url 'auction:home' %}">
                         <v-list-item-action>
                             <v-icon>home</v-icon>
@@ -45,14 +45,15 @@
 
                     <v-divider class="my-3"></v-divider>
 
-                    <v-list-item href="{% url 'auction:create_auction' %}">
+                    <v-list-item href="{% url 'auction:auctions' %}">
                         <v-list-item-action>
                             <v-icon>gavel</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
-                            <v-list-item-title>Host an Auction</v-list-item-title>
+                            <v-list-item-title>Auctions</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
                     <v-list-item href="{% url 'auction:my_bids' %}">
                         <v-list-item-action>
                             <v-icon>attach_money</v-icon>
@@ -72,6 +73,7 @@
                             <v-list-item-title>Account</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
                     <v-list-item href="{% url 'auction:logout' %}">
                         <v-list-item-action>
                             <v-icon>logout</v-icon>

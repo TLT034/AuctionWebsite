@@ -46,6 +46,7 @@ urlpatterns += [
 
 # Auction management urls
 urlpatterns += [
+  path('auctions/', login_required(views.auctions), name='auctions'),
   path('auction/create_auction/', login_required(views.create_auction), name='create_auction'),
   path('auction/auction_detail/<int:pk>', login_required(views.auction_detail), name='auction_detail'),
   path('auction/item/<int:item_id>', login_required(views.item_view), name='item'),
@@ -61,7 +62,8 @@ urlpatterns += [
   path('auction/auction_detail/<int:pk>/archive', login_required(views.archive), name='archive'),
   path('auction/auction_detail/<int:auction_id>/open_bidding', login_required(views.open_bidding), name='open_bidding'),
   path('auction/auction_detail/<int:auction_id>/close_bidding', login_required(views.close_bidding), name='close_bidding'),
-  path('auction/participants/<int:auction_id>', login_required(views.participants_list), name='participants')
+  path('auction/participants/<int:auction_id>', login_required(views.participants_list), name='participants'),
+  path('clear_notifications/<int:user_id>', login_required(views.clear_notifications), name='clear_notifications')
 ]
 
 urlpatterns += staticfiles_urlpatterns()

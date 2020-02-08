@@ -1,0 +1,115 @@
+{% extends 'auction/base2.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <form id="clear_notifications_form" action="{% url 'auction:clear_notifications' user.id %}" method="POST">{% csrf_token %}</form>
+    <v-container grid-list-md fill-height>
+        <v-layout row wrap>
+            <v-flex xs12 text-center>
+                <p style="{
+                        font-family: Material-Design-Iconic-Font;
+                        color: dimgrey;
+                        font-size: 25pt;
+                        margin-top: 10pt;
+                        margin-bottom: 10pt
+                    }">Welcome {{ user.first_name }} ({{ user.username }})</p>
+            </v-flex>
+            <v-flex xs12 text-center>
+                <v-card raised width="100%" class="d-inline-block mx-auto mb-5">
+                    <v-toolbar dark dense class="main-gradient mb-4">
+                        <v-spacer></v-spacer>
+                        <v-toolbar-title>User ID / Bidding #</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-card-text style="{
+                        font-family: Material-Design-Iconic-Font;
+                        font-size: 60pt;
+                        margin-top: 10pt;
+                        margin-bottom: 10pt
+                    }">
+                        {{ user.id }}
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+            <v-flex xs12 text-center>
+                <v-card raised width="100%" class="d-inline-block mx-auto mb-5">
+                    <v-toolbar dark dense class="main-gradient mb-4">
+                        <v-spacer></v-spacer>
+                        <v-toolbar-title>Notifications</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn form="clear_notifications_form" type="submit" small outlined>Clear All</v-btn>
+                    </v-toolbar>
+                    {% if notifications.count <= 0 %}
+                        <v-list-item>
+                            <v-list-item-title>You do not have any notifications</v-list-item-title>
+                        </v-list-item>
+                    {% else %}
+                        {% for n in notifications %}
+                            <v-list-item style="flex-wrap: wrap" key={{ n.id }} href="{% url 'auction:item' n.item.id %}">
+                                <v-list-item-content class="text-center">
+                                    {{ n.text }}
+                                    <v-list-item-action-text>Click here to view the {{ n.item.name }}</v-list-item-action-text>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-divider></v-divider>
+                        {% endfor %}
+                    {% endif %}
+                </v-card>
+            </v-flex>
+            <v-flex xs12>
+                <v-card raised width="100%" class="d-inline-block mx-auto mb-5 text-center">
+                    <v-toolbar dark dense class="main-gradient mb-4">
+                        <v-spacer></v-spacer>
+                        <v-toolbar-title>Balance</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+                    {# Guaranteed Amount Due #}
+                    <v-card-text style="{
+                        font-family: Material-Design-Iconic-Font;
+                        font-size: 18pt;
+                        margin-top: 5pt;
+                    }">Guaranteed Amount Due</v-card-text>
+                    <v-card-text style="{
+                        font-family: Material-Design-Iconic-Font;
+                        font-size: 22pt;
+                        margin-top: -15pt;
+                    }">${{user.guaranteed_balance}}</v-card-text>
+                    {# Possible Amount Due #}
+                    <v-card-text style="{
+                        font-family: Material-Design-Iconic-Font;
+                        font-size: 18pt;
+                        margin-top: 5pt;
+                    }">*Possible Amount Due</v-card-text>
+                    <v-card-text style="{
+                        font-family: Material-Design-Iconic-Font;
+                        font-size: 22pt;
+                        margin-top: -15pt;
+                    }">${{ user.possible_balance }}</v-card-text>
+                    {# Possible Amount Description#}
+                    <v-card-text style="{
+                        font-family: Material-Design-Iconic-Font;
+                        font-size: 10pt;
+                        margin-top: 5pt;
+                    }">*Possible amount includes items that you are currently winning (highest bidder) and is subject to change by the end of the auction.</v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
+
+{% endblock %}
+
+{% block vue %}
+    <script>
+    Vue.use(Vuetify);
+
+    home_vue = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                drawer: false,
+            },
+            delimiters: ["[[", "]]"],
+    });
+    </script>
+{% endblock %}
