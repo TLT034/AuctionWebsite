@@ -53,7 +53,6 @@ class AuctionUser(AbstractUser):
         item = Item.objects.get(pk=pk)
         self.watched_items.remove(item)
 
-
     def send_notification(self, text, item):
         notification = self.notification_set.create(text=text, item=item)
         return notification

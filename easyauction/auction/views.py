@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, FileResponse
 from django.urls import reverse
 from django.conf import settings
+from django.contrib.auth import authenticate, login
 
 import json
 from decimal import Decimal
@@ -29,6 +30,14 @@ class SignUpView(generic.CreateView):
     form_class = UserSignUpForm
     success_url = reverse_lazy('auction:login')
     template_name = 'auction/account/signup.html'
+
+    def form_valid(self, form):
+        form.save()
+        username = self.request.POST['username']
+        password = self.request.POST['password1']
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return redirect('auction:login')
 
 
 class ViewAccountView(generic.DetailView):
