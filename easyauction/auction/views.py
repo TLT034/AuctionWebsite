@@ -52,6 +52,15 @@ class EditAccountView(generic.UpdateView):
 
 def home(request):
     user = request.user
+    context = {
+        'user': user,
+        'notifications': user.notification_set.order_by('-timestamp')
+    }
+    return render(request, 'auction/home.html', context=context)
+
+
+def auctions(request):
+    user = request.user
     hosted_auctions = user.auction_set.order_by('-time_created')
     joined_auctions = user.joined_auctions.order_by('-time_created')
 
@@ -64,20 +73,25 @@ def home(request):
     if request.method == 'POST':
         auction_code = request.POST['auction_code']
         try:
-            auction = Auction.objects.get(pk=auction_code)
-            if auction.published:
-                auction.participants.add(user)
-                auction.save()
+            if auction_code:
+                auction = Auction.objects.get(pk=auction_code)
+                if auction.published:
+                    auction.participants.add(user)
+                    auction.save()
+                else:
+                    error_msg = 'This auction has not been published'
+                    context['error_msg'] = error_msg
+                    return render(request, 'auction/auctions.html', context=context)
             else:
-                error_msg = 'This auction has not been published'
+                error_msg = 'Please enter auction code before clicking JOIN'
                 context['error_msg'] = error_msg
-                return render(request, 'auction/home2.html', context=context)
+                return render(request, 'auction/auctions.html', context=context)
         except Auction.DoesNotExist:
             error_msg = 'Invalid auction code'
             context['error_msg'] = error_msg
-            return render(request, 'auction/home2.html', context=context)
+            return render(request, 'auction/auctions.html', context=context)
         return redirect('auction:auction_detail', auction.id)
-    return render(request, 'auction/home2.html', context=context)
+    return render(request, 'auction/auctions.html', context=context)
 
 
 def auction_detail(request, pk):
@@ -89,7 +103,6 @@ def auction_detail(request, pk):
         live_items = auction.item_set.filter(auction_type='live')
         silent_items = auction.item_set.filter(auction_type='silent')
     elif user.joined_auctions.filter(pk=pk).exists():
-        # TODO: implement count-down on items and only show items with positive countdowns
         user_is_admin = False
         auction = user.joined_auctions.get(pk=pk)
         live_items = auction.item_set.filter(auction_type='live')
@@ -212,6 +225,9 @@ def delete_item(request, item_id):
         raise Http404("The item you are trying to delete does not exist or may have already been deleted")
 
     if request.method == 'POST':
+        highest_bid = item.bid_set.order_by('-price')[0]
+        highest_bid.bidder.possible_balance -= highest_bid.price
+        highest_bid.bidder.save()
         item.delete()
 
     return redirect('auction:auction_detail', auction_id)
@@ -229,11 +245,24 @@ def remove_bid(request, item_id, bid_id):
 
     # if there are more bids than just the one bid that we are deleting
     if bid == item.bid_set.latest('timestamp') and item.bid_set.count() > 1:
-        item.current_price = item.bid_set.all().order_by('-price')[1].price
+        prev_bid = item.bid_set.all().order_by('-price')[1]
+        item.current_price = prev_bid.price
+
         item.min_bid = item.current_price + item.bid_increment
+        # For the previous bidder, add his original bid to his possible balance
+        prev_bid.bidder.possible_balance += prev_bid.price
+        prev_bid.bidder.save()
+
+        # For the user whose bid is being deleted, reset his possible balance
+        bid.bidder.possible_balance -= bid.price
+        bid.bidder.save()
+
         bid.delete()
         item.save()
     elif item.bid_set.count() == 1:
+        # For the user whose bid is being deleted, reset his possible balance
+        bid.bidder.possible_balance -= bid.price
+        bid.bidder.save()
         item.current_price = item.starting_price
         item.min_bid = item.starting_price
         bid.delete()
@@ -270,6 +299,21 @@ def submit_bid(request, item_id):
                     item.current_price = bid_amount
                     item.min_bid = item.current_price + item.bid_increment
                     item.save()
+
+                    # update possible balance for new highest bidder
+                    user.possible_balance += bid.price
+                    user.save()
+
+                    if item.bid_set.count() > 1:
+                        # update possible balance for previous highest bidder
+                        prev_highest_bid = item.bid_set.order_by('-price')[1]
+                        prev_highest_bid.bidder.possible_balance -= prev_highest_bid.price
+                        prev_highest_bid.bidder.save()
+
+                        # send outbid notification to previous highest bidder
+                        text = f"Outbid! You have been outbid {item.bid_set.order_by('price')[1].price} on the {item}"
+                        prev_highest_bid.bidder.send_notification(text, item)
+
                     return render(request, 'auction/bid_success.html', context={'bid': bid})
 
         return render(request, 'auction/bid_fail.html', context={'bid': {'item': item, 'price': bid_amount}})
@@ -438,9 +482,14 @@ def publish(request, pk):
         # un-assign winners
         for item in auction.item_set.filter(auction_type='silent'):
             if item.bid_set.count() > 0:
+                item.bid_set.order_by('-price')[0].won = False
                 item.is_sold = False
                 item.winner = None
                 item.save()
+
+        # reset guaranteed balance
+        for user in auction.participants.all():
+            user.guaranteed_balance = 0.00
 
         auction.publish()
         auction.save()
@@ -469,6 +518,13 @@ def archive(request, pk):
                 bid.won = True
                 bid.save()
 
+                # Update winners balance
+                item.winner.guaranteed_balance += bid.price
+                item.winner.save()
+
+                # Send notification to winner
+                text = f"Congratulations! You won the {item.name}"
+                item.winner.send_notification(text=text, item=item)
 
         auction.close_bidding()
         auction.archive()
@@ -541,3 +597,13 @@ def participants_list(request, auction_id):
 
     context = {'participants': participants_json, 'n_participants': len(participants), 'auction': auction}
     return render(request, 'auction/participants.html', context=context)
+
+
+def clear_notifications(request, user_id):
+    try:
+        user = AuctionUser.objects.get(id=user_id)
+        user.notification_set.all().delete()
+    except AuctionUser.DoesNotExist:
+        raise Http404("The user you does not exist or may have been deleted")
+
+    return redirect("auction:home")
