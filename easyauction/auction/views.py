@@ -103,6 +103,7 @@ def auction_detail(request, pk):
         live_items = auction.item_set.filter(auction_type='live')
         silent_items = auction.item_set.filter(auction_type='silent')
     elif user.joined_auctions.filter(pk=pk).exists():
+        # TODO: implement count-down on items and only show items with positive countdowns
         user_is_admin = False
         auction = user.joined_auctions.get(pk=pk)
         live_items = auction.item_set.filter(auction_type='live')
@@ -471,6 +472,16 @@ class MyBidListView(generic.ListView):
         return ordered_queryset
 
 
+class WatchedItemsView(generic.ListView):
+    model = Item
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = self.model.objects.filter(pk__in=user.watched_items.all())
+
+        return queryset
+
+
 def publish(request, pk):
     try:
         auction = Auction.objects.get(pk=pk)
@@ -607,3 +618,17 @@ def clear_notifications(request, user_id):
         raise Http404("The user you does not exist or may have been deleted")
 
     return redirect("auction:home")
+
+
+def watch_item(request, item_id: int):
+    user = request.user
+    user.watch_item(pk=item_id)
+    user.save()
+    return item_view(request, item_id=item_id)
+
+
+def unwatch_item(request, item_id: int):
+    user = request.user
+    user.unwatch_item(pk=item_id)
+    user.save()
+    return item_view(request, item_id=item_id)

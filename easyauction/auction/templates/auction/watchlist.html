@@ -1,0 +1,45 @@
+{% extends "auction/base2.html" %}
+
+# Sets page title
+{% block title %} Watchlist {% endblock %}
+
+{% block content %}
+    <v-card class="d-inline-block mx-auto text-center">
+    <v-card-title>Watchlist</v-card-title>
+        {% if object_list %}
+            <v-list>
+                {% for item in object_list %}
+                    <v-list-item  key={{ item.id }} href="{% url 'auction:item' item.pk %}">
+                        <v-list-item-avatar tile size="100"><v-img src="{{ item.image.url }}"></v-img></v-list-item-avatar>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.name }}</v-list-item-title>
+                            <v-list-item-subtitle>
+                                {% if item.is_open %}  {# If the item is open for bidding #}
+                                    Current Price: $ {{ item.current_price }}
+                                    <br>
+                                    Total Bids: {{ item.bid_set.count }}
+                                {% else %}  {# If the item is NOT open for bidding #}
+                                    {% if item.is_sold %}  {# If the item is not open because it is sold #}
+                                        Final Price: $ {{ item.current_price }}
+                                        <br>
+                                        Total Bids: {{ item.bid_set.count }}
+                                        <br>
+                                        Winner: {{ item.winner }}
+                                        <div style="color:red">SOLD</div>
+                                    {% else %}  {# If the item is not open for bidding yet #}
+                                        Starting Price: $ {{ item.starting_price }}
+                                        <br>
+                                        <div style="color:red">Not Open</div>
+                                    {% endif %}
+                                {% endif %}
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                {% endfor %}
+            </v-list>
+        {% else %}
+            <v-card-text>You haven't saved an items yet.</v-card-text>
+        {% endif %}
+    </v-card>
+{% endblock %}

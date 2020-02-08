@@ -205,19 +205,19 @@
                                     <v-list-item-subtitle>
                                         {% if item.is_open %}  {# If the item is open for bidding #}
                                             Current Price: $ {{ item.current_price }}
-                                            <br/>
+                                            <br>
                                             Total Bids: {{ item.bid_set.count }}
                                         {% else %}  {# If the item is NOT open for bidding #}
                                             {% if item.is_sold %}  {# If the item is not open because it is sold #}
                                                 Final Price: $ {{ item.current_price }}
-                                                <br/>
+                                                <br>
                                                 Total Bids: {{ item.bid_set.count }}
-                                                <br/>
+                                                <br>
                                                 Winner: {{ item.winner }}
                                                 <div style="color:red">SOLD</div>
                                             {% else %}  {# If the item is not open for bidding yet #}
                                                 Starting Price: $ {{ item.starting_price }}
-                                                <br/>
+                                                <br>
                                                 <div style="color:red">Not Open</div>
                                             {% endif %}
                                         {% endif %}
@@ -248,12 +248,12 @@
                                         {% else %}  {# If the item is NOT open for bidding #}
                                             {% if item.is_sold %}  {# If the item is not open because it is sold #}
                                                 Final Price: $ {{ item.current_price }}
-                                                <br/>
+                                                <br>
                                                 Winner: {{ item.winner }}
                                                 <div style="color:red">SOLD</div>
                                             {% else %}  {# If the item is not open for bidding yet #}
                                                 Starting Price: $ {{ item.starting_price }}
-                                                <br/>
+                                                <br>
                                                 <div style="color:red">Not Open</div>
                                             {% endif %}
                                         {% endif %}

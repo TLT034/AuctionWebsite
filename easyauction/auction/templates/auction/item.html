@@ -6,6 +6,8 @@
     <v-form id="edit_item_form" action="{% url "auction:edit_item" item.id %}" method="POST">{% csrf_token %}</v-form>
     <form id="delete_form" action="{% url "auction:delete_item" item.id %}" method="POST">{% csrf_token %}</form>
     <form id="bid_form" action="{% url "auction:submit_bid" item.id %}" method="POST">{% csrf_token %}</form>
+    <form id="watch_form" action="{% url "auction:watch_item" item.id %}" method="POST">{% csrf_token %}</form>
+    <form id="unwatch_form" action="{% url "auction:unwatch_item" item.id %}" method="POST">{% csrf_token %}</form>
 
 
 
@@ -126,8 +128,29 @@
                 {% elif item.is_open and item.bid_set.last.bidder == user %}
                     <p style="color:green; font-size: 20px"><strong>You are currently winning!</strong></p>
                 {% endif %}
-            {# if the item is sold #}
+
+                {% if item not in user.watched_items.all %}
+                    <v-btn
+                        form="watch_form"
+                        v-show="!edit"
+                        color="green"
+                        type="submit"
+                    >
+                    Watch
+                    </v-btn>
+                {% elif item in user.watched_items.all %}
+                    <v-btn
+                        form="unwatch_form"
+                        v-show="!edit"
+                        color="red"
+                        type="submit"
+                    >
+                    Unwatch
+                    </v-btn>
+                {% endif %}
             {% endif %}
+
+            {# if the item is sold #}
             {% if item.auction_type == "silent" and item.is_sold %}
                 <p style="color:red; font-size: 20px"><strong>SOLD!</strong></p>
             {% endif %}
